@@ -95,7 +95,7 @@ local:
   path: uploads/file # 上传文件保存路径
   size: 10 # 上传文件大小单位M
 mysql: # mysql 配置
-  path: 192.168.1.4
+  path: 127.0.0.1
   port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: server-fiber
@@ -128,7 +128,7 @@ qiniu:
   use-cdn-domains: false
 redis: # redis 配置
   db: 0
-  addr: 192.168.1.4
+  addr: 127.0.0.1
   password: ""
   port: "6379"
 system:
