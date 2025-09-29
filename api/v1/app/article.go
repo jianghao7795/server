@@ -6,6 +6,7 @@ import (
 	appReq "server-fiber/model/app/request"
 	"server-fiber/model/common/request"
 	"server-fiber/model/common/response"
+	"server-fiber/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"
@@ -26,18 +27,14 @@ import (
 // @Router /article/createArticle [post]
 func (a *ArticleApi) CreateArticle(c *fiber.Ctx) error {
 	var article app.Article
-	err := c.BodyParser(&article)
-	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+	if err := c.BodyParser(&article); err != nil {
+		return utils.ErrorHandlerInstance.HandleValidationError(c, "article data", err)
 	}
-	if err := articleService.CreateArticle(&article); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithDetailed(map[string]string{
-			"msg": err.Error(),
-		}, "创建失败", c)
 
+	if err := articleService.CreateArticle(&article); err != nil {
+		return utils.ErrorHandlerInstance.HandleAPIError(c, "创建文章", err)
 	}
+
 	return response.OkWithId("创建成功", article.ID, c)
 }
 
