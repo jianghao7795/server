@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|grep -v 172.\*.\*.\*|awk '{print $2}'|tr -d "addr:"`
+ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|grep -v 172.17.\*.\*|awk '{print $2}'|tr -d "addr:"`
 echo $ip
 
 cp conf/config.yaml config.yaml
