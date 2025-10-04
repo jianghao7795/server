@@ -30,7 +30,7 @@ func (s *CommentApi) GetCommentByArticleId(c *fiber.Ctx) error {
 	}
 	if articleComment, err := commentServiceApp.GetCommentByArticleId(id); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
 	} else {
 		return response.OkWithDetailed(articleComment, "获取成功", c)
 	}
@@ -56,7 +56,7 @@ func (s *CommentApi) CreatedComment(c *fiber.Ctx) error {
 	}
 	if err := commentServiceApp.CreatedComment(&comment); err != nil {
 		global.LOG.Error("评论失败!", zap.Error(err))
-		return response.FailWithMessage("评论失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "评论失败", c)
 	} else {
 		return response.OkWithId("评论成功", comment.ID, c)
 	}
