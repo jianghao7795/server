@@ -42,7 +42,7 @@ func (s *ArticleApi) GetArticleList(c *fiber.Ctx) error {
 
 	if list, total, err := articleServiceApp.GetArticleList(&pageInfo, c); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -78,7 +78,7 @@ func (s *ArticleApi) GetArticleDetail(c *fiber.Ctx) error {
 	}
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
 
 	} else {
 		return response.OkWithData(articleDetail, c)
@@ -103,15 +103,15 @@ func (s *ArticleApi) GetSearchArticle(c *fiber.Ctx) error {
 	err := c.ParamsParser(&searchValue)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取数据失败", c)
 	}
 	searchValue.Sort = c.Query("sort")
 	if searchValue.Name != "tags" && searchValue.Name != "articles" {
-		return response.FailWithMessage("查询的不是tag 或 article", c)
+		return response.FailWithDetailed(fiber.Map{"msg": "查询的不是tag 或 article"}, "查询的不是tag 或 article", c)
 	}
 	if list, err := articleServiceApp.GetSearchArticle(&searchValue); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List: list,

@@ -2,62 +2,65 @@ package app
 
 import (
 	"errors"
+	"fmt"
 	global "server-fiber/model"
 	"server-fiber/model/app"
 	appReq "server-fiber/model/app/request"
 	"server-fiber/model/common/request"
+	"server-fiber/utils"
 	"time"
 
 	"gorm.io/gorm"
 )
 
-type ArticleService struct{}
-
-// CreateArticle
-func (*ArticleService) CreateArticle(article *app.Article) error {
-	return global.DB.Create(article).Error
+type ArticleService struct {
+	*utils.CRUDBase[app.Article]
 }
 
-// DeleteArticle delete
-func (*ArticleService) DeleteArticle(id uint) error {
+// NewArticleService creates a new article service
+func NewArticleService() *ArticleService {
+	return &ArticleService{
+		CRUDBase: utils.NewCRUDBase[app.Article](global.DB),
+	}
+}
+
+// CreateArticle creates a new article
+func (s *ArticleService) CreateArticle(article *app.Article) error {
+	return s.Create(article)
+}
+
+// DeleteArticle deletes an article and its related comments
+func (s *ArticleService) DeleteArticle(id uint) error {
 	return global.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Delete(&app.Article{}, id).Error; err != nil {
-			return err
+		// Delete related comments first
+		if err := tx.Delete(&app.Comment{}, "article_id = ?", id).Error; err != nil {
+			return fmt.Errorf("failed to delete related comments: %w", err)
 		}
 
-		if err := tx.Delete(&app.Comment{}, "article_id = ?", id).Error; err != nil {
-			return err
+		// Delete the article
+		if err := tx.Delete(&app.Article{}, id).Error; err != nil {
+			return fmt.Errorf("failed to delete article: %w", err)
 		}
 
 		return nil
 	})
 }
 
-// delete by ids
-func (*ArticleService) DeleteArticleByIds(ids request.IdsReq) (err error) {
-	var articleIds *[]app.Article = &[]app.Article{}
-	err = global.DB.Delete(articleIds, "id in ?", ids.Ids).Error
-	return
+// DeleteArticleByIds deletes multiple articles by IDs
+func (s *ArticleService) DeleteArticleByIds(ids request.IdsReq) error {
+	return s.DeleteByIDs(ids)
 }
 
-// update
-func (*ArticleService) UpdateArticle(article *app.Article) (err error) {
-	result := global.DB.Model(&app.Article{}).Where("id = ?", article.ID).Save(article)
-	if result.Error != nil {
-		err = result.Error
-		return
-	}
-	if result.RowsAffected == 0 {
-		err = errors.New("没有更新任何数据")
-		return
-	}
-	return err
+// UpdateArticle updates an existing article
+func (s *ArticleService) UpdateArticle(article *app.Article) error {
+	return s.Update(article)
 }
 
-// getDetail by id
-func (*ArticleService) GetArticle(id uint) (article app.Article, err error) {
-	err = global.DB.Preload("Tags").Preload("User").Where("id = ?", id).First(&article).Error
-	return
+// GetArticle retrieves an article by ID with related data
+func (s *ArticleService) GetArticle(id uint) (app.Article, error) {
+	var article app.Article
+	err := global.DB.Preload("Tags").Preload("User").Where("id = ?", id).First(&article).Error
+	return article, err
 }
 
 // getList

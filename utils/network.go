@@ -7,9 +7,5 @@ func NetWorkStatus(path string) bool {
 	cmd := exec.Command("curl", path)
 
 	err := cmd.Run()
-	if err != nil {
-		return false
-	}
-
-	return true
+	return err == nil
 }

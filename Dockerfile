@@ -8,6 +8,7 @@ ENV GO111MODULE=on
 
 WORKDIR /app
 COPY . /app
+RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -tags=jsoniter -trimpath -o fiber -ldflags="-s -w" cmd/main.go #CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o fiber cmd/main.go
 
 FROM rockylinux:9-minimal AS runner

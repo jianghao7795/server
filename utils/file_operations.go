@@ -42,7 +42,10 @@ Redirect:
 	return os.Rename(src, dst)
 }
 
-func DeLFile(filePath string) error {
+// DeleteFile removes a file or directory
+// @param filePath path to the file or directory to delete
+// @return error if deletion fails
+func DeleteFile(filePath string) error {
 	return os.RemoveAll(filePath)
 }
 
