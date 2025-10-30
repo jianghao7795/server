@@ -53,7 +53,10 @@ func (TagApi *TagApi) CreateTag(c *fiber.Ctx) error {
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tag/deleteTag/{id} [delete]
 func (TagApi *TagApi) DeleteTag(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return response.FailWithDetailed(fiber.Map{"msg": "获取id参数失败"}, "参数错误", c)
+	}
 	if err := appTabService.DeleteTag(uint(id)); err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))
 		return response.FailWithMessage("删除失败", c)

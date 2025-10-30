@@ -30,7 +30,10 @@ type ArticleApi struct{}
 // @Router /getArticleList [get]
 func (s *ArticleApi) GetArticleList(c *fiber.Ctx) error {
 	var pageInfo request.ArticleSearch
-	_ = c.QueryParser(&pageInfo)
+	err := c.QueryParser(&pageInfo)
+	if err != nil {
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "参数错误", c)
+	}
 	// log.Println("is_promint: ", pageInfo.IsImportant)
 	if pageInfo.Page == 0 {
 		pageInfo.Page = 1
