@@ -1,4 +1,4 @@
-FROM golang:latest AS builder
+FROM golang:1.25-alpine AS builder
 
 LABEL org.opencontainers.image.authors="jianghao"
 
@@ -6,10 +6,14 @@ ENV GOPROXY=https://goproxy.cn,direct
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 ENV GO111MODULE=on
 
+RUN apk add --no-cache upx
+
 WORKDIR /app
 COPY . /app
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -tags=jsoniter -trimpath -o fiber -ldflags="-s -w" cmd/main.go #CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o fiber cmd/main.go
+RUN upx --best fiber
+RUN ls -lh
 
 FROM rockylinux:9-minimal AS runner
 WORKDIR /app
