@@ -3,7 +3,7 @@
 # 文章点赞功能API测试脚本
 # 请确保服务器已启动并运行在 localhost:8888
 
-BASE_URL="http://localhost:8888/backend"
+BASE_URL="http://localhost:3100/backend"
 API_BASE="$BASE_URL/like"
 
 # 颜色输出
