@@ -12,6 +12,7 @@ import (
 	"go.uber.org/zap"
 	"server-fiber/init_load"
 	"server-fiber/model"
+	"server-fiber/router"
 )
 
 // Injectors from wire.go:
@@ -36,7 +37,42 @@ func InitializeApp() (*init_load.RouterApp, func(), error) {
 		return nil, nil, err
 	}
 	timerInitialized := init_load.ProvideTimer(db, logger)
-	routerApp := init_load.ProvideRouter(app, db, logger, redisInitialized, timerInitialized)
+	articleRouter := router.ProvideArticleRouter()
+	commentRouter := router.ProvideCommentRouter()
+	baseMessageRouter := router.ProvideBaseMessageRouter()
+	userRouter := router.ProvideUserRouter()
+	taskRouter := router.ProvideTaskRouter()
+	tagRouter := router.ProvideTagRouter()
+	likeRouter := router.ProvideLikeRouter()
+	appRouter := router.ProvideAppGroup(articleRouter, commentRouter, baseMessageRouter, userRouter, taskRouter, tagRouter, likeRouter)
+	apiRouter := router.ProvideApiRouter()
+	githubRouter := router.ProvideGithubRouter()
+	authorityBtnRouter := router.ProvideAuthorityBtnRouter()
+	authorityRouter := router.ProvideAuthorityRouter()
+	autoCodeHistoryRouter := router.ProvideAutoCodeHistoryRouter()
+	autoCodeRouter := router.ProvideAutoCodeRouter()
+	baseRouter := router.ProvideBaseRouter()
+	casbinRouter := router.ProvideCasbinRouter()
+	dictionaryDetailRouter := router.ProvideDictionaryDetailRouter()
+	dictionaryRouter := router.ProvideDictionaryRouter()
+	initRouter := router.ProvideInitRouter()
+	jwtRouter := router.ProvideJwtRouter()
+	menuRouter := router.ProvideMenuRouter()
+	operationRecordRouter := router.ProvideOperationRecordRouter()
+	problemRouter := router.ProvideProblemRouter()
+	sysRouter := router.ProvideSysRouter()
+	systemUserRouter := router.ProvideSystemUserRouter()
+	systemRouter := router.ProvideSystemGroup(apiRouter, githubRouter, authorityBtnRouter, authorityRouter, autoCodeHistoryRouter, autoCodeRouter, baseRouter, casbinRouter, dictionaryDetailRouter, dictionaryRouter, initRouter, jwtRouter, menuRouter, operationRecordRouter, problemRouter, sysRouter, systemUserRouter)
+	customerRouter := router.ProvideCustomerRouter()
+	excelRouter := router.ProvideExcelRouter()
+	fileUploadAndDownloadRouter := router.ProvideFileUploadAndDownloadRouter()
+	exampleRouter := router.ProvideExampleGroup(customerRouter, excelRouter, fileUploadAndDownloadRouter)
+	frontendRouter := router.ProvideFrontendRouter()
+	routerFrontendRouter := router.ProvideFrontendGroup(frontendRouter)
+	mobileLoginRouter := router.ProvideMobileLoginRouter()
+	mobileUserRouter := router.ProvideMobileUserRouter()
+	mobileRouter := router.ProvideMobileGroup(mobileLoginRouter, mobileUserRouter)
+	routerApp := init_load.ProvideRouter(app, db, logger, redisInitialized, timerInitialized, appRouter, systemRouter, exampleRouter, routerFrontendRouter, mobileRouter)
 	return routerApp, func() {
 	}, nil
 }

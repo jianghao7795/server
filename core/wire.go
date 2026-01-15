@@ -6,6 +6,7 @@ package core
 import (
 	"server-fiber/init_load"
 	"server-fiber/model"
+	"server-fiber/router"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/wire"
@@ -23,10 +24,13 @@ func InitializeApp() (*init_load.RouterApp, func(), error) {
 		init_load.ProvideRedis,
 		init_load.ProvideTimer,
 		
+		// Router 层 - 使用 wire.NewSet 组织路由
+		router.RouterSet,
+		
 		// Fiber App
 		ProvideFiberApp,
 		
-		// Router
+		// Router 初始化
 		init_load.ProvideRouter,
 	)
 	return nil, nil, nil

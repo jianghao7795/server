@@ -8,7 +8,8 @@ import (
 	"server-fiber/router/system"
 )
 
-type appGroup struct {
+// AppRouter App 路由组
+type AppRouter struct {
 	app.ArticleRouter
 	app.CommentRouter
 	app.BaseMessageRouter
@@ -18,30 +19,26 @@ type appGroup struct {
 	app.LikeRouter
 }
 
-var AppRouter = new(appGroup)
-
-type exampleGroup struct {
+// ExampleRouter Example 路由组
+type ExampleRouter struct {
 	example.CustomerRouter
 	example.ExcelRouter
 	example.FileUploadAndDownloadRouter
 }
 
-var ExampleRouter = new(exampleGroup)
-
-type frontendGroup struct {
+// FrontendRouter Frontend 路由组
+type FrontendRouter struct {
 	frontend.FrontendRouter
 }
 
-var FrontendRouter = new(frontendGroup)
-
-type mobileGroup struct {
+// MobileRouter Mobile 路由组
+type MobileRouter struct {
 	mobile.MobileLoginRouter
 	mobile.MobileUserRouter
 }
 
-var MobileRouter = new(mobileGroup)
-
-type systemGroup struct {
+// SystemRouter System 路由组
+type SystemRouter struct {
 	system.ApiRouter
 	system.GithubRouter
 	system.AuthorityBtnRouter
@@ -61,4 +58,11 @@ type systemGroup struct {
 	system.UserRouter
 }
 
-var SystemRouter = new(systemGroup)
+// 为了向后兼容，保留全局变量
+var (
+	AppRouterInstance      = &AppRouter{}
+	ExampleRouterInstance = &ExampleRouter{}
+	FrontendRouterInstance = &FrontendRouter{}
+	MobileRouterInstance  = &MobileRouter{}
+	SystemRouterInstance  = &SystemRouter{}
+)

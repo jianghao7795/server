@@ -12,6 +12,7 @@ import (
 
 	"server-fiber/init_load"
 	global "server-fiber/model"
+	"server-fiber/router"
 	"server-fiber/service/system"
 
 	"github.com/gofiber/fiber/v2"
@@ -60,7 +61,14 @@ func initConfig() {
 }
 
 func RunServerElectron(app *fiber.App) {
-	router := init_load.Routers(app)
+	// 使用全局路由实例（向后兼容）
+	appRouter := router.AppRouterInstance
+	systemRouter := router.SystemRouterInstance
+	exampleRouter := router.ExampleRouterInstance
+	frontendRouter := router.FrontendRouterInstance
+	mobileRouter := router.MobileRouterInstance
+	routerApp := init_load.Routers(app, appRouter, systemRouter, exampleRouter, frontendRouter, mobileRouter)
+	router := routerApp
 	address := fmt.Sprintf(":%d", global.CONFIG.System.Addr)
 	global.LOG.Info("server run success on ", zap.String("address", address))
 	log.Println(`Welcome to Fiber API`)

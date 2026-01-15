@@ -2,6 +2,7 @@ package init_load
 
 import (
 	global "server-fiber/model"
+	"server-fiber/router"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"
@@ -47,7 +48,18 @@ func ProvideTimer(db *gorm.DB, logger *zap.Logger) TimerInitialized {
 }
 
 // ProvideRouter 初始化路由
-func ProvideRouter(app *fiber.App, db *gorm.DB, logger *zap.Logger, _ RedisInitialized, _ TimerInitialized) *RouterApp {
-	configuredApp := Routers(app)
+func ProvideRouter(
+	app *fiber.App,
+	db *gorm.DB,
+	logger *zap.Logger,
+	_ RedisInitialized,
+	_ TimerInitialized,
+	appRouter *router.AppRouter,
+	systemRouter *router.SystemRouter,
+	exampleRouter *router.ExampleRouter,
+	frontendRouter *router.FrontendRouter,
+	mobileRouter *router.MobileRouter,
+) *RouterApp {
+	configuredApp := Routers(app, appRouter, systemRouter, exampleRouter, frontendRouter, mobileRouter)
 	return &RouterApp{App: configuredApp}
 }
