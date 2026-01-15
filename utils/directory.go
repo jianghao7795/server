@@ -23,7 +23,7 @@ func PathExists(path string) (bool, error) {
 		return false, errors.New("存在同名文件")
 	}
 	if os.IsNotExist(err) {
-		return false, nil
+		return false, errors.New("目录不存在")
 	}
 	return false, err
 }
@@ -39,7 +39,7 @@ func PathExistsFile(path string) (bool, error) {
 		return true, nil
 	}
 	if os.IsNotExist(err) {
-		return false, nil
+		return false, errors.New("文件不存在")
 	}
 
 	return true, nil
