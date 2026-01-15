@@ -23,19 +23,18 @@ func InitializeApp() (*init_load.RouterApp, func(), error) {
 		init_load.ProvideGorm,
 		init_load.ProvideRedis,
 		init_load.ProvideTimer,
-		
+
 		// Router 层 - 使用 wire.NewSet 组织路由
 		router.RouterSet,
-		
+
 		// Fiber App
 		ProvideFiberApp,
-		
+
 		// Router 初始化
 		init_load.ProvideRouter,
 	)
 	return nil, nil, nil
 }
-
 
 // ViperInit 初始化 Viper
 func ViperInit() (*viper.Viper, error) {
