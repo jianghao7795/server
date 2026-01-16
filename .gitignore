@@ -10,3 +10,6 @@ uploads
 vendor
 log
 logs
+main
+fiber
+bin

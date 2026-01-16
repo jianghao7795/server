@@ -21,7 +21,7 @@ import (
 
 func initConfig() {
 	var err error
-	global.VIP, err = viperInit() // 初始化Viper 配置
+	global.VIPER, err = viperInit() // 初始化Viper 配置
 	if err != nil {
 		// global.LOG.Error("配置错误：", zap.Error(err))
 		log.Println("配置错误： ", err.Error())

@@ -7,12 +7,13 @@
 package core
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"server-fiber/init_load"
 	"server-fiber/model"
 	"server-fiber/router"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 // Injectors from wire.go:
@@ -89,7 +90,7 @@ func ZapInit(vip *viper.Viper) (*zap.Logger, error) {
 	if err := vip.Unmarshal(&model.CONFIG); err != nil {
 		return nil, err
 	}
-	model.VIP = vip
+	model.VIPER = vip
 	logger, err := zapInit()
 	if err != nil {
 		return nil, err

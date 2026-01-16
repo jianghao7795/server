@@ -46,7 +46,7 @@ func ZapInit(vip *viper.Viper) (*zap.Logger, error) {
 	if err := vip.Unmarshal(&model.CONFIG); err != nil {
 		return nil, err
 	}
-	model.VIP = vip
+	model.VIPER = vip
 	logger, err := zapInit()
 	if err != nil {
 		return nil, err

@@ -19,7 +19,7 @@ type GlobalVars struct {
 	DB        *gorm.DB
 	DBList    map[string]*gorm.DB
 	REDIS     *redis.Client
-	VIP       *viper.Viper
+	VIPER     *viper.Viper
 	LOG       *zap.Logger
 }
 
@@ -33,13 +33,13 @@ func ProvideGlobalVars(
 	// 设置全局变量
 	DB = db
 	REDIS = redis
-	VIP = vip
+	VIPER = vip
 	LOG = logger
 	
 	return &GlobalVars{
 		DB:     db,
 		REDIS:  redis,
-		VIP:    vip,
+		VIPER:  vip,
 		LOG:    logger,
 	}
 }

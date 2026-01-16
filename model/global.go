@@ -22,7 +22,7 @@ var (
 	REDIS     *redis.Client       // redis
 	CONFIG    config.Server       // 配置 文件配置
 	RunCONFIG config.RunServer    // 运行配置 读取库配置
-	VIP       *viper.Viper        // 读写配置文件
+	VIPER     *viper.Viper        // 读写配置文件
 	LOG       *zap.Logger         // 日志 打印日志 debug fatal error info warn 等几种方式
 	Timer     = timer.NewTimerTask()
 	// ConcurrencyControl = &singleflight.Group{} // 记录token
