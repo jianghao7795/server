@@ -1,4 +1,4 @@
-FROM golang:1.25-alpine AS builder
+FROM docker.io/library/golang:1.25-alpine AS builder
 
 LABEL org.opencontainers.image.authors="jianghao"
 
@@ -15,7 +15,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -tags=jsoniter -trimpath -o fiber -ldflags
 RUN upx -5 fiber
 RUN ls -lh
 
-FROM rockylinux:9-minimal AS runner
+FROM docker.io/library/rockylinux:9-minimal AS runner
 WORKDIR /app
 
 COPY --from=builder /app/fiber .
