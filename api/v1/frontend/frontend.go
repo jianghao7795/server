@@ -1,8 +1,8 @@
 package frontend
 
 import (
-	"server-fiber/service/frontend"
-	systemService "server-fiber/service/system"
+	"server/service/frontend"
+	systemService "server/service/system"
 )
 
 var articleServiceApp = frontend.ArticleServiceApp

@@ -2,7 +2,7 @@ package utils
 
 import (
 	"errors"
-	"server-fiber/model/common/request"
+	"server/model/common/request"
 
 	"gorm.io/gorm"
 )

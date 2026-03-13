@@ -1,7 +1,7 @@
 package app
 
 import (
-	global "server-fiber/model"
+	global "server/model"
 )
 
 // Like 点赞结构体

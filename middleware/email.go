@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/system"
-	"server-fiber/plugin/email/utils"
-	systemService "server-fiber/service/system"
-	utils2 "server-fiber/utils"
+	global "server/model"
+	"server/model/system"
+	"server/plugin/email/utils"
+	systemService "server/service/system"
+	utils2 "server/utils"
 	"strconv"
 	"time"
 

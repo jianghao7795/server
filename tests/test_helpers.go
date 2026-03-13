@@ -32,7 +32,7 @@ func (h *TestHelper) AssertResponseStatus(t *testing.T, resp *httptest.ResponseR
 
 // AssertResponseBody 验证响应体结构
 func (h *TestHelper) AssertResponseBody(t *testing.T, resp *httptest.ResponseRecorder, expectedKeys ...string) {
-	var responseBody map[string]interface{}
+	var responseBody map[string]any
 	err := json.NewDecoder(resp.Body).Decode(&responseBody)
 	assert.NoError(t, err)
 
@@ -43,7 +43,7 @@ func (h *TestHelper) AssertResponseBody(t *testing.T, resp *httptest.ResponseRec
 
 // AssertResponseMessage 验证响应消息
 func (h *TestHelper) AssertResponseMessage(t *testing.T, resp *httptest.ResponseRecorder, expectedMessage string) {
-	var responseBody map[string]interface{}
+	var responseBody map[string]any
 	err := json.NewDecoder(resp.Body).Decode(&responseBody)
 	assert.NoError(t, err)
 
@@ -90,8 +90,8 @@ func NewTestData() *TestData {
 }
 
 // GetSampleGithubData 获取示例 GitHub 数据
-func (td *TestData) GetSampleGithubData() []map[string]interface{} {
-	return []map[string]interface{}{
+func (td *TestData) GetSampleGithubData() []map[string]any {
+	return []map[string]any{
 		{
 			"author":     "testuser1",
 			"message":    "feat: add new feature",
@@ -106,8 +106,8 @@ func (td *TestData) GetSampleGithubData() []map[string]interface{} {
 }
 
 // GetSamplePageInfo 获取示例分页信息
-func (td *TestData) GetSamplePageInfo() map[string]interface{} {
-	return map[string]interface{}{
+func (td *TestData) GetSamplePageInfo() map[string]any {
+	return map[string]any{
 		"page":     1,
 		"pageSize": 10,
 	}

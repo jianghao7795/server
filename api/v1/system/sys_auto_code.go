@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net/url"
 	"os"
-	"server-fiber/model/common/response"
-	"server-fiber/model/system"
-	"server-fiber/utils"
+	"server/model/common/response"
+	"server/model/system"
+	"server/utils"
 
-	global "server-fiber/model"
+	global "server/model"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

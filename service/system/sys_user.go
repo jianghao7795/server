@@ -3,10 +3,10 @@ package system
 import (
 	"errors"
 	"fmt"
-	global "server-fiber/model"
-	"server-fiber/model/system"
-	"server-fiber/model/system/request"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/system"
+	"server/model/system/request"
+	"server/utils"
 
 	uuid "github.com/google/uuid"
 	"gorm.io/gorm"

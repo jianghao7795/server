@@ -1,6 +1,6 @@
 package app
 
-import global "server-fiber/model"
+import global "server/model"
 
 type Ip struct {
 	global.MODEL

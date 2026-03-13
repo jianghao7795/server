@@ -2,12 +2,12 @@ package system
 
 import (
 	"errors"
-	"server-fiber/model/common/request"
-	"server-fiber/model/system"
-	"server-fiber/model/system/response"
+	"server/model/common/request"
+	"server/model/system"
+	"server/model/system/response"
 	"strconv"
 
-	global "server-fiber/model"
+	global "server/model"
 
 	"gorm.io/gorm"
 )

@@ -1,6 +1,6 @@
 package response
 
-import "server-fiber/model/system"
+import "server/model/system"
 
 type SysAPIResponse struct {
 	Api system.SysApi `json:"api"`

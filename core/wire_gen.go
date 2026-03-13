@@ -7,9 +7,9 @@
 package core
 
 import (
-	"server-fiber/init_load"
-	"server-fiber/model"
-	"server-fiber/router"
+	"server/init_load"
+	"server/model"
+	"server/router"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"

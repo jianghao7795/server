@@ -2,15 +2,15 @@ package frontend
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	"server-fiber/model/frontend"
-	loginRequest "server-fiber/model/frontend/request"
-	"server-fiber/model/system"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/common/response"
+	"server/model/frontend"
+	loginRequest "server/model/frontend/request"
+	"server/model/system"
+	"server/utils"
 
-	systemReq "server-fiber/model/system/request"
-	systemRes "server-fiber/model/system/response"
+	systemReq "server/model/system/request"
+	systemRes "server/model/system/response"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/redis/go-redis/v9"

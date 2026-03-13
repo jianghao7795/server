@@ -1,11 +1,11 @@
 package router
 
 import (
-	"server-fiber/router/app"
-	"server-fiber/router/example"
-	"server-fiber/router/frontend"
-	"server-fiber/router/mobile"
-	"server-fiber/router/system"
+	"server/router/app"
+	"server/router/example"
+	"server/router/frontend"
+	"server/router/mobile"
+	"server/router/system"
 
 	"github.com/google/wire"
 )

@@ -1,6 +1,6 @@
 package frontend
 
-import global "server-fiber/model"
+import global "server/model"
 
 // Comment 结构体
 // 如果含有time.Time 请自行import time包

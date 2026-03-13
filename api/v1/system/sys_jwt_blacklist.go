@@ -1,9 +1,9 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	"server-fiber/model/system"
+	global "server/model"
+	"server/model/common/response"
+	"server/model/system"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"

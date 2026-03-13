@@ -1,8 +1,8 @@
 package example
 
 import (
-	v1 "server-fiber/api/v1/example"
-	"server-fiber/middleware"
+	v1 "server/api/v1/example"
+	"server/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )

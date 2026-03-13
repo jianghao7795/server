@@ -3,10 +3,10 @@ package middleware
 import (
 	"strings"
 
-	"server-fiber/utils"
+	"server/utils"
 
-	"server-fiber/model/common/response"
-	systemService "server-fiber/service/system"
+	"server/model/common/response"
+	systemService "server/service/system"
 
 	"github.com/gofiber/fiber/v2"
 )

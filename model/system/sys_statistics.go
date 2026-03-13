@@ -1,6 +1,6 @@
 package system
 
-import global "server-fiber/model"
+import global "server/model"
 
 type SysStatistics struct {
 	global.MODEL

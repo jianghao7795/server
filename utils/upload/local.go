@@ -6,11 +6,11 @@ import (
 	"mime/multipart"
 	"os"
 	"path"
-	"server-fiber/utils"
+	"server/utils"
 	"strings"
 	"time"
 
-	global "server-fiber/model"
+	global "server/model"
 
 	"go.uber.org/zap"
 )

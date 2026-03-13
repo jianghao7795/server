@@ -2,7 +2,7 @@ package middleware
 
 import (
 	// "log"
-	"server-fiber/model/common/response"
+	"server/model/common/response"
 	"sync"
 	"time"
 

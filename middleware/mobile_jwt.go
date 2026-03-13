@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"server-fiber/model/common/response"
-	"server-fiber/utils"
+	"server/model/common/response"
+	"server/utils"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"

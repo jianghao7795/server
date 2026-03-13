@@ -1,6 +1,6 @@
 package request
 
-import "server-fiber/model/common/request"
+import "server/model/common/request"
 
 type SysAutoHistory struct {
 	request.PageInfo

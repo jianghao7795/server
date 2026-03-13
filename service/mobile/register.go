@@ -1,8 +1,8 @@
 package mobile
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/mobile"
+	global "server/model"
+	"server/model/mobile"
 )
 
 type MobileRegisterService struct{}

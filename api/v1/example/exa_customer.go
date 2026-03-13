@@ -1,12 +1,12 @@
 package example
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	"server-fiber/model/example"
-	"server-fiber/model/example/request"
-	exampleRes "server-fiber/model/example/response"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/common/response"
+	"server/model/example"
+	"server/model/example/request"
+	exampleRes "server/model/example/response"
+	"server/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

@@ -39,7 +39,7 @@ fi
 
 # 编译项目
 echo -e "${BLUE}3. 编译项目...${NC}"
-go build -o server-fiber .
+go build -o server .
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ 项目编译成功${NC}"
 else
@@ -73,7 +73,7 @@ fi
 # 启动服务器进行API测试
 echo -e "${BLUE}7. 启动服务器进行API测试...${NC}"
 echo -e "${YELLOW}请手动启动服务器：${NC}"
-echo -e "${YELLOW}./server-fiber${NC}"
+echo -e "${YELLOW}./server${NC}"
 echo ""
 echo -e "${YELLOW}然后运行API测试脚本：${NC}"
 echo -e "${YELLOW}bash test_like_api.sh${NC}"
@@ -105,6 +105,6 @@ echo ""
 echo -e "${YELLOW}下一步操作：${NC}"
 echo "1. 配置数据库连接"
 echo "2. 执行数据库迁移：sql/create_like_tables.sql"
-echo "3. 启动服务器：./server-fiber"
+echo "3. 启动服务器：./server"
 echo "4. 运行API测试：bash test_like_api.sh"
 echo "5. 导入Postman集合：postman_like_api.json"

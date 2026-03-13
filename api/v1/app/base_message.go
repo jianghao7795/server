@@ -2,10 +2,10 @@ package app
 
 import (
 	"errors"
-	"server-fiber/model/app"
-	"server-fiber/model/common/response"
+	"server/model/app"
+	"server/model/common/response"
 
-	global "server-fiber/model"
+	global "server/model"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

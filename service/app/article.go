@@ -3,11 +3,11 @@ package app
 import (
 	"errors"
 	"fmt"
-	global "server-fiber/model"
-	"server-fiber/model/app"
-	appReq "server-fiber/model/app/request"
-	"server-fiber/model/common/request"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/app"
+	appReq "server/model/app/request"
+	"server/model/common/request"
+	"server/utils"
 	"time"
 
 	"gorm.io/gorm"

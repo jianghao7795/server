@@ -1,8 +1,8 @@
 package model
 
 import (
-	"server-fiber/config"
-	"server-fiber/utils/timer"
+	"server/config"
+	"server/utils/timer"
 	"sync"
 
 	ut "github.com/go-playground/universal-translator"

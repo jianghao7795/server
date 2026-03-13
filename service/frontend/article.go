@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"net/url"
-	global "server-fiber/model"
-	"server-fiber/model/frontend"
-	"server-fiber/model/system"
+	global "server/model"
+	"server/model/frontend"
+	"server/model/system"
 	"strconv"
 	"strings"
 	"time"
@@ -14,7 +14,7 @@ import (
 	// json "github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 
-	frontendReq "server-fiber/model/frontend/request"
+	frontendReq "server/model/frontend/request"
 
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"

@@ -3,7 +3,7 @@ package utils
 import (
 	"errors"
 	"os"
-	global "server-fiber/model"
+	global "server/model"
 
 	"go.uber.org/zap"
 )

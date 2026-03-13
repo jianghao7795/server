@@ -1,8 +1,8 @@
 package frontend
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/frontend"
+	global "server/model"
+	"server/model/frontend"
 )
 
 type Comment struct{}

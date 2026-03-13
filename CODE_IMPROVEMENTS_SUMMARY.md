@@ -70,7 +70,7 @@ func (c *CRUDBase[T]) GetList(pageInfo request.PageInfo) ([]T, int64, error)
 ```go
 type ValidationMiddleware struct{}
 
-func (vm *ValidationMiddleware) ValidateBody(c *fiber.Ctx, dest interface{}) error
+func (vm *ValidationMiddleware) ValidateBody(c *fiber.Ctx, dest any) error
 func (vm *ValidationMiddleware) ValidateParams(c *fiber.Ctx, paramName string) (string, error)
 func (vm *ValidationMiddleware) ValidateID(c *fiber.Ctx) (uint, error)
 ```

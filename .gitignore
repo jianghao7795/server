@@ -2,7 +2,7 @@
 tmp
 log
 .idea
-server-fiber
+server
 config.yaml
 breakpointDir
 fileDir

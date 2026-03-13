@@ -1,8 +1,8 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/system/response"
+	global "server/model"
+	"server/model/system/response"
 )
 
 // GetDB 获取数据库的所有数据库名

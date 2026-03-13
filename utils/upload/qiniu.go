@@ -7,7 +7,7 @@ import (
 	"mime/multipart"
 	"time"
 
-	global "server-fiber/model"
+	global "server/model"
 
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"

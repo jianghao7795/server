@@ -1,7 +1,7 @@
 package response
 
 import (
-	"server-fiber/model/system/request"
+	"server/model/system/request"
 )
 
 type PolicyPathResponse struct {

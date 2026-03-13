@@ -3,8 +3,8 @@ package middleware
 import (
 	"context"
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
+	global "server/model"
+	"server/model/common/response"
 	"time"
 
 	"go.uber.org/zap"

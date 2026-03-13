@@ -1,8 +1,8 @@
 package request
 
 import (
-	"server-fiber/model/common/request"
-	model "server-fiber/model/system"
+	"server/model/common/request"
+	model "server/model/system"
 )
 
 // User register structure

@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Server-Fiber API",
+    "title": "server API",
     "description": "基于 Fiber 框架的后端服务 API 文档",
     "version": "1.0.0",
     "contact": {
@@ -124,7 +124,7 @@
         "tags": ["User"],
         "summary": "管理员注册账号",
         "description": "管理员注册新用户账号",
-        "security": [{"ApiKeyAuth": []}],
+        "security": [{ "ApiKeyAuth": [] }],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
@@ -152,7 +152,7 @@
         "tags": ["User"],
         "summary": "用户修改密码",
         "description": "用户修改登录密码",
-        "security": [{"ApiKeyAuth": []}],
+        "security": [{ "ApiKeyAuth": [] }],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
@@ -180,7 +180,7 @@
         "tags": ["User"],
         "summary": "分页获取用户列表",
         "description": "分页获取用户列表信息",
-        "security": [{"ApiKeyAuth": []}],
+        "security": [{ "ApiKeyAuth": [] }],
         "produces": ["application/json"],
         "parameters": [
           {
@@ -219,7 +219,7 @@
         "tags": ["User"],
         "summary": "获取自身信息",
         "description": "获取当前登录用户信息",
-        "security": [{"ApiKeyAuth": []}],
+        "security": [{ "ApiKeyAuth": [] }],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -236,7 +236,7 @@
         "tags": ["Article"],
         "summary": "创建文章",
         "description": "创建新的文章",
-        "security": [{"ApiKeyAuth": []}],
+        "security": [{ "ApiKeyAuth": [] }],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
@@ -333,7 +333,7 @@
         "tags": ["Casbin"],
         "summary": "更新角色API权限",
         "description": "更新角色的API权限配置",
-        "security": [{"ApiKeyAuth": []}],
+        "security": [{ "ApiKeyAuth": [] }],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [

@@ -1,11 +1,11 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/request"
-	"server-fiber/model/common/response"
-	"server-fiber/model/system"
-	systemReq "server-fiber/model/system/request"
+	global "server/model"
+	"server/model/common/request"
+	"server/model/common/response"
+	"server/model/system"
+	systemReq "server/model/system/request"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

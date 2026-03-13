@@ -2,12 +2,12 @@ package system
 
 import (
 	"context"
-	"server-fiber/model/system"
+	"server/model/system"
 	"time"
 
 	"go.uber.org/zap"
 
-	global "server-fiber/model"
+	global "server/model"
 )
 
 //@author: wuhao

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"server-fiber/model/system"
+	"server/model/system"
 
 	"github.com/stretchr/testify/assert"
 )

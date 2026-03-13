@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	global "server-fiber/model"
-	"server-fiber/model/system/request"
+	global "server/model"
+	"server/model/system/request"
 	"sort"
 
 	"go.uber.org/zap"

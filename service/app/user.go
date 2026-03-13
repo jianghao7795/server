@@ -2,12 +2,12 @@ package app
 
 import (
 	"errors"
-	"server-fiber/model/app"
-	"server-fiber/model/common/request"
+	"server/model/app"
+	"server/model/common/request"
 
-	global "server-fiber/model"
+	global "server/model"
 
-	appReq "server-fiber/model/app/request"
+	appReq "server/model/app/request"
 
 	"gorm.io/gorm"
 )

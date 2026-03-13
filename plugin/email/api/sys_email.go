@@ -1,10 +1,10 @@
 package api
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	email_response "server-fiber/plugin/email/model/response"
-	"server-fiber/plugin/email/service"
+	global "server/model"
+	"server/model/common/response"
+	email_response "server/plugin/email/model/response"
+	"server/plugin/email/service"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

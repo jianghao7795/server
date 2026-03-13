@@ -1,8 +1,8 @@
 package app
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
+	global "server/model"
+	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v2"
 )

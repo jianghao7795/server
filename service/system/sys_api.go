@@ -3,10 +3,10 @@ package system
 import (
 	"errors"
 	"fmt"
-	global "server-fiber/model"
-	"server-fiber/model/common/request"
-	"server-fiber/model/system"
-	systemReq "server-fiber/model/system/request"
+	global "server/model"
+	"server/model/common/request"
+	"server/model/system"
+	systemReq "server/model/system/request"
 
 	"gorm.io/gorm"
 )

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"server-fiber/plugin/email/utils"
+	"server/plugin/email/utils"
 )
 
 type EmailService struct{}

@@ -1,8 +1,8 @@
 package request
 
 import (
-	"server-fiber/model/common/request"
-	"server-fiber/model/system"
+	"server/model/common/request"
+	"server/model/system"
 )
 
 // api分页条件查询及排序结构体

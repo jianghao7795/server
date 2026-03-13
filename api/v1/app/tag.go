@@ -1,11 +1,11 @@
 package app
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/app"
-	appReq "server-fiber/model/app/request"
-	"server-fiber/model/common/request"
-	"server-fiber/model/common/response"
+	global "server/model"
+	"server/model/app"
+	appReq "server/model/app/request"
+	"server/model/common/request"
+	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

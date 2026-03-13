@@ -2,9 +2,9 @@ package frontend
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	"server-fiber/model/frontend/request"
+	global "server/model"
+	"server/model/common/response"
+	"server/model/frontend/request"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

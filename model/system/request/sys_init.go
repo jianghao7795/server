@@ -3,7 +3,7 @@ package request
 import (
 	"fmt"
 
-	"server-fiber/config"
+	"server/config"
 )
 
 type InitDB struct {

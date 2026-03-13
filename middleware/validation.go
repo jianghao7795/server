@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"server-fiber/utils"
+	"server/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -10,7 +10,7 @@ import (
 type ValidationMiddleware struct{}
 
 // ValidateBody validates request body and binds to struct
-func (vm *ValidationMiddleware) ValidateBody(c *fiber.Ctx, dest interface{}) error {
+func (vm *ValidationMiddleware) ValidateBody(c *fiber.Ctx, dest any) error {
 	if err := c.BodyParser(dest); err != nil {
 		return utils.ErrorHandlerInstance.HandleValidationError(c, "request body", err)
 	}

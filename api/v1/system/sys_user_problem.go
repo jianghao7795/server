@@ -1,9 +1,9 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	problemReq "server-fiber/model/system"
+	global "server/model"
+	"server/model/common/response"
+	problemReq "server/model/system"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"

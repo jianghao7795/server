@@ -1,9 +1,9 @@
 package frontend
 
 import (
-	fileUpload "server-fiber/api/v1/app"
-	v1 "server-fiber/api/v1/frontend"
-	"server-fiber/middleware"
+	fileUpload "server/api/v1/app"
+	v1 "server/api/v1/frontend"
+	"server/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -1,7 +1,7 @@
 package app
 
 import (
-	global "server-fiber/model"
+	global "server/model"
 )
 
 // CategoryPost 分类帖子关联结构体

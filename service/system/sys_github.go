@@ -1,9 +1,9 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/request"
-	"server-fiber/model/system"
+	global "server/model"
+	"server/model/common/request"
+	"server/model/system"
 	"sort"
 	"time"
 )

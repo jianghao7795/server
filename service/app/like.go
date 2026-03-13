@@ -2,8 +2,8 @@ package app
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/app"
+	global "server/model"
+	"server/model/app"
 
 	"gorm.io/gorm"
 )

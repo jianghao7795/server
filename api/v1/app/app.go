@@ -1,7 +1,7 @@
 package app
 
 import (
-	appService "server-fiber/service/app"
+	appService "server/service/app"
 )
 
 // ArticleApi article

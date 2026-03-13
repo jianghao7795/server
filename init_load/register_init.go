@@ -1,8 +1,8 @@
 package init_load
 
 // import (
-// 	_ "server-fiber/source/example"
-// 	_ "server-fiber/source/system"
+// 	_ "server/source/example"
+// 	_ "server/source/system"
 // )
 
 // func init() {

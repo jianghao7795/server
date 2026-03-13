@@ -1,6 +1,6 @@
 package example
 
-import exampleServer "server-fiber/service/example"
+import exampleServer "server/service/example"
 
 type FileUploadAndDownloadApi struct{}
 type ExcelApi struct{}

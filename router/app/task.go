@@ -1,8 +1,8 @@
 package app
 
 import (
-	v1 "server-fiber/api/v1/app"
-	"server-fiber/middleware"
+	v1 "server/api/v1/app"
+	"server/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )

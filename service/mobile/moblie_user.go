@@ -2,10 +2,10 @@ package mobile
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/common/request"
-	"server-fiber/model/mobile"
-	mobileReq "server-fiber/model/mobile/request"
+	global "server/model"
+	"server/model/common/request"
+	"server/model/mobile"
+	mobileReq "server/model/mobile/request"
 )
 
 type MobileUserService struct{}

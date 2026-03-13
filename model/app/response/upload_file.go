@@ -7,7 +7,7 @@
 
 package response
 
-import "server-fiber/model/app"
+import "server/model/app"
 
 type ResponseUploadFile struct {
 	File app.FileUploadAndDownload `json:"file" form:"file"`

@@ -3,13 +3,13 @@ package example
 import (
 	ioutil "io"
 	"mime/multipart"
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	"server-fiber/model/example"
-	"server-fiber/model/example/request"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/common/response"
+	"server/model/example"
+	"server/model/example/request"
+	"server/utils"
 
-	exampleRes "server-fiber/model/example/response"
+	exampleRes "server/model/example/response"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

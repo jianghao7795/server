@@ -3,12 +3,12 @@ package frontend
 import (
 	"crypto/rsa"
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/app"
-	"server-fiber/model/frontend"
-	frontendRequest "server-fiber/model/frontend/request"
-	frontendResponse "server-fiber/model/frontend/response"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/app"
+	"server/model/frontend"
+	frontendRequest "server/model/frontend/request"
+	frontendResponse "server/model/frontend/response"
+	"server/utils"
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"

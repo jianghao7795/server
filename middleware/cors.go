@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"server-fiber/config"
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
+	"server/config"
+	global "server/model"
+	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v2"
 )

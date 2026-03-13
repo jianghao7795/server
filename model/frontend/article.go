@@ -1,7 +1,7 @@
 package frontend
 
 import (
-	global "server-fiber/model"
+	global "server/model"
 )
 
 type Article struct {

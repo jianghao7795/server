@@ -1,7 +1,7 @@
 package app
 
 import (
-	global "server-fiber/model"
+	global "server/model"
 )
 
 // Category 分类结构体

@@ -1,6 +1,6 @@
 package response
 
-import "server-fiber/model/example"
+import "server/model/example"
 
 type ExaCustomerResponse struct {
 	Customer example.ExaCustomer `json:"customer"`

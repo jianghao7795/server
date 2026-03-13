@@ -10,10 +10,10 @@ import (
 	"syscall"
 	"time"
 
-	"server-fiber/init_load"
-	global "server-fiber/model"
-	"server-fiber/router"
-	"server-fiber/service/system"
+	"server/init_load"
+	global "server/model"
+	"server/router"
+	"server/service/system"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

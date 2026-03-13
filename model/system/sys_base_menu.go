@@ -1,7 +1,7 @@
 package system
 
 import (
-	global "server-fiber/model"
+	global "server/model"
 )
 
 type SysBaseMenu struct {

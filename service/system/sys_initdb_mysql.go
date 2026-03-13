@@ -5,13 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
-	"server-fiber/config"
-	"server-fiber/model/system/request"
-	"server-fiber/utils"
+	"server/config"
+	"server/model/system/request"
+	"server/utils"
 
 	"github.com/gookit/color"
 
-	global "server-fiber/model"
+	global "server/model"
 
 	"github.com/google/uuid"
 	"gorm.io/driver/mysql"

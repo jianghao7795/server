@@ -2,9 +2,9 @@ package core
 
 import (
 	"os"
-	"server-fiber/core/internal"
-	global "server-fiber/model"
-	"server-fiber/utils"
+	"server/core/internal"
+	global "server/model"
+	"server/utils"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

@@ -3,8 +3,8 @@ package frontend
 import (
 	"encoding/json"
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/frontend"
+	global "server/model"
+	"server/model/frontend"
 	"strconv"
 	"time"
 

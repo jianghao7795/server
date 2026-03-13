@@ -2,7 +2,7 @@ package init_load
 
 import (
 	"context"
-	global "server-fiber/model"
+	global "server/model"
 	"strings"
 	"time"
 

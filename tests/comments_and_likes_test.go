@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	global "server-fiber/model"
-	"server-fiber/model/app"
-	appService "server-fiber/service/app"
+	global "server/model"
+	"server/model/app"
+	appService "server/service/app"
 
 	"github.com/stretchr/testify/assert"
 )

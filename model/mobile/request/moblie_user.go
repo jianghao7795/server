@@ -1,8 +1,8 @@
 package request
 
 import (
-	"server-fiber/model/common/request"
-	"server-fiber/model/mobile"
+	"server/model/common/request"
+	"server/model/mobile"
 )
 
 type MobileUserSearch struct {

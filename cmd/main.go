@@ -10,10 +10,10 @@ import (
 	"syscall"
 	"time"
 
-	"server-fiber/core"
-	_ "server-fiber/docs" // 引入生成的文档
-	global "server-fiber/model"
-	"server-fiber/service/system"
+	"server/core"
+	_ "server/docs" // 引入生成的文档
+	global "server/model"
+	"server/service/system"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

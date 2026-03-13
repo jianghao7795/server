@@ -7,7 +7,7 @@
 
 package app
 
-import global "server-fiber/model"
+import global "server/model"
 
 type FileUploadAndDownload struct {
 	global.MODEL

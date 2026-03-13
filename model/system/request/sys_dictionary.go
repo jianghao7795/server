@@ -1,8 +1,8 @@
 package request
 
 import (
-	"server-fiber/model/common/request"
-	"server-fiber/model/system"
+	"server/model/common/request"
+	"server/model/system"
 )
 
 type SysDictionarySearch struct {

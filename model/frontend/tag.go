@@ -2,7 +2,7 @@
 package frontend
 
 import (
-	global "server-fiber/model"
+	global "server/model"
 )
 
 // tag 结构体

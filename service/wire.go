@@ -1,11 +1,11 @@
 package service
 
 import (
-	"server-fiber/service/app"
-	"server-fiber/service/example"
-	"server-fiber/service/frontend"
-	"server-fiber/service/mobile"
-	"server-fiber/service/system"
+	"server/service/app"
+	"server/service/example"
+	"server/service/frontend"
+	"server/service/mobile"
+	"server/service/system"
 
 	"github.com/google/wire"
 	"gorm.io/gorm"

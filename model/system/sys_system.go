@@ -1,7 +1,7 @@
 package system
 
 import (
-	"server-fiber/config"
+	"server/config"
 )
 
 // 配置文件结构体

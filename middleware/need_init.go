@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	global "server-fiber/model"
+	global "server/model"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -1,7 +1,7 @@
 package router
 
 import (
-	"server-fiber/plugin/email/api"
+	"server/plugin/email/api"
 
 	"github.com/gofiber/fiber/v2"
 )

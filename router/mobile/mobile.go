@@ -1,9 +1,9 @@
 package mobile
 
 import (
-	fileUpload "server-fiber/api/v1/app"
-	v1 "server-fiber/api/v1/mobile"
-	"server-fiber/middleware"
+	fileUpload "server/api/v1/app"
+	v1 "server/api/v1/mobile"
+	"server/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )

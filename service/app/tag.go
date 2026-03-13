@@ -1,10 +1,10 @@
 package app
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/app"
-	appReq "server-fiber/model/app/request"
-	"server-fiber/model/common/request"
+	global "server/model"
+	"server/model/app"
+	appReq "server/model/app/request"
+	"server/model/common/request"
 	"strings"
 )
 

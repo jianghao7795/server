@@ -2,8 +2,8 @@ package utils
 
 import (
 	"fmt"
-	"server-fiber/model"
-	"server-fiber/model/common/response"
+	"server/model"
+	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

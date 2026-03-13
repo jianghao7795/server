@@ -2,7 +2,7 @@
 package app
 
 import (
-	global "server-fiber/model"
+	global "server/model"
 )
 
 // Tag 结构体

@@ -1,10 +1,10 @@
 package system
 
 import (
-	"server-fiber/config"
-	global "server-fiber/model"
-	"server-fiber/model/system"
-	"server-fiber/utils"
+	"server/config"
+	global "server/model"
+	"server/model/system"
+	"server/utils"
 
 	"go.uber.org/zap"
 )

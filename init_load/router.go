@@ -7,9 +7,9 @@
 package init_load
 
 import (
-	"server-fiber/middleware"
-	global "server-fiber/model"
-	"server-fiber/router"
+	"server/middleware"
+	global "server/model"
+	"server/router"
 	"time"
 
 	"github.com/gofiber/contrib/swagger"
@@ -33,7 +33,7 @@ func Routers(
 		BasePath: "/",
 		FilePath: "./docs/swagger.json",
 		Path:     "./docs",
-		Title:    "Server-Fiber API documentation",
+		Title:    "server API documentation",
 		CacheAge: 3600, // Default to 1 hour
 	}
 

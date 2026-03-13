@@ -3,9 +3,9 @@ package system
 import (
 	"testing"
 
-	"server-fiber/api/v1/system"
-	"server-fiber/model/common/request"
-	systemModel "server-fiber/model/system"
+	"server/api/v1/system"
+	"server/model/common/request"
+	systemModel "server/model/system"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -71,10 +71,10 @@ func TestRequestParsing(t *testing.T) {
 func TestResponseFormat(t *testing.T) {
 	t.Run("验证响应结构", func(t *testing.T) {
 		// 测试响应结构
-		response := map[string]interface{}{
+		response := map[string]any{
 			"code": 200,
 			"msg":  "success",
-			"data": map[string]interface{}{
+			"data": map[string]any{
 				"list":     []systemModel.SysGithub{},
 				"page":     1,
 				"pageSize": 10,

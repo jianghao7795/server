@@ -2,8 +2,8 @@ package utils
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/mobile"
+	global "server/model"
+	"server/model/mobile"
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"

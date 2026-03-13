@@ -1,7 +1,7 @@
 package response
 
 import (
-	"server-fiber/model/system"
+	"server/model/system"
 )
 
 type SysUserResponse struct {

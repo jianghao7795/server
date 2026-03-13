@@ -1,8 +1,8 @@
 package request
 
 import (
-	"server-fiber/model/app"
-	"server-fiber/model/common/request"
+	"server/model/app"
+	"server/model/common/request"
 )
 
 type BaseMessageBody struct {

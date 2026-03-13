@@ -3,9 +3,9 @@ package middleware
 
 import (
 	"encoding/json"
-	global "server-fiber/model"
-	"server-fiber/model/system"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/system"
+	"server/utils"
 	"strconv"
 	"strings"
 	"time"
@@ -13,7 +13,7 @@ import (
 	// json "github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 
-	systemService "server-fiber/service/system"
+	systemService "server/service/system"
 
 	"go.uber.org/zap"
 )

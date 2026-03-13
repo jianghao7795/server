@@ -1,9 +1,9 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/system"
-	"server-fiber/model/system/response"
+	global "server/model"
+	"server/model/system"
+	"server/model/system/response"
 	"strconv"
 )
 

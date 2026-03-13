@@ -1,9 +1,9 @@
 package frontend
 
 import (
-	global "server-fiber/model"
-	appReq "server-fiber/model/app/request"
-	"server-fiber/model/common/response"
+	global "server/model"
+	appReq "server/model/app/request"
+	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

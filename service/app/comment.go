@@ -2,10 +2,10 @@ package app
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/app"
-	commentReq "server-fiber/model/app/request"
-	"server-fiber/model/common/request"
+	global "server/model"
+	"server/model/app"
+	commentReq "server/model/app/request"
+	"server/model/common/request"
 	"strings"
 )
 

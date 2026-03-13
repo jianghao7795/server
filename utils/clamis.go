@@ -2,8 +2,8 @@ package utils
 
 import (
 	"errors"
-	global "server-fiber/model"
-	systemReq "server-fiber/model/system/request"
+	global "server/model"
+	systemReq "server/model/system/request"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"

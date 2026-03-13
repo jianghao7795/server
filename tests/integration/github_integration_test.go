@@ -33,7 +33,7 @@ func TestGithubIntegration_CompleteFlow(t *testing.T) {
 		if err == nil && resp != nil {
 			assert.Equal(t, 200, resp.StatusCode)
 
-			var responseBody map[string]interface{}
+			var responseBody map[string]any
 			json.NewDecoder(resp.Body).Decode(&responseBody)
 
 			// 验证响应结构
@@ -54,7 +54,7 @@ func TestGithubIntegration_CompleteFlow(t *testing.T) {
 
 		if err == nil && resp != nil {
 			// 如果网络正常，验证响应
-			var responseBody map[string]interface{}
+			var responseBody map[string]any
 			json.NewDecoder(resp.Body).Decode(&responseBody)
 
 			// 根据网络状态，响应可能是成功或网络错误

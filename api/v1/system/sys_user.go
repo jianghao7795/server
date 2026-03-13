@@ -2,14 +2,14 @@ package system
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	"server-fiber/model/system"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/common/response"
+	"server/model/system"
+	"server/utils"
 	"strconv"
 
-	systemReq "server-fiber/model/system/request"
-	systemRes "server-fiber/model/system/response"
+	systemReq "server/model/system/request"
+	systemRes "server/model/system/response"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/redis/go-redis/v9"

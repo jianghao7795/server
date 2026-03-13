@@ -1,8 +1,8 @@
 package system
 
 import (
-	v1 "server-fiber/api/v1/system"
-	"server-fiber/middleware"
+	v1 "server/api/v1/system"
+	"server/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )

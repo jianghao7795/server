@@ -1,9 +1,9 @@
 package mobile
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	"server-fiber/model/mobile"
+	global "server/model"
+	"server/model/common/response"
+	"server/model/mobile"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

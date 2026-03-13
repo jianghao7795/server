@@ -1,6 +1,6 @@
 package response
 
-import "server-fiber/model/example"
+import "server/model/example"
 
 type FilePathResponse struct {
 	FilePath string `json:"filePath"`

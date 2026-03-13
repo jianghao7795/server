@@ -2,11 +2,11 @@ package example
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/example"
-	"server-fiber/model/example/request"
-	"server-fiber/model/system"
-	systemService "server-fiber/service/system"
+	global "server/model"
+	"server/model/example"
+	"server/model/example/request"
+	"server/model/system"
+	systemService "server/service/system"
 	"strings"
 )
 

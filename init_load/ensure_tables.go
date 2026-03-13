@@ -3,10 +3,10 @@ package init_load
 import (
 	"context"
 
-	"server-fiber/model/app"
-	"server-fiber/model/example"
-	sysModel "server-fiber/model/system"
-	"server-fiber/service/system"
+	"server/model/app"
+	"server/model/example"
+	sysModel "server/model/system"
+	"server/service/system"
 
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"gorm.io/gorm"

@@ -1,7 +1,7 @@
 package request
 
 import (
-	"server-fiber/model/common/request"
+	"server/model/common/request"
 )
 
 type CommentSearch struct {

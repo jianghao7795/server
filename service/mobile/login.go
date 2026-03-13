@@ -2,11 +2,11 @@ package mobile
 
 import (
 	"errors"
-	global "server-fiber/model"
-	"server-fiber/model/mobile"
-	"server-fiber/model/mobile/request"
-	"server-fiber/model/mobile/response"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/mobile"
+	"server/model/mobile/request"
+	"server/model/mobile/response"
+	"server/utils"
 
 	"gorm.io/gorm"
 )

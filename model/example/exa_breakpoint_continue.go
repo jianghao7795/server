@@ -2,7 +2,7 @@ package example
 
 import (
 	"mime/multipart"
-	global "server-fiber/model"
+	global "server/model"
 )
 
 // file struct, 文件结构体

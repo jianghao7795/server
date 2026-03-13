@@ -2,10 +2,10 @@ package system
 
 import (
 	"errors"
-	"server-fiber/model/system/request"
+	"server/model/system/request"
 	"sync"
 
-	global "server-fiber/model"
+	global "server/model"
 
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"

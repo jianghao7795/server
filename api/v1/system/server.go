@@ -1,6 +1,6 @@
 package system
 
-import systemServer "server-fiber/service/system"
+import systemServer "server/service/system"
 
 // service 端的服务
 

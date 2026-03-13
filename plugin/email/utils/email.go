@@ -6,7 +6,7 @@ import (
 	"net/smtp"
 	"strings"
 
-	"server-fiber/plugin/email/global"
+	"server/plugin/email/global"
 
 	"github.com/jordan-wright/email"
 )

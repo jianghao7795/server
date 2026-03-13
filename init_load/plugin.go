@@ -1,9 +1,9 @@
 package init_load
 
 import (
-	global "server-fiber/model"
-	"server-fiber/plugin/email"
-	"server-fiber/utils/plugin"
+	global "server/model"
+	"server/plugin/email"
+	"server/utils/plugin"
 
 	"github.com/gofiber/fiber/v2"
 )

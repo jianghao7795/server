@@ -8,9 +8,9 @@
 package app
 
 import (
-	global "server-fiber/model"
-	responseUploadFile "server-fiber/model/app/response"
-	"server-fiber/model/common/response"
+	global "server/model"
+	responseUploadFile "server/model/app/response"
+	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

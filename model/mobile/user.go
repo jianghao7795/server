@@ -1,7 +1,7 @@
 package mobile
 
 import (
-	global "server-fiber/model"
+	global "server/model"
 )
 
 // MobileUser 结构体

@@ -5,7 +5,7 @@ import (
 	ioutil "io"
 	"math"
 	"os"
-	global "server-fiber/model"
+	global "server/model"
 	"strconv"
 )
 

@@ -1,9 +1,9 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	systemRes "server-fiber/model/system/response"
+	global "server/model"
+	"server/model/common/response"
+	systemRes "server/model/system/response"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/mojocn/base64Captcha"

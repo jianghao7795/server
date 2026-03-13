@@ -12,9 +12,9 @@ import (
 	ioutil "io"
 	"os"
 	"path/filepath"
-	global "server-fiber/model"
-	"server-fiber/model/system"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/system"
+	"server/utils"
 	"strconv"
 	"strings"
 	"text/template"
@@ -86,7 +86,7 @@ func Init(Package string) {
 		packageServiceName: {
 			path: filepath.Join(global.CONFIG.AutoCode.Root,
 				global.CONFIG.AutoCode.Server, "service", "enter.go"),
-			importCodeF:  "server-fiber/%s/%s",
+			importCodeF:  "server/%s/%s",
 			packageNameF: "%s",
 			groupName:    "ServiceGroup",
 			structNameF:  "%sServiceGroup",
@@ -94,7 +94,7 @@ func Init(Package string) {
 		packageRouterName: {
 			path: filepath.Join(global.CONFIG.AutoCode.Root,
 				global.CONFIG.AutoCode.Server, "router", "enter.go"),
-			importCodeF:  "server-fiber/%s/%s",
+			importCodeF:  "server/%s/%s",
 			packageNameF: "%s",
 			groupName:    "RouterGroup",
 			structNameF:  "%s",
@@ -102,7 +102,7 @@ func Init(Package string) {
 		packageAPIName: {
 			path: filepath.Join(global.CONFIG.AutoCode.Root,
 				global.CONFIG.AutoCode.Server, "api/v1", "enter.go"),
-			importCodeF:  "server-fiber/%s/%s",
+			importCodeF:  "server/%s/%s",
 			packageNameF: "%s",
 			groupName:    "ApiGroup",
 			structNameF:  "%sApiGroup",
@@ -289,7 +289,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			global.CONFIG.AutoCode.Server, global.CONFIG.AutoCode.SInitialize, "gorm.go")
 		routePath := filepath.Join(global.CONFIG.AutoCode.Root,
 			global.CONFIG.AutoCode.Server, global.CONFIG.AutoCode.SInitialize, "router.go")
-		imporStr := fmt.Sprintf("server-fiber/model/%s", autoCode.Package)
+		imporStr := fmt.Sprintf("server/model/%s", autoCode.Package)
 		_ = ImportReference(routePath, "", "", autoCode.Package, "")
 		_ = ImportReference(gormPath, imporStr, "", "", "")
 

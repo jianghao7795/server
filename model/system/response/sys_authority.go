@@ -1,6 +1,6 @@
 package response
 
-import "server-fiber/model/system"
+import "server/model/system"
 
 type SysAuthorityResponse struct {
 	Authority system.SysAuthority `json:"authority"`

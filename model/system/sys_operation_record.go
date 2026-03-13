@@ -2,8 +2,8 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/frontend"
+	global "server/model"
+	"server/model/frontend"
 	"time"
 )
 

@@ -1,6 +1,6 @@
 package mobile
 
-import mobileServiceApp "server-fiber/service/mobile"
+import mobileServiceApp "server/service/mobile"
 
 var userService = mobileServiceApp.UserServiceApp
 

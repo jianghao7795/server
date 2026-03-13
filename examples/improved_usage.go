@@ -1,11 +1,11 @@
 package examples
 
 import (
-	"server-fiber/middleware"
-	"server-fiber/model/app"
-	"server-fiber/model/common/request"
-	"server-fiber/model/common/response"
-	"server-fiber/utils"
+	"server/middleware"
+	"server/model/app"
+	"server/model/common/request"
+	"server/model/common/response"
+	"server/utils"
 
 	"github.com/gofiber/fiber/v2"
 )

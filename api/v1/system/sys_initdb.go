@@ -1,12 +1,12 @@
 package system
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/app"
-	"server-fiber/model/common/response"
-	"server-fiber/model/example"
-	sysModel "server-fiber/model/system"
-	"server-fiber/model/system/request"
+	global "server/model"
+	"server/model/app"
+	"server/model/common/response"
+	"server/model/example"
+	sysModel "server/model/system"
+	"server/model/system/request"
 
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gofiber/fiber/v2"

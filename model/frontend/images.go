@@ -1,6 +1,6 @@
 package frontend
 
-import global "server-fiber/model"
+import global "server/model"
 
 type ExaFile struct {
 	global.MODEL

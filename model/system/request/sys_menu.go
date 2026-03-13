@@ -1,8 +1,8 @@
 package request
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/system"
+	global "server/model"
+	"server/model/system"
 )
 
 // Add menu authority info structure

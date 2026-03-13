@@ -2,9 +2,9 @@ package init_load
 
 import (
 	"errors"
-	"server-fiber/config"
-	"server-fiber/init_load/gorm_log"
-	global "server-fiber/model"
+	"server/config"
+	"server/init_load/gorm_log"
+	global "server/model"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

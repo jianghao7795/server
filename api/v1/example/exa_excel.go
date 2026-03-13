@@ -2,11 +2,11 @@ package example
 
 import (
 	"os"
-	global "server-fiber/model"
-	"server-fiber/model/common/request"
-	"server-fiber/model/common/response"
-	"server-fiber/model/example"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/common/request"
+	"server/model/common/response"
+	"server/model/example"
+	"server/utils"
 	"strings"
 	"time"
 

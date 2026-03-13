@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"server-fiber/model"
-	"server-fiber/model/system"
+	"server/model"
+	"server/model/system"
 	"sort"
 	"time"
 
@@ -94,7 +94,7 @@ func fetchGitHubCommits() ([]system.GithubCommit, error) {
 	const (
 		page    = "1"
 		perPage = "20"
-		url     = "https://api.github.com/repos/JiangHaoCode/server-fiber/commits"
+		url     = "https://api.github.com/repos/JiangHaoCode/server/commits"
 	)
 
 	reqURL := fmt.Sprintf("%s?page=%s&per_page=%s", url, page, perPage)

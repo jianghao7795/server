@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	global "server-fiber/model"
-	"server-fiber/utils"
+	global "server/model"
+	"server/utils"
 	"time"
 
 	// json "github.com/bytedance/sonic"
@@ -67,7 +67,7 @@ func viperInit() (*viper.Viper, error) {
 		}
 	} else {
 		if isFile, err := utils.IsExistFile(config); isFile {
-			fmt.Printf("您正在使用命令行的-c参数传递的值,config的路径为%v\n", config) // server-fiber -c config.yaml
+			fmt.Printf("您正在使用命令行的-c参数传递的值,config的路径为%v\n", config) // server -c config.yaml
 		} else {
 			panic("请检查配置文件" + config + "是否存在: " + err.Error())
 		}

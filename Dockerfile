@@ -1,4 +1,4 @@
-FROM docker.io/library/golang:1.25-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 LABEL org.opencontainers.image.authors="jianghao"
 
@@ -25,7 +25,7 @@ COPY --from=builder /app/docs/ ./docs/
 
 EXPOSE 3100
 CMD ["/app/fiber", "-c", "./conf/"]
-# ENTRYPOINT ["/app/server-fiber", "-c", "config.yaml"]
+# ENTRYPOINT ["/app/server", "-c", "config.yaml"]
 
 
 #

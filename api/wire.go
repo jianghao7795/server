@@ -1,16 +1,16 @@
 package api
 
 import (
-	"server-fiber/api/v1/app"
-	"server-fiber/api/v1/example"
-	"server-fiber/api/v1/frontend"
-	"server-fiber/api/v1/mobile"
-	"server-fiber/api/v1/system"
-	appService "server-fiber/service/app"
-	exampleService "server-fiber/service/example"
-	frontendService "server-fiber/service/frontend"
-	mobileService "server-fiber/service/mobile"
-	systemService "server-fiber/service/system"
+	"server/api/v1/app"
+	"server/api/v1/example"
+	"server/api/v1/frontend"
+	"server/api/v1/mobile"
+	"server/api/v1/system"
+	appService "server/service/app"
+	exampleService "server/service/example"
+	frontendService "server/service/frontend"
+	mobileService "server/service/mobile"
+	systemService "server/service/system"
 
 	"github.com/google/wire"
 )

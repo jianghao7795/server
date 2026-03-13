@@ -1,8 +1,8 @@
 package app
 
 import (
-	global "server-fiber/model"
-	"server-fiber/model/system"
+	global "server/model"
+	"server/model/system"
 )
 
 type Article struct {

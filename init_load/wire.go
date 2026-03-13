@@ -1,8 +1,8 @@
 package init_load
 
 import (
-	global "server-fiber/model"
-	"server-fiber/router"
+	global "server/model"
+	"server/router"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

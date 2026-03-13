@@ -1,8 +1,8 @@
 package email
 
 import (
-	"server-fiber/plugin/email/global"
-	"server-fiber/plugin/email/router"
+	"server/plugin/email/global"
+	"server/plugin/email/router"
 
 	"github.com/gofiber/fiber/v2"
 )

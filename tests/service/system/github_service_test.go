@@ -3,8 +3,8 @@ package system
 import (
 	"testing"
 
-	"server-fiber/model/common/request"
-	systemModel "server-fiber/model/system"
+	"server/model/common/request"
+	systemModel "server/model/system"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

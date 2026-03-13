@@ -4,11 +4,11 @@ import (
 	"errors"
 	"strconv"
 
-	global "server-fiber/model"
-	"server-fiber/model/common/response"
-	"server-fiber/model/mobile"
-	"server-fiber/model/mobile/request"
-	"server-fiber/utils"
+	global "server/model"
+	"server/model/common/response"
+	"server/model/mobile"
+	"server/model/mobile/request"
+	"server/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"

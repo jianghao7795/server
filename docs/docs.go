@@ -39,7 +39,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysApi"
+                            "$ref": "#/definitions/server_model_system.SysApi"
                         }
                     }
                 ],
@@ -49,7 +49,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -98,7 +98,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -138,7 +138,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.IdsReq"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
@@ -148,7 +148,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -187,7 +187,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -227,7 +227,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.GetById"
+                            "$ref": "#/definitions/server_model_common_request.GetById"
                         }
                     }
                 ],
@@ -235,7 +235,7 @@ const docTemplate = `{
                     "200": {
                         "description": "根据id获取api,返回包括api详情",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -262,7 +262,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.SearchApiParams"
+                            "$ref": "#/definitions/server_model_system_request.SearchApiParams"
                         }
                     }
                 ],
@@ -272,13 +272,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -312,7 +312,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysApi"
+                            "$ref": "#/definitions/server_model_system.SysApi"
                         }
                     }
                 ],
@@ -322,7 +322,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -363,7 +363,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.Article"
+                            "$ref": "#/definitions/server_model_app.Article"
                         }
                     }
                 ],
@@ -373,7 +373,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -395,19 +395,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -447,7 +447,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -466,19 +466,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -509,7 +509,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.IdsReq"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
@@ -519,7 +519,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -538,19 +538,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -582,7 +582,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -591,7 +591,7 @@ const docTemplate = `{
                                             "type": "integer"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_app.Article"
+                                            "$ref": "#/definitions/server_model_app.Article"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -604,13 +604,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "404": {
                         "description": "文章不存在",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -669,7 +669,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -678,7 +678,7 @@ const docTemplate = `{
                                             "type": "integer"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -691,13 +691,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -724,7 +724,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -746,13 +746,13 @@ const docTemplate = `{
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -783,7 +783,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.IdsReq"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
@@ -793,7 +793,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -812,19 +812,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -863,7 +863,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.Article"
+                            "$ref": "#/definitions/server_model_app.Article"
                         }
                     }
                 ],
@@ -873,7 +873,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -892,19 +892,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -935,7 +935,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_response.SysAuthorityCopyResponse"
+                            "$ref": "#/definitions/server_model_system_response.SysAuthorityCopyResponse"
                         }
                     }
                 ],
@@ -945,13 +945,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.SysAuthorityResponse"
+                                            "$ref": "#/definitions/server_model_system_response.SysAuthorityResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -964,13 +964,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -1001,7 +1001,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                            "$ref": "#/definitions/server_model_system.SysAuthority"
                         }
                     }
                 ],
@@ -1011,13 +1011,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.SysAuthorityResponse"
+                                            "$ref": "#/definitions/server_model_system_response.SysAuthorityResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -1030,13 +1030,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -1075,7 +1075,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1091,13 +1091,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -1127,7 +1127,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.PageInfo"
+                            "$ref": "#/definitions/server_model_common_request.PageInfo"
                         }
                     }
                 ],
@@ -1137,13 +1137,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -1180,7 +1180,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                            "$ref": "#/definitions/server_model_system.SysAuthority"
                         }
                     }
                 ],
@@ -1190,7 +1190,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1230,7 +1230,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                            "$ref": "#/definitions/server_model_system.SysAuthority"
                         }
                     }
                 ],
@@ -1240,13 +1240,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.SysAuthorityResponse"
+                                            "$ref": "#/definitions/server_model_system_response.SysAuthorityResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -1282,7 +1282,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1322,7 +1322,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.SysAuthorityBtnReq"
+                            "$ref": "#/definitions/server_model_system_request.SysAuthorityBtnReq"
                         }
                     }
                 ],
@@ -1332,7 +1332,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1375,7 +1375,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.SysAuthorityBtnReq"
+                            "$ref": "#/definitions/server_model_system_request.SysAuthorityBtnReq"
                         }
                     }
                 ],
@@ -1385,7 +1385,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1425,7 +1425,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysAutoCode"
+                            "$ref": "#/definitions/server_model_system.SysAutoCode"
                         }
                     }
                 ],
@@ -1435,7 +1435,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1479,7 +1479,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.AutoCodeStruct"
+                            "$ref": "#/definitions/server_model_system.AutoCodeStruct"
                         }
                     }
                 ],
@@ -1517,7 +1517,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysAutoCode"
+                            "$ref": "#/definitions/server_model_system.SysAutoCode"
                         }
                     }
                 ],
@@ -1527,7 +1527,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1571,7 +1571,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.GetById"
+                            "$ref": "#/definitions/server_model_common_request.GetById"
                         }
                     }
                 ],
@@ -1581,7 +1581,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1620,7 +1620,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1663,7 +1663,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1707,7 +1707,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.GetById"
+                            "$ref": "#/definitions/server_model_common_request.GetById"
                         }
                     }
                 ],
@@ -1717,7 +1717,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1760,7 +1760,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1804,7 +1804,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.SysAutoHistory"
+                            "$ref": "#/definitions/server_model_system_request.SysAutoHistory"
                         }
                     }
                 ],
@@ -1814,13 +1814,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -1856,7 +1856,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1900,7 +1900,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.AutoCodeStruct"
+                            "$ref": "#/definitions/server_model_system.AutoCodeStruct"
                         }
                     }
                 ],
@@ -1910,7 +1910,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1954,7 +1954,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.RollBack"
+                            "$ref": "#/definitions/server_model_system_request.RollBack"
                         }
                     }
                 ],
@@ -1964,7 +1964,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2003,7 +2003,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2012,7 +2012,7 @@ const docTemplate = `{
                                             "type": "number"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.SysCaptchaResponse"
+                                            "$ref": "#/definitions/server_model_system_response.SysCaptchaResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -2048,7 +2048,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2057,7 +2057,7 @@ const docTemplate = `{
                                             "type": "number"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.SysCaptchaResponse"
+                                            "$ref": "#/definitions/server_model_system_response.SysCaptchaResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -2090,7 +2090,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.LoginToken"
+                            "$ref": "#/definitions/server_model_system_request.LoginToken"
                         }
                     }
                 ],
@@ -2100,13 +2100,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.LoginResponse"
+                                            "$ref": "#/definitions/server_model_system_response.LoginResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -2119,13 +2119,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "登录失败",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2151,7 +2151,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.Login"
+                            "$ref": "#/definitions/server_model_system_request.Login"
                         }
                     }
                 ],
@@ -2161,13 +2161,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.LoginResponse"
+                                            "$ref": "#/definitions/server_model_system_response.LoginResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -2180,13 +2180,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "登录失败",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2217,7 +2217,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.BaseMessage"
+                            "$ref": "#/definitions/server_model_app.BaseMessage"
                         }
                     }
                 ],
@@ -2227,7 +2227,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2249,13 +2249,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2295,7 +2295,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2304,7 +2304,7 @@ const docTemplate = `{
                                             "type": "integer"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_app.BaseMessage"
+                                            "$ref": "#/definitions/server_model_app.BaseMessage"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -2317,19 +2317,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "404": {
                         "description": "基础消息不存在",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2368,7 +2368,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.BaseMessage"
+                            "$ref": "#/definitions/server_model_app.BaseMessage"
                         }
                     }
                 ],
@@ -2378,7 +2378,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2397,13 +2397,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2441,13 +2441,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_app_response.ResponseUploadFile"
+                                            "$ref": "#/definitions/server_model_app_response.ResponseUploadFile"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -2485,7 +2485,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.CasbinInReceive"
+                            "$ref": "#/definitions/server_model_system_request.CasbinInReceive"
                         }
                     }
                 ],
@@ -2495,7 +2495,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2511,13 +2511,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2556,7 +2556,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2578,13 +2578,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2615,7 +2615,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.Comment"
+                            "$ref": "#/definitions/server_model_app.Comment"
                         }
                     }
                 ],
@@ -2625,7 +2625,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2644,13 +2644,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2690,7 +2690,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2709,13 +2709,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2746,7 +2746,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.IdsReq"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
@@ -2756,7 +2756,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2775,13 +2775,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -2819,7 +2819,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2828,7 +2828,7 @@ const docTemplate = `{
                                             "type": "number"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_app.Comment"
+                                            "$ref": "#/definitions/server_model_app.Comment"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -2905,7 +2905,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2914,7 +2914,7 @@ const docTemplate = `{
                                             "type": "number"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -2991,7 +2991,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3000,7 +3000,7 @@ const docTemplate = `{
                                             "type": "number"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -3037,7 +3037,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.Praise"
+                            "$ref": "#/definitions/server_model_app.Praise"
                         }
                     }
                 ],
@@ -3047,7 +3047,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3056,7 +3056,7 @@ const docTemplate = `{
                                             "type": "number"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_app.Praise"
+                                            "$ref": "#/definitions/server_model_app.Praise"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -3102,7 +3102,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.Comment"
+                            "$ref": "#/definitions/server_model_app.Comment"
                         }
                     }
                 ],
@@ -3112,7 +3112,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3131,13 +3131,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -3168,7 +3168,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_example.ExaCustomer"
+                            "$ref": "#/definitions/server_model_example.ExaCustomer"
                         }
                     }
                 ],
@@ -3178,7 +3178,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3197,13 +3197,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -3241,13 +3241,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_example_response.ExaCustomerResponse"
+                                            "$ref": "#/definitions/server_model_example_response.ExaCustomerResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -3293,7 +3293,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_example.ExaCustomer"
+                            "$ref": "#/definitions/server_model_example.ExaCustomer"
                         }
                     }
                 ],
@@ -3303,7 +3303,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3322,13 +3322,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -3366,7 +3366,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3382,13 +3382,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -3458,13 +3458,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -3522,7 +3522,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_plugin_email_model_response.Email"
+                            "$ref": "#/definitions/server_plugin_email_model_response.Email"
                         }
                     }
                 ],
@@ -3568,7 +3568,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3587,19 +3587,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -3630,7 +3630,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_example.ExcelInfo"
+                            "$ref": "#/definitions/server_model_example.ExcelInfo"
                         }
                     }
                 ],
@@ -3644,19 +3644,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -3695,7 +3695,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3711,19 +3711,19 @@ const docTemplate = `{
                     "400": {
                         "description": "文件格式错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -3749,13 +3749,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -3797,7 +3797,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3838,7 +3838,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_example.ExaFileUploadAndDownload"
+                            "$ref": "#/definitions/server_model_example.ExaFileUploadAndDownload"
                         }
                     }
                 ],
@@ -3848,7 +3848,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3864,13 +3864,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -3908,13 +3908,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_example_response.FileResponse"
+                                            "$ref": "#/definitions/server_model_example_response.FileResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -3952,7 +3952,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_example.ExaFileUploadAndDownload"
+                            "$ref": "#/definitions/server_model_example.ExaFileUploadAndDownload"
                         }
                     }
                 ],
@@ -3962,7 +3962,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3978,13 +3978,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4022,13 +4022,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_example_response.FileResponse"
+                                            "$ref": "#/definitions/server_model_example_response.FileResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4071,13 +4071,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_example_response.FilePathResponse"
+                                            "$ref": "#/definitions/server_model_example_response.FilePathResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4122,13 +4122,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_example_response.FileResponse"
+                                            "$ref": "#/definitions/server_model_example_response.FileResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4165,7 +4165,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.PageInfo"
+                            "$ref": "#/definitions/server_model_common_request.PageInfo"
                         }
                     }
                 ],
@@ -4175,13 +4175,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4226,7 +4226,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4289,13 +4289,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_example_response.ExaFileResponse"
+                                            "$ref": "#/definitions/server_model_example_response.ExaFileResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4308,19 +4308,19 @@ const docTemplate = `{
                     "400": {
                         "description": "文件过大或格式错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4360,7 +4360,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4379,13 +4379,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4411,7 +4411,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_frontend.Comment"
+                            "$ref": "#/definitions/server_model_frontend.Comment"
                         }
                     }
                 ],
@@ -4421,7 +4421,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4443,7 +4443,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4475,7 +4475,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4486,7 +4486,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/server-fiber_model_frontend.Comment"
+                                                "$ref": "#/definitions/server_model_frontend.Comment"
                                             }
                                         },
                                         "msg": {
@@ -4500,7 +4500,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4522,7 +4522,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4533,7 +4533,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/server-fiber_model_app.FileUploadAndDownload"
+                                                "$ref": "#/definitions/server_model_app.FileUploadAndDownload"
                                             }
                                         },
                                         "msg": {
@@ -4547,7 +4547,7 @@ const docTemplate = `{
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4579,7 +4579,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4601,7 +4601,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4642,7 +4642,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4651,7 +4651,7 @@ const docTemplate = `{
                                             "type": "integer"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4664,7 +4664,7 @@ const docTemplate = `{
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4690,7 +4690,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.Login"
+                            "$ref": "#/definitions/server_model_system_request.Login"
                         }
                     }
                 ],
@@ -4700,13 +4700,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.LoginResponse"
+                                            "$ref": "#/definitions/server_model_system_response.LoginResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4719,13 +4719,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "登录失败",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4757,7 +4757,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4766,7 +4766,7 @@ const docTemplate = `{
                                             "type": "integer"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_app.Article"
+                                            "$ref": "#/definitions/server_model_app.Article"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4779,13 +4779,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "404": {
                         "description": "文章不存在",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4844,7 +4844,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4853,7 +4853,7 @@ const docTemplate = `{
                                             "type": "integer"
                                         },
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4866,13 +4866,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4920,7 +4920,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4931,7 +4931,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/server-fiber_model_app.Article"
+                                                "$ref": "#/definitions/server_model_app.Article"
                                             }
                                         },
                                         "msg": {
@@ -4945,7 +4945,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -4975,7 +4975,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4996,7 +4996,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5051,13 +5051,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -5072,7 +5072,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5103,7 +5103,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5139,7 +5139,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.InitDB"
+                            "$ref": "#/definitions/server_model_system_request.InitDB"
                         }
                     }
                 ],
@@ -5149,7 +5149,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5188,7 +5188,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5228,7 +5228,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysBaseMenu"
+                            "$ref": "#/definitions/server_model_system.SysBaseMenu"
                         }
                     }
                 ],
@@ -5238,7 +5238,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5279,7 +5279,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.AddMenuAuthorityInfo"
+                            "$ref": "#/definitions/server_model_system_request.AddMenuAuthorityInfo"
                         }
                     }
                 ],
@@ -5289,7 +5289,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5305,13 +5305,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5341,7 +5341,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.GetById"
+                            "$ref": "#/definitions/server_model_common_request.GetById"
                         }
                     }
                 ],
@@ -5351,7 +5351,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5391,7 +5391,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.GetById"
+                            "$ref": "#/definitions/server_model_common_request.GetById"
                         }
                     }
                 ],
@@ -5401,13 +5401,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_system_response.SysBaseMenuResponse"
+                                            "$ref": "#/definitions/server_model_system_response.SysBaseMenuResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -5441,7 +5441,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5449,7 +5449,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/server-fiber_model_system.SysBaseMenu"
+                                                "$ref": "#/definitions/server_model_system.SysBaseMenu"
                                             }
                                         },
                                         "msg": {
@@ -5463,7 +5463,7 @@ const docTemplate = `{
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5490,7 +5490,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5498,7 +5498,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/server-fiber_model_system.SysMenu"
+                                                "$ref": "#/definitions/server_model_system.SysMenu"
                                             }
                                         },
                                         "msg": {
@@ -5512,7 +5512,7 @@ const docTemplate = `{
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5551,7 +5551,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5559,7 +5559,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/server-fiber_model_system.SysMenu"
+                                                "$ref": "#/definitions/server_model_system.SysMenu"
                                             }
                                         },
                                         "msg": {
@@ -5573,13 +5573,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5609,7 +5609,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.PageInfo"
+                            "$ref": "#/definitions/server_model_common_request.PageInfo"
                         }
                     }
                 ],
@@ -5619,13 +5619,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -5662,7 +5662,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysBaseMenu"
+                            "$ref": "#/definitions/server_model_system.SysBaseMenu"
                         }
                     }
                 ],
@@ -5672,7 +5672,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5713,13 +5713,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_mobile.MobileUser"
+                                            "$ref": "#/definitions/server_model_mobile.MobileUser"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -5732,7 +5732,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5758,7 +5758,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_mobile.Login"
+                            "$ref": "#/definitions/server_model_mobile.Login"
                         }
                     }
                 ],
@@ -5768,7 +5768,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5787,7 +5787,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5813,7 +5813,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_mobile.Register"
+                            "$ref": "#/definitions/server_model_mobile.Register"
                         }
                     }
                 ],
@@ -5823,7 +5823,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5839,7 +5839,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5872,7 +5872,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_mobile_request.MobileUpdate"
+                            "$ref": "#/definitions/server_model_mobile_request.MobileUpdate"
                         }
                     }
                 ],
@@ -5882,7 +5882,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5901,7 +5901,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5927,7 +5927,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_mobile_request.MobileUpdatePassword"
+                            "$ref": "#/definitions/server_model_mobile_request.MobileUpdatePassword"
                         }
                     }
                 ],
@@ -5937,7 +5937,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5956,7 +5956,7 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -5987,7 +5987,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_mobile.MobileUser"
+                            "$ref": "#/definitions/server_model_mobile.MobileUser"
                         }
                     }
                 ],
@@ -5997,7 +5997,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6013,13 +6013,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -6059,7 +6059,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6075,13 +6075,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -6112,7 +6112,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.IdsReq"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
@@ -6122,7 +6122,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6138,13 +6138,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -6400,7 +6400,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_mobile.MobileUser"
+                            "$ref": "#/definitions/server_model_mobile.MobileUser"
                         }
                     }
                 ],
@@ -6410,7 +6410,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6426,13 +6426,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -6462,7 +6462,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysDictionary"
+                            "$ref": "#/definitions/server_model_system.SysDictionary"
                         }
                     }
                 ],
@@ -6472,7 +6472,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6512,7 +6512,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysDictionary"
+                            "$ref": "#/definitions/server_model_system.SysDictionary"
                         }
                     }
                 ],
@@ -6522,7 +6522,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6605,7 +6605,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6721,13 +6721,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -6764,7 +6764,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysDictionary"
+                            "$ref": "#/definitions/server_model_system.SysDictionary"
                         }
                     }
                 ],
@@ -6774,7 +6774,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6814,7 +6814,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysDictionaryDetail"
+                            "$ref": "#/definitions/server_model_system.SysDictionaryDetail"
                         }
                     }
                 ],
@@ -6824,7 +6824,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6864,7 +6864,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysDictionaryDetail"
+                            "$ref": "#/definitions/server_model_system.SysDictionaryDetail"
                         }
                     }
                 ],
@@ -6874,7 +6874,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6963,7 +6963,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7085,13 +7085,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -7128,7 +7128,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysDictionaryDetail"
+                            "$ref": "#/definitions/server_model_system.SysDictionaryDetail"
                         }
                     }
                 ],
@@ -7138,7 +7138,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7178,7 +7178,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysOperationRecord"
+                            "$ref": "#/definitions/server_model_system.SysOperationRecord"
                         }
                     }
                 ],
@@ -7188,7 +7188,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7228,7 +7228,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysOperationRecord"
+                            "$ref": "#/definitions/server_model_system.SysOperationRecord"
                         }
                     }
                 ],
@@ -7238,7 +7238,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7278,7 +7278,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.IdsReq"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
@@ -7288,7 +7288,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7432,7 +7432,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7609,13 +7609,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -7648,7 +7648,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7688,7 +7688,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7727,7 +7727,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7764,7 +7764,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.System"
+                            "$ref": "#/definitions/server_model_system.System"
                         }
                     }
                 ],
@@ -7774,7 +7774,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7872,7 +7872,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.Tag"
+                            "$ref": "#/definitions/server_model_app.Tag"
                         }
                     }
                 ],
@@ -7882,7 +7882,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7901,13 +7901,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -7947,7 +7947,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -7963,13 +7963,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -8000,7 +8000,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.IdsReq"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
@@ -8010,7 +8010,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8026,13 +8026,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -8149,7 +8149,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.Tag"
+                            "$ref": "#/definitions/server_model_app.Tag"
                         }
                     }
                 ],
@@ -8159,7 +8159,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8175,13 +8175,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -8220,7 +8220,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8236,19 +8236,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "404": {
                         "description": "任务不存在",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -8287,7 +8287,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8303,19 +8303,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "404": {
                         "description": "任务不存在",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -8345,7 +8345,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                            "$ref": "#/definitions/server_model_system.SysUser"
                         }
                     }
                 ],
@@ -8355,7 +8355,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8387,7 +8387,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.Register"
+                            "$ref": "#/definitions/server_model_system_request.Register"
                         }
                     }
                 ],
@@ -8397,7 +8397,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8434,7 +8434,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.ChangePasswordStruct"
+                            "$ref": "#/definitions/server_model_system_request.ChangePasswordStruct"
                         }
                     }
                 ],
@@ -8444,7 +8444,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8485,7 +8485,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.User"
+                            "$ref": "#/definitions/server_model_app.User"
                         }
                     }
                 ],
@@ -8495,7 +8495,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8517,13 +8517,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -8563,7 +8563,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8579,19 +8579,19 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "403": {
                         "description": "不能删除自己",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -8622,7 +8622,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_request.IdsReq"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
@@ -8632,7 +8632,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8651,13 +8651,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -8736,7 +8736,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8775,7 +8775,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8814,7 +8814,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8884,13 +8884,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/server-fiber_model_common_response.PageResult"
+                                            "$ref": "#/definitions/server_model_common_response.PageResult"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -8924,7 +8924,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                            "$ref": "#/definitions/server_model_system.SysUser"
                         }
                     }
                 ],
@@ -8934,7 +8934,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -8975,7 +8975,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.SetUserAuthorities"
+                            "$ref": "#/definitions/server_model_system_request.SetUserAuthorities"
                         }
                     }
                 ],
@@ -8985,7 +8985,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -9001,13 +9001,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -9038,7 +9038,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system_request.SetUserAuth"
+                            "$ref": "#/definitions/server_model_system_request.SetUserAuth"
                         }
                     }
                 ],
@@ -9048,7 +9048,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -9064,13 +9064,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -9101,7 +9101,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                            "$ref": "#/definitions/server_model_system.SysUser"
                         }
                     }
                 ],
@@ -9111,7 +9111,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -9127,13 +9127,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -9172,7 +9172,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_app.User"
+                            "$ref": "#/definitions/server_model_app.User"
                         }
                     }
                 ],
@@ -9182,7 +9182,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                                    "$ref": "#/definitions/server_model_common_response.Response"
                                 },
                                 {
                                     "type": "object",
@@ -9201,13 +9201,13 @@ const docTemplate = `{
                     "400": {
                         "description": "参数错误",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     },
                     "401": {
                         "description": "未授权",
                         "schema": {
-                            "$ref": "#/definitions/server-fiber_model_common_response.Response"
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -9998,7 +9998,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_app.Article": {
+        "server_model_app.Article": {
             "type": "object",
             "properties": {
                 "content": {
@@ -10028,7 +10028,7 @@ const docTemplate = `{
                     "description": "多对多 article_tag",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_app.Tag"
+                        "$ref": "#/definitions/server_model_app.Tag"
                     }
                 },
                 "title": {
@@ -10039,14 +10039,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                    "$ref": "#/definitions/server_model_system.SysUser"
                 },
                 "user_id": {
                     "type": "integer"
                 }
             }
         },
-        "server-fiber_model_app.BaseMessage": {
+        "server_model_app.BaseMessage": {
             "type": "object",
             "properties": {
                 "copyright": {
@@ -10084,11 +10084,11 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_app.Comment": {
+        "server_model_app.Comment": {
             "type": "object",
             "properties": {
                 "article": {
-                    "$ref": "#/definitions/server-fiber_model_app.Article"
+                    "$ref": "#/definitions/server_model_app.Article"
                 },
                 "article_id": {
                     "type": "integer"
@@ -10096,7 +10096,7 @@ const docTemplate = `{
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_app.Comment"
+                        "$ref": "#/definitions/server_model_app.Comment"
                     }
                 },
                 "content": {
@@ -10114,7 +10114,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "to_user": {
-                    "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                    "$ref": "#/definitions/server_model_system.SysUser"
                 },
                 "to_user_id": {
                     "description": "作为外键 关联User",
@@ -10128,7 +10128,7 @@ const docTemplate = `{
                     "description": "foreignKey是管联UserId的SysUser的表",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                            "$ref": "#/definitions/server_model_system.SysUser"
                         }
                     ]
                 },
@@ -10138,7 +10138,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_app.FileUploadAndDownload": {
+        "server_model_app.FileUploadAndDownload": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -10171,7 +10171,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_app.Praise": {
+        "server_model_app.Praise": {
             "type": "object",
             "properties": {
                 "comment_id": {
@@ -10194,13 +10194,13 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_app.Tag": {
+        "server_model_app.Tag": {
             "type": "object",
             "properties": {
                 "articles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_app.Article"
+                        "$ref": "#/definitions/server_model_app.Article"
                     }
                 },
                 "createdAt": {
@@ -10223,7 +10223,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_app.User": {
+        "server_model_app.User": {
             "type": "object",
             "properties": {
                 "content": {
@@ -10258,15 +10258,15 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_app_response.ResponseUploadFile": {
+        "server_model_app_response.ResponseUploadFile": {
             "type": "object",
             "properties": {
                 "file": {
-                    "$ref": "#/definitions/server-fiber_model_app.FileUploadAndDownload"
+                    "$ref": "#/definitions/server_model_app.FileUploadAndDownload"
                 }
             }
         },
-        "server-fiber_model_common_request.GetById": {
+        "server_model_common_request.GetById": {
             "type": "object",
             "properties": {
                 "id": {
@@ -10275,7 +10275,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_common_request.IdsReq": {
+        "server_model_common_request.IdsReq": {
             "type": "object",
             "properties": {
                 "ids": {
@@ -10286,7 +10286,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_common_request.PageInfo": {
+        "server_model_common_request.PageInfo": {
             "type": "object",
             "properties": {
                 "is_cropper": {
@@ -10310,7 +10310,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_common_response.PageResult": {
+        "server_model_common_response.PageResult": {
             "type": "object",
             "properties": {
                 "list": {},
@@ -10325,7 +10325,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_common_response.Response": {
+        "server_model_common_response.Response": {
             "type": "object",
             "properties": {
                 "code": {
@@ -10337,7 +10337,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_example.ExaCustomer": {
+        "server_model_example.ExaCustomer": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -10360,7 +10360,7 @@ const docTemplate = `{
                     "description": "管理详情",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                            "$ref": "#/definitions/server_model_system.SysUser"
                         }
                     ]
                 },
@@ -10378,7 +10378,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_example.ExaFile": {
+        "server_model_example.ExaFile": {
             "type": "object",
             "properties": {
                 "chunk_total": {
@@ -10392,7 +10392,7 @@ const docTemplate = `{
                     "description": "切片结构体",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_example.ExaFileChunk"
+                        "$ref": "#/definitions/server_model_example.ExaFileChunk"
                     }
                 },
                 "file_md5": {
@@ -10417,7 +10417,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_example.ExaFileChunk": {
+        "server_model_example.ExaFileChunk": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -10443,7 +10443,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_example.ExaFileUploadAndDownload": {
+        "server_model_example.ExaFileUploadAndDownload": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -10492,7 +10492,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_example.ExcelInfo": {
+        "server_model_example.ExcelInfo": {
             "type": "object",
             "properties": {
                 "fileName": {
@@ -10502,12 +10502,12 @@ const docTemplate = `{
                 "infoList": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_example.FielUploadImport"
+                        "$ref": "#/definitions/server_model_example.FielUploadImport"
                     }
                 }
             }
         },
-        "server-fiber_model_example.FielUploadImport": {
+        "server_model_example.FielUploadImport": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -10548,23 +10548,23 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_example_response.ExaCustomerResponse": {
+        "server_model_example_response.ExaCustomerResponse": {
             "type": "object",
             "properties": {
                 "customer": {
-                    "$ref": "#/definitions/server-fiber_model_example.ExaCustomer"
+                    "$ref": "#/definitions/server_model_example.ExaCustomer"
                 }
             }
         },
-        "server-fiber_model_example_response.ExaFileResponse": {
+        "server_model_example_response.ExaFileResponse": {
             "type": "object",
             "properties": {
                 "file": {
-                    "$ref": "#/definitions/server-fiber_model_example.ExaFileUploadAndDownload"
+                    "$ref": "#/definitions/server_model_example.ExaFileUploadAndDownload"
                 }
             }
         },
-        "server-fiber_model_example_response.FilePathResponse": {
+        "server_model_example_response.FilePathResponse": {
             "type": "object",
             "properties": {
                 "filePath": {
@@ -10572,15 +10572,15 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_example_response.FileResponse": {
+        "server_model_example_response.FileResponse": {
             "type": "object",
             "properties": {
                 "file": {
-                    "$ref": "#/definitions/server-fiber_model_example.ExaFile"
+                    "$ref": "#/definitions/server_model_example.ExaFile"
                 }
             }
         },
-        "server-fiber_model_frontend.Article": {
+        "server_model_frontend.Article": {
             "type": "object",
             "properties": {
                 "content": {
@@ -10609,7 +10609,7 @@ const docTemplate = `{
                 "tags": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_frontend.Tag"
+                        "$ref": "#/definitions/server_model_frontend.Tag"
                     }
                 },
                 "title": {
@@ -10620,14 +10620,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/server-fiber_model_frontend.ArticleUser"
+                    "$ref": "#/definitions/server_model_frontend.ArticleUser"
                 },
                 "user_id": {
                     "type": "integer"
                 }
             }
         },
-        "server-fiber_model_frontend.ArticleUser": {
+        "server_model_frontend.ArticleUser": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -10653,11 +10653,11 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_frontend.Comment": {
+        "server_model_frontend.Comment": {
             "type": "object",
             "properties": {
                 "article": {
-                    "$ref": "#/definitions/server-fiber_model_frontend.Article"
+                    "$ref": "#/definitions/server_model_frontend.Article"
                 },
                 "article_id": {
                     "type": "integer"
@@ -10665,7 +10665,7 @@ const docTemplate = `{
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_frontend.Comment"
+                        "$ref": "#/definitions/server_model_frontend.Comment"
                     }
                 },
                 "content": {
@@ -10683,7 +10683,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "to_user": {
-                    "$ref": "#/definitions/server-fiber_model_frontend.User"
+                    "$ref": "#/definitions/server_model_frontend.User"
                 },
                 "to_user_id": {
                     "type": "integer"
@@ -10693,20 +10693,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/server-fiber_model_frontend.User"
+                    "$ref": "#/definitions/server_model_frontend.User"
                 },
                 "user_id": {
                     "type": "integer"
                 }
             }
         },
-        "server-fiber_model_frontend.Tag": {
+        "server_model_frontend.Tag": {
             "type": "object",
             "properties": {
                 "aritcles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_frontend.Article"
+                        "$ref": "#/definitions/server_model_frontend.Article"
                     }
                 },
                 "createdAt": {
@@ -10729,7 +10729,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_frontend.User": {
+        "server_model_frontend.User": {
             "type": "object",
             "properties": {
                 "activeColor": {
@@ -10791,7 +10791,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_mobile.Login": {
+        "server_model_mobile.Login": {
             "type": "object",
             "properties": {
                 "password": {
@@ -10805,7 +10805,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_mobile.MobileUser": {
+        "server_model_mobile.MobileUser": {
             "type": "object",
             "properties": {
                 "avatar": {
@@ -10853,7 +10853,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_mobile.Register": {
+        "server_model_mobile.Register": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -10882,7 +10882,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_mobile_request.MobileUpdate": {
+        "server_model_mobile_request.MobileUpdate": {
             "type": "object",
             "properties": {
                 "field": {
@@ -10891,7 +10891,7 @@ const docTemplate = `{
                 "value": {}
             }
         },
-        "server-fiber_model_mobile_request.MobileUpdatePassword": {
+        "server_model_mobile_request.MobileUpdatePassword": {
             "type": "object",
             "properties": {
                 "id": {
@@ -10905,7 +10905,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.AutoCodeStruct": {
+        "server_model_system.AutoCodeStruct": {
             "type": "object",
             "properties": {
                 "abbreviation": {
@@ -10927,7 +10927,7 @@ const docTemplate = `{
                 "fields": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.Field"
+                        "$ref": "#/definitions/server_model_system.Field"
                     }
                 },
                 "humpPackageName": {
@@ -10951,7 +10951,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.Field": {
+        "server_model_system.Field": {
             "type": "object",
             "properties": {
                 "columnName": {
@@ -10992,7 +10992,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.Meta": {
+        "server_model_system.Meta": {
             "type": "object",
             "properties": {
                 "closeTab": {
@@ -11017,7 +11017,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.PolicyType": {
+        "server_model_system.PolicyType": {
             "type": "integer",
             "enum": [
                 0,
@@ -11040,7 +11040,7 @@ const docTemplate = `{
                 "Mobile"
             ]
         },
-        "server-fiber_model_system.SysApi": {
+        "server_model_system.SysApi": {
             "type": "object",
             "properties": {
                 "api_group": {
@@ -11073,7 +11073,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysAuthority": {
+        "server_model_system.SysAuthority": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -11087,7 +11087,7 @@ const docTemplate = `{
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                        "$ref": "#/definitions/server_model_system.SysAuthority"
                     }
                 },
                 "createdAt": {
@@ -11097,7 +11097,7 @@ const docTemplate = `{
                 "dataAuthorityId": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                        "$ref": "#/definitions/server_model_system.SysAuthority"
                     }
                 },
                 "defaultRouter": {
@@ -11110,7 +11110,7 @@ const docTemplate = `{
                 "menus": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysBaseMenu"
+                        "$ref": "#/definitions/server_model_system.SysBaseMenu"
                     }
                 },
                 "parentId": {
@@ -11123,7 +11123,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysAutoCode": {
+        "server_model_system.SysAutoCode": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -11149,19 +11149,19 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysBaseMenu": {
+        "server_model_system.SysBaseMenu": {
             "type": "object",
             "properties": {
                 "authoritys": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                        "$ref": "#/definitions/server_model_system.SysAuthority"
                     }
                 },
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysBaseMenu"
+                        "$ref": "#/definitions/server_model_system.SysBaseMenu"
                     }
                 },
                 "component": {
@@ -11183,14 +11183,14 @@ const docTemplate = `{
                 "menuBtn": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysBaseMenuBtn"
+                        "$ref": "#/definitions/server_model_system.SysBaseMenuBtn"
                     }
                 },
                 "meta": {
                     "description": "附加属性",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/server-fiber_model_system.Meta"
+                            "$ref": "#/definitions/server_model_system.Meta"
                         }
                     ]
                 },
@@ -11201,7 +11201,7 @@ const docTemplate = `{
                 "parameters": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysBaseMenuParameter"
+                        "$ref": "#/definitions/server_model_system.SysBaseMenuParameter"
                     }
                 },
                 "parentId": {
@@ -11222,7 +11222,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysBaseMenuBtn": {
+        "server_model_system.SysBaseMenuBtn": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -11248,7 +11248,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysBaseMenuParameter": {
+        "server_model_system.SysBaseMenuParameter": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -11280,7 +11280,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysDictionary": {
+        "server_model_system.SysDictionary": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -11306,7 +11306,7 @@ const docTemplate = `{
                 "sysDictionaryDetails": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysDictionaryDetail"
+                        "$ref": "#/definitions/server_model_system.SysDictionaryDetail"
                     }
                 },
                 "type": {
@@ -11319,7 +11319,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysDictionaryDetail": {
+        "server_model_system.SysDictionaryDetail": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -11356,13 +11356,13 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysMenu": {
+        "server_model_system.SysMenu": {
             "type": "object",
             "properties": {
                 "authoritys": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                        "$ref": "#/definitions/server_model_system.SysAuthority"
                     }
                 },
                 "btns": {
@@ -11374,7 +11374,7 @@ const docTemplate = `{
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysMenu"
+                        "$ref": "#/definitions/server_model_system.SysMenu"
                     }
                 },
                 "component": {
@@ -11396,7 +11396,7 @@ const docTemplate = `{
                 "menuBtn": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysBaseMenuBtn"
+                        "$ref": "#/definitions/server_model_system.SysBaseMenuBtn"
                     }
                 },
                 "menuId": {
@@ -11406,7 +11406,7 @@ const docTemplate = `{
                     "description": "附加属性",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/server-fiber_model_system.Meta"
+                            "$ref": "#/definitions/server_model_system.Meta"
                         }
                     ]
                 },
@@ -11417,7 +11417,7 @@ const docTemplate = `{
                 "parameters": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysBaseMenuParameter"
+                        "$ref": "#/definitions/server_model_system.SysBaseMenuParameter"
                     }
                 },
                 "parentId": {
@@ -11438,7 +11438,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysOperationRecord": {
+        "server_model_system.SysOperationRecord": {
             "type": "object",
             "properties": {
                 "agent": {
@@ -11486,14 +11486,14 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type_port": {
-                    "$ref": "#/definitions/server-fiber_model_system.PolicyType"
+                    "$ref": "#/definitions/server_model_system.PolicyType"
                 },
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                    "$ref": "#/definitions/server_model_system.SysUser"
                 },
                 "user_id": {
                     "description": "用户id",
@@ -11501,7 +11501,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.SysUser": {
+        "server_model_system.SysUser": {
             "type": "object",
             "properties": {
                 "activeColor": {
@@ -11511,11 +11511,11 @@ const docTemplate = `{
                 "authorities": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                        "$ref": "#/definitions/server_model_system.SysAuthority"
                     }
                 },
                 "authority": {
-                    "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                    "$ref": "#/definitions/server_model_system.SysAuthority"
                 },
                 "authorityId": {
                     "description": "用户角色ID",
@@ -11576,7 +11576,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system.System": {
+        "server_model_system.System": {
             "type": "object",
             "properties": {
                 "config": {
@@ -11584,7 +11584,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.AddMenuAuthorityInfo": {
+        "server_model_system_request.AddMenuAuthorityInfo": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -11594,12 +11594,12 @@ const docTemplate = `{
                 "menus": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system.SysBaseMenu"
+                        "$ref": "#/definitions/server_model_system.SysBaseMenu"
                     }
                 }
             }
         },
-        "server-fiber_model_system_request.CasbinInReceive": {
+        "server_model_system_request.CasbinInReceive": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -11609,12 +11609,12 @@ const docTemplate = `{
                 "casbinInfos": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/server-fiber_model_system_request.CasbinInfo"
+                        "$ref": "#/definitions/server_model_system_request.CasbinInfo"
                     }
                 }
             }
         },
-        "server-fiber_model_system_request.CasbinInfo": {
+        "server_model_system_request.CasbinInfo": {
             "type": "object",
             "properties": {
                 "method": {
@@ -11627,7 +11627,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.ChangePasswordStruct": {
+        "server_model_system_request.ChangePasswordStruct": {
             "type": "object",
             "properties": {
                 "newPassword": {
@@ -11644,7 +11644,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.InitDB": {
+        "server_model_system_request.InitDB": {
             "type": "object",
             "properties": {
                 "dbName": {
@@ -11673,7 +11673,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.Login": {
+        "server_model_system_request.Login": {
             "type": "object",
             "properties": {
                 "captcha": {
@@ -11694,7 +11694,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.LoginToken": {
+        "server_model_system_request.LoginToken": {
             "type": "object",
             "required": [
                 "password",
@@ -11709,7 +11709,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.Register": {
+        "server_model_system_request.Register": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -11741,7 +11741,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.RollBack": {
+        "server_model_system_request.RollBack": {
             "type": "object",
             "properties": {
                 "deleteTable": {
@@ -11754,7 +11754,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.SearchApiParams": {
+        "server_model_system_request.SearchApiParams": {
             "type": "object",
             "properties": {
                 "api_group": {
@@ -11814,7 +11814,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.SetUserAuth": {
+        "server_model_system_request.SetUserAuth": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -11823,7 +11823,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.SetUserAuthorities": {
+        "server_model_system_request.SetUserAuthorities": {
             "type": "object",
             "properties": {
                 "authorityIds": {
@@ -11838,7 +11838,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.SysAuthorityBtnReq": {
+        "server_model_system_request.SysAuthorityBtnReq": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -11855,7 +11855,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_request.SysAutoHistory": {
+        "server_model_system_request.SysAutoHistory": {
             "type": "object",
             "properties": {
                 "is_cropper": {
@@ -11879,7 +11879,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_response.LoginResponse": {
+        "server_model_system_response.LoginResponse": {
             "type": "object",
             "properties": {
                 "expiresAt": {
@@ -11889,15 +11889,15 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/server-fiber_model_system.SysUser"
+                    "$ref": "#/definitions/server_model_system.SysUser"
                 }
             }
         },
-        "server-fiber_model_system_response.SysAuthorityCopyResponse": {
+        "server_model_system_response.SysAuthorityCopyResponse": {
             "type": "object",
             "properties": {
                 "authority": {
-                    "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                    "$ref": "#/definitions/server_model_system.SysAuthority"
                 },
                 "oldAuthorityId": {
                     "description": "旧角色ID",
@@ -11905,23 +11905,23 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_model_system_response.SysAuthorityResponse": {
+        "server_model_system_response.SysAuthorityResponse": {
             "type": "object",
             "properties": {
                 "authority": {
-                    "$ref": "#/definitions/server-fiber_model_system.SysAuthority"
+                    "$ref": "#/definitions/server_model_system.SysAuthority"
                 }
             }
         },
-        "server-fiber_model_system_response.SysBaseMenuResponse": {
+        "server_model_system_response.SysBaseMenuResponse": {
             "type": "object",
             "properties": {
                 "menu": {
-                    "$ref": "#/definitions/server-fiber_model_system.SysBaseMenu"
+                    "$ref": "#/definitions/server_model_system.SysBaseMenu"
                 }
             }
         },
-        "server-fiber_model_system_response.SysCaptchaResponse": {
+        "server_model_system_response.SysCaptchaResponse": {
             "type": "object",
             "properties": {
                 "captchaId": {
@@ -11935,7 +11935,7 @@ const docTemplate = `{
                 }
             }
         },
-        "server-fiber_plugin_email_model_response.Email": {
+        "server_plugin_email_model_response.Email": {
             "type": "object",
             "properties": {
                 "body": {
