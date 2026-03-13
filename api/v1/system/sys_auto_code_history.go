@@ -6,7 +6,7 @@ import (
 	"server/model/common/response"
 	systemReq "server/model/system/request"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -24,9 +24,9 @@ type AutoCodeHistoryApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/getMeta [get]
-func (a *AutoCodeHistoryApi) First(c *fiber.Ctx) error {
+func (a *AutoCodeHistoryApi) First(c fiber.Ctx) error {
 	var info request.GetById
-	_ = c.QueryParser(&info)
+	_ = c.Bind().Query(&info)
 	data, err := autoCodeHistoryService.First(&info)
 	if err != nil {
 		return response.FailWithMessage(err.Error(), c)
@@ -46,9 +46,9 @@ func (a *AutoCodeHistoryApi) First(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/delSysHistory [get]
-func (a *AutoCodeHistoryApi) Delete(c *fiber.Ctx) error {
+func (a *AutoCodeHistoryApi) Delete(c fiber.Ctx) error {
 	var info request.GetById
-	_ = c.QueryParser(&info)
+	_ = c.Bind().Query(&info)
 	err := autoCodeHistoryService.Delete(&info)
 	if err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))
@@ -69,9 +69,9 @@ func (a *AutoCodeHistoryApi) Delete(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/rollback [get]
-func (a *AutoCodeHistoryApi) RollBack(c *fiber.Ctx) error {
+func (a *AutoCodeHistoryApi) RollBack(c fiber.Ctx) error {
 	var info systemReq.RollBack
-	_ = c.QueryParser(&info)
+	_ = c.Bind().Query(&info)
 	if err := autoCodeHistoryService.RollBack(&info); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -90,9 +90,9 @@ func (a *AutoCodeHistoryApi) RollBack(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/getSysHistory [post]
-func (a *AutoCodeHistoryApi) GetList(c *fiber.Ctx) error {
+func (a *AutoCodeHistoryApi) GetList(c fiber.Ctx) error {
 	var search systemReq.SysAutoHistory
-	_ = c.QueryParser(&search)
+	_ = c.Bind().Query(&search)
 	list, total, err := autoCodeHistoryService.GetList(search.PageInfo)
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))

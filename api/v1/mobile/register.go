@@ -5,7 +5,7 @@ import (
 	"server/model/common/response"
 	"server/model/mobile"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -23,9 +23,9 @@ type RegisterMobile struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobile/register [post]
-func (*RegisterMobile) Register(c *fiber.Ctx) (err error) {
+func (*RegisterMobile) Register(c fiber.Ctx) (err error) {
 	var data mobile.Register
-	err = c.BodyParser(&data)
+	err = c.Bind().Body(&data)
 	if err != nil {
 		return response.FailWithMessage("获取数据失败", c)
 	}

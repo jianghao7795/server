@@ -15,7 +15,7 @@ import (
 	fileDimensionReq "server/model/example/request"
 	exampleRes "server/model/example/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -34,7 +34,7 @@ import (
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /fileUploadAndDownload/upload [post]
-func (u *FileUploadAndDownloadApi) UploadFile(c *fiber.Ctx) error {
+func (u *FileUploadAndDownloadApi) UploadFile(c fiber.Ctx) error {
 	var file example.ExaFileUploadAndDownload
 	noSave := c.Query("noSave", "0")
 	isCropper, err := strconv.Atoi(c.Query("is_cropper", "1"))
@@ -99,9 +99,9 @@ func (u *FileUploadAndDownloadApi) UploadFile(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/editFileName [put]
-func (u *FileUploadAndDownloadApi) EditFileName(c *fiber.Ctx) error {
+func (u *FileUploadAndDownloadApi) EditFileName(c fiber.Ctx) error {
 	var data example.ExaFileUploadAndDownload
-	if err := c.BodyParser(&data); err != nil {
+	if err := c.Bind().Body(&data); err != nil {
 		global.LOG.Error("获取文件失败!", zap.Error(err))
 		return response.FailWithMessage("获取文件失败"+err.Error(), c)
 	}
@@ -125,8 +125,8 @@ func (u *FileUploadAndDownloadApi) EditFileName(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/deleteFile [delete]
-func (u *FileUploadAndDownloadApi) DeleteFile(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (u *FileUploadAndDownloadApi) DeleteFile(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败!", zap.Error(err))
 		return response.FailWithMessage("获取id失败"+err.Error(), c)
@@ -149,9 +149,9 @@ func (u *FileUploadAndDownloadApi) DeleteFile(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/getFileList [get]
-func (u *FileUploadAndDownloadApi) GetFileList(c *fiber.Ctx) error {
+func (u *FileUploadAndDownloadApi) GetFileList(c fiber.Ctx) error {
 	var pageInfo request.PageInfo
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	list, total, err := fileUploadAndDownloadService.GetFileRecordInfoList(&pageInfo)
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))

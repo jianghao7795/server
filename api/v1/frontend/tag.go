@@ -1,11 +1,13 @@
 package frontend
 
 import (
+	"strconv"
+
 	global "server/model"
 	appReq "server/model/app/request"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -23,9 +25,9 @@ type TagApi struct{}
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Router /frontend/getTagList [get]
-func (appTabApi *TagApi) GetTagList(c *fiber.Ctx) error {
+func (appTabApi *TagApi) GetTagList(c fiber.Ctx) error {
 	var pageInfo appReq.TagSearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if list, err := tagServiceApp.GetTagList(c); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)
@@ -47,8 +49,8 @@ func (appTabApi *TagApi) GetTagList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /frontend/getTag/{id} [get]
-func (appTabApi *TagApi) GetTag(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (appTabApi *TagApi) GetTag(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return response.FailWithMessage("获取Ids失败", c)
 	}

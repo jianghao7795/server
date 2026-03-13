@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type ResponseMobile struct {
@@ -15,6 +15,6 @@ const (
 )
 
 // 返回401 错误信息 data 和 string message信息返回
-func FailWithDetailed401(data any, message string, c *fiber.Ctx) error {
+func FailWithDetailed401(data any, message string, c fiber.Ctx) error {
 	return Result(ERROR401, data, message, c)
 }

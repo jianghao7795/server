@@ -1,7 +1,7 @@
 package ws
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -19,11 +19,11 @@ type wsPlugin struct {
 // Register 方法注册了WebSocket路由
 func (w *wsPlugin) Register(g fiber.Router) {
 	// ws 为身份校验函数
-	g.Get("/ws", func(c *fiber.Ctx) error {
+	g.Get("/ws", func(c fiber.Ctx) error {
 		// 实现WebSocket连接的逻辑
 		return nil
 	})
-	g.Post("/sendMsg", func(c *fiber.Ctx) error {
+	g.Post("/sendMsg", func(c fiber.Ctx) error {
 		// 实现发送消息的逻辑
 		return nil
 	})

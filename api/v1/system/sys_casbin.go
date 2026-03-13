@@ -6,7 +6,7 @@ import (
 	"server/model/system/request"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -25,9 +25,9 @@ type CasbinApi struct{}
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /casbin/UpdateCasbin [post]
-func (cas *CasbinApi) UpdateCasbin(c *fiber.Ctx) error {
+func (cas *CasbinApi) UpdateCasbin(c fiber.Ctx) error {
 	var cmr request.CasbinInReceive
-	if err := c.BodyParser(&cmr); err != nil {
+	if err := c.Bind().Body(&cmr); err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
 	}
@@ -55,9 +55,9 @@ func (cas *CasbinApi) UpdateCasbin(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /casbin/getPolicyPathByAuthorityId/{id} [get]
-func (cas *CasbinApi) GetPolicyPathByAuthorityId(c *fiber.Ctx) error {
+func (cas *CasbinApi) GetPolicyPathByAuthorityId(c fiber.Ctx) error {
 	var casbin request.CasbinInReceive
-	_ = c.QueryParser(&casbin)
+	_ = c.Bind().Query(&casbin)
 	casbin.AuthorityId = c.Params("id")
 	if err := utils.Verify(casbin, utils.AuthorityIdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)

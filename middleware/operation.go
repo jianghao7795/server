@@ -11,7 +11,7 @@ import (
 	"time"
 
 	// json "github.com/bytedance/sonic"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 
 	systemService "server/service/system"
 
@@ -25,7 +25,7 @@ var operationRecordService = new(systemService.OperationRecordService)
 // 用于记录用户的API操作历史，包括请求信息、响应状态、执行时间等
 // 支持GET请求的查询参数记录和POST/PUT等请求的请求体记录
 // 自动识别请求来源（后端管理、前端API、移动端）并记录相应的端口类型
-func OperationRecord(c *fiber.Ctx) error {
+func OperationRecord(c fiber.Ctx) error {
 	var body []byte
 	var userId int
 	// var err error

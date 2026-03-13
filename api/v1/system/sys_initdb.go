@@ -9,7 +9,7 @@ import (
 	"server/model/system/request"
 
 	adapter "github.com/casbin/gorm-adapter/v3"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -25,13 +25,13 @@ type DBApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /init/initdb [post]
-func (i *DBApi) InitDB(c *fiber.Ctx) error {
+func (i *DBApi) InitDB(c fiber.Ctx) error {
 	if global.DB != nil {
 		global.LOG.Error("已存在数据库配置!")
 		return response.FailWithMessage("已存在数据库配置", c)
 	}
 	var dbInfo request.InitDB
-	if err := c.QueryParser(&dbInfo); err != nil {
+	if err := c.Bind().Query(&dbInfo); err != nil {
 		global.LOG.Error("参数校验不通过!", zap.Error(err))
 		return response.FailWithMessage("参数校验不通过", c)
 	}
@@ -51,7 +51,7 @@ func (i *DBApi) InitDB(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /init/checkdb [get]
-func (i *DBApi) CheckDB(c *fiber.Ctx) error {
+func (i *DBApi) CheckDB(c fiber.Ctx) error {
 	var (
 		message  = ""
 		needInit = true

@@ -1,13 +1,15 @@
 package system
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	"server/model/system"
 	systemReq "server/model/system/request"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -24,9 +26,9 @@ type OperationRecordApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysOperationRecord/createSysOperationRecord [post]
-func (s *OperationRecordApi) CreateSysOperationRecord(c *fiber.Ctx) error {
+func (s *OperationRecordApi) CreateSysOperationRecord(c fiber.Ctx) error {
 	var sysOperationRecord system.SysOperationRecord
-	_ = c.BodyParser(&sysOperationRecord)
+	_ = c.Bind().Body(&sysOperationRecord)
 	if err := operationRecordService.CreateSysOperationRecord(&sysOperationRecord); err != nil {
 		global.LOG.Error("创建失败!", zap.Error(err))
 		return response.FailWithMessage("创建失败", c)
@@ -46,8 +48,8 @@ func (s *OperationRecordApi) CreateSysOperationRecord(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
-func (s *OperationRecordApi) DeleteSysOperationRecord(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (s *OperationRecordApi) DeleteSysOperationRecord(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if err := operationRecordService.DeleteSysOperationRecord(uint(id)); err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))
 		return response.FailWithMessage("删除失败", c)
@@ -67,9 +69,9 @@ func (s *OperationRecordApi) DeleteSysOperationRecord(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysOperationRecord/deleteSysOperationRecordByIds [delete]
-func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *fiber.Ctx) error {
+func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
-	_ = c.BodyParser(&IDS)
+	_ = c.Bind().Body(&IDS)
 	if err := operationRecordService.DeleteSysOperationRecordByIds(IDS); err != nil {
 		global.LOG.Error("批量删除失败!", zap.Error(err))
 		return response.FailWithMessage("批量删除失败", c)
@@ -89,8 +91,8 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysOperationRecord/findSysOperationRecord/:id [get]
-func (s *OperationRecordApi) FindSysOperationRecord(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (s *OperationRecordApi) FindSysOperationRecord(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if respSysOperationRecord, err := operationRecordService.GetSysOperationRecord(uint(id)); err != nil {
 		global.LOG.Error("查询失败!", zap.Error(err))
 		return response.FailWithMessage("查询失败", c)
@@ -110,9 +112,9 @@ func (s *OperationRecordApi) FindSysOperationRecord(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysOperationRecord/getSysOperationRecordList [get]
-func (s *OperationRecordApi) GetSysOperationRecordList(c *fiber.Ctx) error {
+func (s *OperationRecordApi) GetSysOperationRecordList(c fiber.Ctx) error {
 	var pageInfo systemReq.SysOperationRecordSearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if pageInfo.TypePort == system.Backend {
 		if list, total, err := operationRecordService.GetSysOperationRecordInfoList(&pageInfo); err != nil {
 			global.LOG.Error("获取失败!", zap.Error(err))

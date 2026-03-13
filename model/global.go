@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	ut "github.com/go-playground/universal-translator"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/redis/go-redis/v9"
 	"github.com/songzhibin97/gkit/cache/local_cache"
 	"github.com/spf13/viper"
@@ -34,7 +34,7 @@ var (
 	lock sync.RWMutex
 )
 
-func Done(c *fiber.Ctx, logString []byte) {
+func Done(c fiber.Ctx, logString []byte) {
 	if c.Response().StatusCode() >= fiber.StatusBadRequest {
 		if c.Response().StatusCode() == 404 {
 			LOG.Info(string(logString))

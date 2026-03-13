@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type TokenBucket struct {
@@ -41,7 +41,7 @@ func (tb *TokenBucket) Allow() bool {
 }
 
 // LimitHandler 允许 连续访问次数
-func LimitHandler(c *fiber.Ctx) error {
+func LimitHandler(c fiber.Ctx) error {
 	tb := &TokenBucket{
 		capacity:  1000,
 		rate:      10.0,

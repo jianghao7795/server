@@ -11,7 +11,7 @@ import (
 
 	global "server/model"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -31,9 +31,9 @@ type AutoCodeApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/preview [post]
-func (autoApi *AutoCodeApi) PreviewTemp(c *fiber.Ctx) error {
+func (autoApi *AutoCodeApi) PreviewTemp(c fiber.Ctx) error {
 	var a system.AutoCodeStruct
-	_ = c.BodyParser(&a)
+	_ = c.Bind().Body(&a)
 	if err := utils.Verify(a, utils.AutoCodeVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -59,9 +59,9 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/createTemp [post]
-func (autoApi *AutoCodeApi) CreateTemp(c *fiber.Ctx) error {
+func (autoApi *AutoCodeApi) CreateTemp(c fiber.Ctx) error {
 	var a system.AutoCodeStruct
-	_ = c.BodyParser(&a)
+	_ = c.Bind().Body(&a)
 	if err := utils.Verify(a, utils.AutoCodeVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -107,7 +107,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/getDatabase [get]
-func (autoApi *AutoCodeApi) GetDB(c *fiber.Ctx) error {
+func (autoApi *AutoCodeApi) GetDB(c fiber.Ctx) error {
 	dbs, err := autoCodeService.Database().GetDB()
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
@@ -128,7 +128,7 @@ func (autoApi *AutoCodeApi) GetDB(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/getTables [get]
-func (autoApi *AutoCodeApi) GetTables(c *fiber.Ctx) error {
+func (autoApi *AutoCodeApi) GetTables(c fiber.Ctx) error {
 	dbName := c.Query("dbName", global.CONFIG.Mysql.Dbname)
 	tables, err := autoCodeService.Database().GetTables(dbName)
 	if err != nil {
@@ -150,7 +150,7 @@ func (autoApi *AutoCodeApi) GetTables(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/getColumn [get]
-func (autoApi *AutoCodeApi) GetColumn(c *fiber.Ctx) error {
+func (autoApi *AutoCodeApi) GetColumn(c fiber.Ctx) error {
 	dbName := c.Query("dbName", global.CONFIG.Mysql.Dbname)
 	tableName := c.Query("tableName")
 	columns, err := autoCodeService.Database().GetColumn(tableName, dbName)
@@ -174,9 +174,9 @@ func (autoApi *AutoCodeApi) GetColumn(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/createPackage [post]
-func (autoApi *AutoCodeApi) CreatePackage(c *fiber.Ctx) error {
+func (autoApi *AutoCodeApi) CreatePackage(c fiber.Ctx) error {
 	var a system.SysAutoCode
-	_ = c.BodyParser(&a)
+	_ = c.Bind().Body(&a)
 	if err := utils.Verify(a, utils.AutoPackageVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -200,7 +200,7 @@ func (autoApi *AutoCodeApi) CreatePackage(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/getPackage [post]
-func (autoApi *AutoCodeApi) GetPackage(c *fiber.Ctx) error {
+func (autoApi *AutoCodeApi) GetPackage(c fiber.Ctx) error {
 	pkgs, err := autoCodeService.GetPackage()
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
@@ -222,9 +222,9 @@ func (autoApi *AutoCodeApi) GetPackage(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /autoCode/delPackage [post]
-func (autoApi *AutoCodeApi) DelPackage(c *fiber.Ctx) error {
+func (autoApi *AutoCodeApi) DelPackage(c fiber.Ctx) error {
 	var a system.SysAutoCode
-	_ = c.QueryParser(&a)
+	_ = c.Bind().Query(&a)
 	err := autoCodeService.DelPackage(a)
 	if err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))

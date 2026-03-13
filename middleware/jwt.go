@@ -8,12 +8,12 @@ import (
 	"server/model/common/response"
 	systemService "server/service/system"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 var jwtService = new(systemService.JwtService)
 
-func JWTAuth(c *fiber.Ctx) error {
+func JWTAuth(c fiber.Ctx) error {
 	// 解决访问文件的401问题
 	if strings.Contains(c.Path(), "uploads/excel/") || strings.Contains(c.Path(), "uploads/file/") {
 		code := c.Response().StatusCode()

@@ -2,11 +2,13 @@ package frontend
 
 import (
 	"errors"
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	"server/model/frontend/request"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -28,9 +30,9 @@ type ArticleApi struct{}
 // @Failure 500 {object} response.Response "服务器错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Router /getArticleList [get]
-func (s *ArticleApi) GetArticleList(c *fiber.Ctx) error {
+func (s *ArticleApi) GetArticleList(c fiber.Ctx) error {
 	var pageInfo request.ArticleSearch
-	err := c.QueryParser(&pageInfo)
+	err := c.Bind().Query(&pageInfo)
 	if err != nil {
 		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "参数错误", c)
 	}
@@ -68,8 +70,8 @@ func (s *ArticleApi) GetArticleList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /getArticle/{id} [get]
-func (s *ArticleApi) GetArticleDetail(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (s *ArticleApi) GetArticleDetail(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取Id失败!", zap.Error(err))
 		return response.FailWithMessage("获取Id失败", c)
@@ -101,9 +103,9 @@ func (s *ArticleApi) GetArticleDetail(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /getSearchArticle/{name}/{value} [get]
-func (s *ArticleApi) GetSearchArticle(c *fiber.Ctx) error {
+func (s *ArticleApi) GetSearchArticle(c fiber.Ctx) error {
 	var searchValue request.ArticleSearch
-	err := c.ParamsParser(&searchValue)
+	err := c.Bind().URI(&searchValue)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取数据失败", c)

@@ -6,13 +6,13 @@ import (
 	systemReq "server/model/system/request"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	uuid "github.com/google/uuid"
 )
 
 // GetClaims 从fiber的Context中获取JWT token并解析出CustomClaims结构体
-func GetClaims(c *fiber.Ctx) (*systemReq.CustomClaims, error) {
-	tokenString := c.Get("Authorization") // 从请求头中获取token字符串
+func GetClaims(c fiber.Ctx) (*systemReq.CustomClaims, error) {
+	tokenString := c.Get("Authorization", "") // 从请求头中获取token字符串
 	// fmt.Println("tokenString: ", tokenString)
 	if tokenString == "" {
 		return nil, errors.New("没有登录，请重新登录")
@@ -30,7 +30,7 @@ func GetClaims(c *fiber.Ctx) (*systemReq.CustomClaims, error) {
 }
 
 // GetUserID 从fiber的Context中获取从jwt解析出来的用户ID
-func GetUserID(c *fiber.Ctx) (uint, error) {
+func GetUserID(c fiber.Ctx) (uint, error) {
 	waitUse, ok := c.Locals("claims").(*systemReq.CustomClaims)
 	if !ok {
 		// 处理类型断言失败的情况，例如返回错误信息或默认值
@@ -51,7 +51,7 @@ func GetUserID(c *fiber.Ctx) (uint, error) {
 }
 
 // GetUserUuid 从fiber的Context中获取从jwt解析出来的用户UUID
-func GetUserUuid(c *fiber.Ctx) uuid.UUID {
+func GetUserUuid(c fiber.Ctx) uuid.UUID {
 	claims := c.Locals("claims")
 	waitUse, ok := claims.(*systemReq.CustomClaims)
 	if !ok {
@@ -73,7 +73,7 @@ func GetUserUuid(c *fiber.Ctx) uuid.UUID {
 }
 
 // 从fiber的Context中获取从jwt解析出来的用户角色id
-func GetUserAuthorityId(c *fiber.Ctx) (string, error) {
+func GetUserAuthorityId(c fiber.Ctx) (string, error) {
 	claims := c.Locals("claims")
 	waitUse, ok := claims.(*systemReq.CustomClaims)
 	if !ok {
@@ -95,7 +95,7 @@ func GetUserAuthorityId(c *fiber.Ctx) (string, error) {
 }
 
 // 从fiber的Context中获取从jwt解析出来的用户角色id
-func GetUserInfo(c *fiber.Ctx) *systemReq.CustomClaims {
+func GetUserInfo(c fiber.Ctx) *systemReq.CustomClaims {
 	waitUse, ok := c.Locals("claims").(*systemReq.CustomClaims)
 	if !ok {
 		if cl, err := GetClaims(c); err != nil {

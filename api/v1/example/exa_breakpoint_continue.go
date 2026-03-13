@@ -3,6 +3,8 @@ package example
 import (
 	ioutil "io"
 	"mime/multipart"
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	"server/model/example"
@@ -11,7 +13,7 @@ import (
 
 	exampleRes "server/model/example/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -26,9 +28,9 @@ import (
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/breakpointContinue [post]
-func (u *FileUploadAndDownloadApi) BreakpointContinue(c *fiber.Ctx) error {
+func (u *FileUploadAndDownloadApi) BreakpointContinue(c fiber.Ctx) error {
 	var breakpoint example.ExaFileData
-	err := c.BodyParser(&breakpoint)
+	err := c.Bind().Body(&breakpoint)
 	if err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -88,10 +90,10 @@ func (u *FileUploadAndDownloadApi) BreakpointContinue(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/findFile [get]
-func (u *FileUploadAndDownloadApi) FindFile(c *fiber.Ctx) error {
+func (u *FileUploadAndDownloadApi) FindFile(c fiber.Ctx) error {
 	fileMd5 := c.Query("fileMd5")
 	fileName := c.Query("fileName")
-	chunkTotal := c.QueryInt("chunkTotal", 0)
+	chunkTotal := fiber.Query[int](c, "chunkTotal", 0)
 	if chunkTotal == 0 {
 		global.LOG.Error("获取文件大小失败")
 		return response.FailWithMessage("获取文件大小失败", c)
@@ -116,10 +118,10 @@ func (u *FileUploadAndDownloadApi) FindFile(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/findFile [post]
-func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c *fiber.Ctx) error {
+func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c fiber.Ctx) error {
 	var file request.BreakPoint
 	// filepath := c.Body("filePath")
-	err := c.BodyParser(&file)
+	err := c.Bind().Body(&file)
 	if err != nil {
 		global.LOG.Error("获取文件信息错误", zap.Error(err))
 		return response.FailWithMessage("获取文件信息错误: "+err.Error(), c)
@@ -150,9 +152,9 @@ func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c *fiber.Ctx) error 
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/removeChunk [delete]
-func (u *FileUploadAndDownloadApi) RemoveChunk(c *fiber.Ctx) error {
+func (u *FileUploadAndDownloadApi) RemoveChunk(c fiber.Ctx) error {
 	var file example.ExaFile
-	err := c.BodyParser(&file)
+	err := c.Bind().Body(&file)
 	if err != nil {
 		global.LOG.Error("获取切片信息失败!", zap.Error(err))
 		return response.FailWithMessage("缓存切片删除失败", c)
@@ -182,9 +184,9 @@ func (u *FileUploadAndDownloadApi) RemoveChunk(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/findFileBreakpoint [get]
-func (u *FileUploadAndDownloadApi) FindFileBreakpoint(c *fiber.Ctx) error {
-	page := c.QueryInt("page", 1)
-	pageSize := c.QueryInt("pageSize", 10)
+func (u *FileUploadAndDownloadApi) FindFileBreakpoint(c fiber.Ctx) error {
+	page := fiber.Query[int](c, "page", 1)
+	pageSize := fiber.Query[int](c, "pageSize", 10)
 	file, total, err := fileUploadAndDownloadService.FindFileBreakpoint(page, pageSize)
 	if err != nil {
 		global.LOG.Error("查找失败!", zap.Error(err))
@@ -210,8 +212,8 @@ func (u *FileUploadAndDownloadApi) FindFileBreakpoint(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/deleteFileBreakpoint [delete]
-func (u *FileUploadAndDownloadApi) DeleteFileBreakpoint(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (u *FileUploadAndDownloadApi) DeleteFileBreakpoint(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败!", zap.Error(err))
 		return response.FailWithMessage("获取id失败: "+err.Error(), c)

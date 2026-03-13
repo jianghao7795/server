@@ -1,13 +1,15 @@
 package system
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	"server/model/system"
 	"server/model/system/request"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -24,9 +26,9 @@ type DictionaryDetailApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionaryDetail/createSysDictionaryDetail [post]
-func (s *DictionaryDetailApi) CreateSysDictionaryDetail(c *fiber.Ctx) error {
+func (s *DictionaryDetailApi) CreateSysDictionaryDetail(c fiber.Ctx) error {
 	var detail system.SysDictionaryDetail
-	_ = c.BodyParser(&detail)
+	_ = c.Bind().Body(&detail)
 	if err := dictionaryDetailService.CreateSysDictionaryDetail(detail); err != nil {
 		global.LOG.Error("创建失败!", zap.Error(err))
 		return response.FailWithMessage("创建失败", c)
@@ -46,8 +48,8 @@ func (s *DictionaryDetailApi) CreateSysDictionaryDetail(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionaryDetail/deleteSysDictionaryDetail/:id [delete]
-func (s *DictionaryDetailApi) DeleteSysDictionaryDetail(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (s *DictionaryDetailApi) DeleteSysDictionaryDetail(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if err := dictionaryDetailService.DeleteSysDictionaryDetail(uint(id)); err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))
 		return response.FailWithMessage("删除失败", c)
@@ -67,9 +69,9 @@ func (s *DictionaryDetailApi) DeleteSysDictionaryDetail(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionaryDetail/updateSysDictionaryDetail [put]
-func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c *fiber.Ctx) error {
+func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c fiber.Ctx) error {
 	var detail system.SysDictionaryDetail
-	_ = c.BodyParser(&detail)
+	_ = c.Bind().Body(&detail)
 	if err := dictionaryDetailService.UpdateSysDictionaryDetail(&detail); err != nil {
 		global.LOG.Error("更新失败!", zap.Error(err))
 		return response.FailWithMessage("更新失败", c)
@@ -89,9 +91,9 @@ func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionaryDetail/findSysDictionaryDetail/:id [get]
-func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *fiber.Ctx) error {
+func (s *DictionaryDetailApi) FindSysDictionaryDetail(c fiber.Ctx) error {
 	var detail system.SysDictionaryDetail
-	id, _ := c.ParamsInt("id")
+	id, _ := strconv.Atoi(c.Params("id"))
 	detail.ID = uint(id)
 	if err := utils.Verify(detail, utils.IdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
@@ -115,9 +117,9 @@ func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionaryDetail/getSysDictionaryDetailList [get]
-func (s *DictionaryDetailApi) GetSysDictionaryDetailList(c *fiber.Ctx) error {
+func (s *DictionaryDetailApi) GetSysDictionaryDetailList(c fiber.Ctx) error {
 	var pageInfo request.SysDictionaryDetailSearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if list, total, err := dictionaryDetailService.GetSysDictionaryDetailInfoList(pageInfo); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)

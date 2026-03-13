@@ -5,11 +5,11 @@ import (
 	global "server/model"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 // Cors 直接放行所有跨域请求并放行所有 OPTIONS 方法
-func Cors(c *fiber.Ctx) error {
+func Cors(c fiber.Ctx) error {
 	method := c.Method()
 	// 放行所有OPTIONS方法
 	if method == "OPTIONS" {
@@ -31,7 +31,7 @@ func Cors(c *fiber.Ctx) error {
 }
 
 // CorsByRules 按照配置处理跨域请求
-func CorsByRules(c *fiber.Ctx) error {
+func CorsByRules(c fiber.Ctx) error {
 	// 放行全部
 	if global.CONFIG.Cors.Mode == "allow-all" {
 		return Cors(c)

@@ -6,12 +6,12 @@ import (
 
 	global "server/model"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 // 处理跨域请求,支持options访问
 
-func NeedInit(c *fiber.Ctx) error {
+func NeedInit(c fiber.Ctx) error {
 	var tables []string
 	global.DB.Raw("show tables").Scan(&tables)
 	if strings.Contains(strings.Join(tables, ""), "sys_users") {

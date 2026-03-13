@@ -1,13 +1,15 @@
 package app
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/app"
 	commentReq "server/model/app/request"
 	"server/model/common/request"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -24,9 +26,9 @@ import (
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /comment/createComment [post]
-func (commentApi *CommentApi) CreateComment(c *fiber.Ctx) error {
+func (commentApi *CommentApi) CreateComment(c fiber.Ctx) error {
 	var commentData app.Comment
-	err := c.BodyParser(&commentData)
+	err := c.Bind().Body(&commentData)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -52,8 +54,8 @@ func (commentApi *CommentApi) CreateComment(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /comment/deleteComment/{id} [delete]
-func (commentApi *CommentApi) DeleteComment(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (commentApi *CommentApi) DeleteComment(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败!", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
@@ -79,9 +81,9 @@ func (commentApi *CommentApi) DeleteComment(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /comment/deleteCommentByIds [delete]
-func (commentApi *CommentApi) DeleteCommentByIds(c *fiber.Ctx) error {
+func (commentApi *CommentApi) DeleteCommentByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
-	err := c.BodyParser(&IDS)
+	err := c.Bind().Body(&IDS)
 	if err != nil {
 		global.LOG.Error("获取id组失败", zap.Error(err))
 		return response.FailWithMessage("获取id组失败", c)
@@ -108,15 +110,15 @@ func (commentApi *CommentApi) DeleteCommentByIds(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /comment/updateComment/{id} [put]
-func (commentApi *CommentApi) UpdateComment(c *fiber.Ctx) error {
+func (commentApi *CommentApi) UpdateComment(c fiber.Ctx) error {
 	var comment2 app.Comment
-	id, err := c.ParamsInt("id")
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败!", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
 	}
 	comment2.ID = uint(id)
-	err = c.BodyParser(&comment2)
+	err = c.Bind().Body(&comment2)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -141,8 +143,8 @@ func (commentApi *CommentApi) UpdateComment(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /comment/getComment/:id [get]
-func (commentApi *CommentApi) FindComment(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id", 0)
+func (commentApi *CommentApi) FindComment(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("未获取到id参数!", zap.Error(err))
 		return response.FailWithMessage("未获取到id参数", c)
@@ -167,9 +169,9 @@ func (commentApi *CommentApi) FindComment(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /comment/getCommentList [get]
-func (commentApi *CommentApi) GetCommentList(c *fiber.Ctx) error {
+func (commentApi *CommentApi) GetCommentList(c fiber.Ctx) error {
 	var pageInfo commentReq.CommentSearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if pageInfo.Page == 0 {
 		pageInfo.Page = 1
 	}
@@ -202,9 +204,9 @@ func (commentApi *CommentApi) GetCommentList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /comment/getCommentTreeList [get]
-func (*CommentApi) GetCommentTreeList(c *fiber.Ctx) error {
+func (*CommentApi) GetCommentTreeList(c fiber.Ctx) error {
 	var pageInfo commentReq.CommentSearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 
 	if list, total, err := commentService.GetCommentTreeList(&pageInfo); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
@@ -231,9 +233,9 @@ func (*CommentApi) GetCommentTreeList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /comment/pariseComment [put]
-func (*CommentApi) PutLikeItOrDislike(c *fiber.Ctx) error {
+func (*CommentApi) PutLikeItOrDislike(c fiber.Ctx) error {
 	var likeIt app.Praise
-	err := c.BodyParser(&likeIt)
+	err := c.Bind().Body(&likeIt)
 	if err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)

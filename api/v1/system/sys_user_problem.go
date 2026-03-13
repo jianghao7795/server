@@ -1,12 +1,14 @@
 package system
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	problemReq "server/model/system"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -24,10 +26,10 @@ type UserProblem struct{}
 // @Failure 400 {object} response.Response{msg=string} "传错参数,请传user id"
 // @Failure 500 {object} response.Response{msg=string} "获取失败"
 // @Router /api/v1/system/user-problem/setting/{id} [get]
-func (*UserProblem) GetProblemSetting(c *fiber.Ctx) error {
+func (*UserProblem) GetProblemSetting(c fiber.Ctx) error {
 	var search problemReq.SysUserProblem
 	var err error
-	search.SysUserId, err = c.ParamsInt("id")
+	search.SysUserId, err = strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("传参错误!", zap.Error(err))
 		return response.FailWithMessage("传错参数,请传user id", c)
@@ -57,9 +59,9 @@ type UpdateProblemSettingData struct {
 // @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Failure 400 {object} response.Response{msg=string} "传错参数"
 // @Router /api/v1/system/user-problem/setting [put]
-func (*UserProblem) UpdateProblemSetting(c *fiber.Ctx) error {
+func (*UserProblem) UpdateProblemSetting(c fiber.Ctx) error {
 	var dataProblem UpdateProblemSettingData
-	err := c.BodyParser(&dataProblem)
+	err := c.Bind().Body(&dataProblem)
 	if err != nil {
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
@@ -88,8 +90,8 @@ func (*UserProblem) UpdateProblemSetting(c *fiber.Ctx) error {
 // @Success 200 {object} response.Response{data=bool,msg=string} "获取成功"
 // @Failure 400 {object} response.Response{msg=string} "传错参数"
 // @Router /api/v1/system/user-problem/has-setting/{uid} [get]
-func (*UserProblem) HasSetting(c *fiber.Ctx) error {
-	SysUserProblemId, _ := c.ParamsInt("uid")
+func (*UserProblem) HasSetting(c fiber.Ctx) error {
+	SysUserProblemId, _ := strconv.Atoi(c.Params("uid"))
 	isSetting, err := userProblem.HasSetting(SysUserProblemId)
 	if err != nil {
 		global.LOG.Error("传参错误!", zap.Error(err))
@@ -114,9 +116,9 @@ type VerifyProblemSettingData struct {
 // @Failure 400 {object} response.Response{msg=string} "传错参数"
 // @Failure 404 {object} response.Response{msg=string} "未查到此问题"
 // @Router /api/v1/system/user-problem/verify [post]
-func (*UserProblem) VerifyAnswer(c *fiber.Ctx) error {
+func (*UserProblem) VerifyAnswer(c fiber.Ctx) error {
 	var dataProblem VerifyProblemSettingData
-	err := c.BodyParser(&dataProblem)
+	err := c.Bind().Body(&dataProblem)
 	if err != nil {
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {

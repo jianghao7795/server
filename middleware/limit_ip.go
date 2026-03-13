@@ -9,12 +9,12 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type LimitConfig struct {
 	// GenerationKey 根据业务生成key 下面CheckOrMark查询生成
-	GenerationKey func(c *fiber.Ctx) string
+	GenerationKey func(c fiber.Ctx) string
 	// 检查函数,用户可修改具体逻辑,更加灵活
 	CheckOrMark func(key string, expire int, limit int) error
 	// Expire key 过期时间
@@ -23,7 +23,7 @@ type LimitConfig struct {
 	Limit int
 }
 
-func (l LimitConfig) LimitWithTime(c *fiber.Ctx) error {
+func (l LimitConfig) LimitWithTime(c fiber.Ctx) error {
 	if err := l.CheckOrMark(l.GenerationKey(c), l.Expire, l.Limit); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{"code": response.ERROR, "msg": err})
 	}
@@ -31,7 +31,7 @@ func (l LimitConfig) LimitWithTime(c *fiber.Ctx) error {
 }
 
 // DefaultGenerationKey 默认生成key
-func DefaultGenerationKey(c *fiber.Ctx) string {
+func DefaultGenerationKey(c fiber.Ctx) string {
 	return "Limit" + c.IP()
 }
 
@@ -46,7 +46,7 @@ func DefaultCheckOrMark(key string, expire int, limit int) (err error) {
 	return err
 }
 
-func DefaultLimit(c *fiber.Ctx) error {
+func DefaultLimit(c fiber.Ctx) error {
 	return LimitConfig{
 		GenerationKey: DefaultGenerationKey,
 		CheckOrMark:   DefaultCheckOrMark,

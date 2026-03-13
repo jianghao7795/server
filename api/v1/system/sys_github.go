@@ -12,7 +12,7 @@ import (
 	"server/utils"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -30,9 +30,9 @@ type SystemGithubApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /github/getGithubList [get]
-func (g *SystemGithubApi) GetGithubList(c *fiber.Ctx) error {
+func (g *SystemGithubApi) GetGithubList(c fiber.Ctx) error {
 	var searchInfo request.PageInfo
-	_ = c.QueryParser(&searchInfo)
+	_ = c.Bind().Query(&searchInfo)
 	if list, err := githubService.GetGithubList(searchInfo); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)
@@ -56,7 +56,7 @@ func (g *SystemGithubApi) GetGithubList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /github/createGithub [get]
-func (g *SystemGithubApi) CreateGithub(c *fiber.Ctx) error {
+func (g *SystemGithubApi) CreateGithub(c fiber.Ctx) error {
 	isCheck := utils.NetWorkStatus("https://api.github.com")
 	if !isCheck {
 		global.LOG.Error("网络错误：networking not work")

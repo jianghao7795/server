@@ -12,7 +12,7 @@ import (
 	systemReq "server/model/system/request"
 	systemRes "server/model/system/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
@@ -23,9 +23,9 @@ type User struct{}
 
 // var userService = service.ServiceGroupApp.SystemServiceGroup.UserService
 // var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
-// func (u *FrontendUser) Login(c *fiber.Ctx) error {
+// func (u *FrontendUser) Login(c fiber.Ctx) error {
 // 	var user loginRequest.LoginForm
-// 	_ = c.QueryParser(&user)
+// 	_ = c.Bind().Query(&user)
 // 	if err := utils.Verify(user, utils.LoginVerifyFrontend); err != nil {
 // 		return response.FailWithMessage(err.Error(), c)
 // 		return
@@ -51,9 +51,9 @@ type User struct{}
 // @Failure 401 {object} response.Response "登录失败"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /frontend/login [post]
-func (b *User) Login(c *fiber.Ctx) error {
+func (b *User) Login(c fiber.Ctx) error {
 	var l systemReq.Login
-	if err := c.BodyParser(&l); err != nil {
+	if err := c.Bind().Body(&l); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
 	}
@@ -74,7 +74,7 @@ func (b *User) Login(c *fiber.Ctx) error {
 }
 
 // 登录以后签发jwt
-func (u *User) tokenNext(c *fiber.Ctx, user system.SysUser) error {
+func (u *User) tokenNext(c fiber.Ctx, user system.SysUser) error {
 	j := utils.NewJWT() // 唯一签名
 	claims := j.CreateClaims(systemReq.BaseClaims{
 		UUID:        user.UUID,
@@ -127,9 +127,9 @@ func (u *User) tokenNext(c *fiber.Ctx, user system.SysUser) error {
 	}
 }
 
-func (*User) RegisterUser(c *fiber.Ctx) error {
+func (*User) RegisterUser(c fiber.Ctx) error {
 	var userInfo loginRequest.RegisterUser
-	_ = c.BodyParser(&userInfo)
+	_ = c.Bind().Body(&userInfo)
 	if userInfo.Password != userInfo.RePassword {
 		global.LOG.Error("密码不一致!", zap.Error(errors.New("密码不一致")))
 		return response.FailWithMessage("密码不一致", c)
@@ -147,7 +147,7 @@ func (*User) RegisterUser(c *fiber.Ctx) error {
 	}
 }
 
-func (u *User) GetCurrent(c *fiber.Ctx) error {
+func (u *User) GetCurrent(c fiber.Ctx) error {
 	uuid := utils.GetUserUuid(c)
 	if ReqUser, err := userService.GetUserInfo(uuid); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
@@ -157,9 +157,9 @@ func (u *User) GetCurrent(c *fiber.Ctx) error {
 	}
 }
 
-func (u *User) UpdatePassword(c *fiber.Ctx) error {
+func (u *User) UpdatePassword(c fiber.Ctx) error {
 	var resetPassword frontend.ResetPassword
-	if err := c.BodyParser(&resetPassword); err != nil {
+	if err := c.Bind().Body(&resetPassword); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -182,10 +182,10 @@ func (u *User) UpdatePassword(c *fiber.Ctx) error {
 	return response.OkWithDetailed(nil, "重置密码成功", c)
 }
 
-func (u *User) UpdateUserBackgroudImage(c *fiber.Ctx) error {
+func (u *User) UpdateUserBackgroudImage(c fiber.Ctx) error {
 	var user frontend.User
 	var err error
-	err = c.BodyParser(&user)
+	err = c.Bind().Body(&user)
 	if err != nil {
 		return response.FailWithMessage("获取数据失败", c)
 	}
@@ -196,10 +196,10 @@ func (u *User) UpdateUserBackgroudImage(c *fiber.Ctx) error {
 	return response.OkWithDetailed(nil, "更新成功", c)
 }
 
-func (u *User) UpdateUser(c *fiber.Ctx) error {
+func (u *User) UpdateUser(c fiber.Ctx) error {
 	var user frontend.User
 	var err error
-	err = c.BodyParser(&user)
+	err = c.Bind().Body(&user)
 	if err != nil {
 		return response.FailWithMessage("获取数据失败", c)
 	}

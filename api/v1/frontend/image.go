@@ -4,7 +4,7 @@ import (
 	global "server/model"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -18,7 +18,7 @@ import (
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Router /frontend/getImages [get]
-func (u *User) GetImages(c *fiber.Ctx) error {
+func (u *User) GetImages(c fiber.Ctx) error {
 	imageList, err := imagesServiceApp.GetImagesList()
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))

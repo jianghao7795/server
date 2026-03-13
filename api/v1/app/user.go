@@ -2,13 +2,15 @@ package app
 
 import (
 	"errors"
+	"strconv"
+
 	global "server/model"
 	"server/model/app"
 	appReq "server/model/app/request"
 	"server/model/common/request"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -25,9 +27,9 @@ import (
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/createUser [post]
-func (userApi *UserApi) CreateUser(c *fiber.Ctx) error {
+func (userApi *UserApi) CreateUser(c fiber.Ctx) error {
 	var user app.User
-	err := c.BodyParser(&user)
+	err := c.Bind().Body(&user)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -53,8 +55,8 @@ func (userApi *UserApi) CreateUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /frontend-user/deleteUser/{id} [delete]
-func (userApi *UserApi) DeleteUser(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (userApi *UserApi) DeleteUser(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败!", zap.Error(err))
 		return response.FailWithMessage("获取id失败，传正确的id", c)
@@ -80,9 +82,9 @@ func (userApi *UserApi) DeleteUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/deleteUserByIds [delete]
-func (userApi *UserApi) DeleteUserByIds(c *fiber.Ctx) error {
+func (userApi *UserApi) DeleteUserByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
-	err := c.BodyParser(&IDS)
+	err := c.Bind().Body(&IDS)
 	if err != nil {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
@@ -109,9 +111,9 @@ func (userApi *UserApi) DeleteUserByIds(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/updateUser/{id} [put]
-func (userApi *UserApi) UpdateUser(c *fiber.Ctx) error {
+func (userApi *UserApi) UpdateUser(c fiber.Ctx) error {
 	var user app.User
-	id, err := c.ParamsInt("id")
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
@@ -122,7 +124,7 @@ func (userApi *UserApi) UpdateUser(c *fiber.Ctx) error {
 		global.LOG.Error("未找到，该用户!", zap.Error(errors.New("未找到，该用户")))
 		return response.FailWithMessage("未找到，该用户", c)
 	}
-	err = c.BodyParser(&user)
+	err = c.Bind().Body(&user)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败"+err.Error(), c)
@@ -148,8 +150,8 @@ func (userApi *UserApi) UpdateUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/findUser/:id [get]
-func (userApi *UserApi) FindUser(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (userApi *UserApi) FindUser(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
@@ -174,9 +176,9 @@ func (userApi *UserApi) FindUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/getUserList [get]
-func (userApi *UserApi) GetUserList(c *fiber.Ctx) error {
+func (userApi *UserApi) GetUserList(c fiber.Ctx) error {
 	var pageInfo appReq.UserSearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if list, total, err := userService.GetUserInfoList(&pageInfo); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败"+err.Error(), c)

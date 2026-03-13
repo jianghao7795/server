@@ -9,13 +9,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
 var userService = systemService.UserServiceApp
 
-func ErrorToEmail(c *fiber.Ctx) error {
+func ErrorToEmail(c fiber.Ctx) error {
 	var username string
 	claims, _ := utils2.GetClaims(c)
 	if claims.Username != "" {

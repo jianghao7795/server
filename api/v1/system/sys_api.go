@@ -1,6 +1,8 @@
 package system
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
@@ -8,7 +10,7 @@ import (
 	systemReq "server/model/system/request"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -25,9 +27,9 @@ type SystemApiApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /api/createApi [post]
-func (s *SystemApiApi) CreateApi(c *fiber.Ctx) (err error) {
+func (s *SystemApiApi) CreateApi(c fiber.Ctx) (err error) {
 	var api system.SysApi
-	err = c.BodyParser(&api)
+	err = c.Bind().Body(&api)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -54,9 +56,9 @@ func (s *SystemApiApi) CreateApi(c *fiber.Ctx) (err error) {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /api/delete/{id} [delete]
-func (s *SystemApiApi) DeleteApi(c *fiber.Ctx) error {
+func (s *SystemApiApi) DeleteApi(c fiber.Ctx) error {
 	var api system.SysApi
-	id, _ := c.ParamsInt("id")
+	id, _ := strconv.Atoi(c.Params("id"))
 	api.ID = uint(id)
 	if err := utils.Verify(api.MODEL, utils.IdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
@@ -80,9 +82,9 @@ func (s *SystemApiApi) DeleteApi(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /api/getApiList [get]
-func (s *SystemApiApi) GetApiList(c *fiber.Ctx) error {
+func (s *SystemApiApi) GetApiList(c fiber.Ctx) error {
 	var pageInfo systemReq.SearchApiParams
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	// log.Println("pageInfo: ", pageInfo.ApiGroup)
 	if list, total, err := apiService.GetAPIInfoList(&pageInfo); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
@@ -109,9 +111,9 @@ func (s *SystemApiApi) GetApiList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /api/getApiById [post]
-func (s *SystemApiApi) GetApiById(c *fiber.Ctx) error {
+func (s *SystemApiApi) GetApiById(c fiber.Ctx) error {
 	var idInfo request.GetById
-	idInfo.ID, _ = c.ParamsInt("id")
+	idInfo.ID, _ = strconv.Atoi(c.Params("id"))
 	if err := utils.Verify(idInfo, utils.IdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -135,9 +137,9 @@ func (s *SystemApiApi) GetApiById(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /api/updateApi [put]
-func (s *SystemApiApi) UpdateApi(c *fiber.Ctx) error {
+func (s *SystemApiApi) UpdateApi(c fiber.Ctx) error {
 	var api system.SysApi
-	err := c.BodyParser(&api)
+	err := c.Bind().Body(&api)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -163,7 +165,7 @@ func (s *SystemApiApi) UpdateApi(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /api/getAllApis [get]
-func (s *SystemApiApi) GetAllApis(c *fiber.Ctx) error {
+func (s *SystemApiApi) GetAllApis(c fiber.Ctx) error {
 	if apis, err := apiService.GetAllApis(); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)
@@ -183,9 +185,9 @@ func (s *SystemApiApi) GetAllApis(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /api/deleteApisByIds [delete]
-func (s *SystemApiApi) DeleteApisByIds(c *fiber.Ctx) error {
+func (s *SystemApiApi) DeleteApisByIds(c fiber.Ctx) error {
 	var ids request.IdsReq
-	_ = c.QueryParser(&ids)
+	_ = c.Bind().Query(&ids)
 	if err := apiService.DeleteApisByIds(ids); err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))
 		return response.FailWithMessage("删除失败", c)

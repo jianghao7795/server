@@ -5,7 +5,7 @@ import (
 	"server/model"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -13,7 +13,7 @@ import (
 type ErrorHandler struct{}
 
 // HandleAPIError handles common API errors with consistent logging and response
-func (eh *ErrorHandler) HandleAPIError(c *fiber.Ctx, operation string, err error) error {
+func (eh *ErrorHandler) HandleAPIError(c fiber.Ctx, operation string, err error) error {
 	if err == nil {
 		return nil
 	}
@@ -28,19 +28,19 @@ func (eh *ErrorHandler) HandleAPIError(c *fiber.Ctx, operation string, err error
 }
 
 // HandleValidationError handles parameter validation errors
-func (eh *ErrorHandler) HandleValidationError(c *fiber.Ctx, field string, err error) error {
+func (eh *ErrorHandler) HandleValidationError(c fiber.Ctx, field string, err error) error {
 	model.LOG.Error(fmt.Sprintf("Validation failed for field %s", field), zap.Error(err))
 	return response.FailWithMessage(fmt.Sprintf("参数验证失败: %s", err.Error()), c)
 }
 
 // HandleDatabaseError handles database operation errors
-func (eh *ErrorHandler) HandleDatabaseError(c *fiber.Ctx, operation string, err error) error {
+func (eh *ErrorHandler) HandleDatabaseError(c fiber.Ctx, operation string, err error) error {
 	model.LOG.Error(fmt.Sprintf("Database %s failed", operation), zap.Error(err))
 	return response.FailWithMessage(fmt.Sprintf("数据库操作失败: %s", operation), c)
 }
 
 // HandleNotFoundError handles resource not found errors
-func (eh *ErrorHandler) HandleNotFoundError(c *fiber.Ctx, resource string) error {
+func (eh *ErrorHandler) HandleNotFoundError(c fiber.Ctx, resource string) error {
 	model.LOG.Warn(fmt.Sprintf("%s not found", resource))
 	return response.FailWithMessage(fmt.Sprintf("%s不存在", resource), c)
 }

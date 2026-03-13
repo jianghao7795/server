@@ -6,7 +6,7 @@ import (
 	"server/model/system"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +22,7 @@ type JwtApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /jwt/jsonInBlacklist [post]
-func (j *JwtApi) JsonInBlacklist(c *fiber.Ctx) error {
+func (j *JwtApi) JsonInBlacklist(c fiber.Ctx) error {
 	tokenString := c.Get("Authorization")
 	token := strings.Replace(tokenString, "Bearer ", "", 1)
 	if token == "" {

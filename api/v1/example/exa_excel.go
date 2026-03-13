@@ -2,6 +2,8 @@ package example
 
 import (
 	"os"
+	"strconv"
+
 	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
@@ -10,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -32,12 +34,12 @@ import (
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /excel/exportExcel [post]
-func (e *ExcelApi) ExportExcel(c *fiber.Ctx) (err error) {
+func (e *ExcelApi) ExportExcel(c fiber.Ctx) (err error) {
 	excelInfo := example.ExcelInfo{
 		FileName: "",
 		InfoList: nil,
 	}
-	if err := c.BodyParser(&excelInfo); err != nil {
+	if err := c.Bind().Body(&excelInfo); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -77,7 +79,7 @@ func (e *ExcelApi) ExportExcel(c *fiber.Ctx) (err error) {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /excel/importExcel [post]
-func (e *ExcelApi) ImportExcel(c *fiber.Ctx) error {
+func (e *ExcelApi) ImportExcel(c fiber.Ctx) error {
 	file, err := c.FormFile("file")
 	if err != nil {
 		global.LOG.Error("接收文件失败!", zap.Error(err))
@@ -119,7 +121,7 @@ func (e *ExcelApi) ImportExcel(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /excel/loadExcel [get]
-func (e *ExcelApi) LoadExcel(c *fiber.Ctx) error {
+func (e *ExcelApi) LoadExcel(c fiber.Ctx) error {
 	menus, err := excelService.ParseExcel2InfoList()
 	if err != nil {
 		global.LOG.Error("加载数据失败!", zap.Error(err))
@@ -144,7 +146,7 @@ func (e *ExcelApi) LoadExcel(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /excel/downloadTemplate [get]
-func (e *ExcelApi) DownloadTemplate(c *fiber.Ctx) error {
+func (e *ExcelApi) DownloadTemplate(c fiber.Ctx) error {
 	fileName := c.Query("fileName")
 	filePath := global.CONFIG.Excel.Dir + fileName
 
@@ -161,9 +163,9 @@ func (e *ExcelApi) DownloadTemplate(c *fiber.Ctx) error {
 	return c.Download(filePath)
 }
 
-func (e *ExcelApi) GetFileList(c *fiber.Ctx) error {
+func (e *ExcelApi) GetFileList(c fiber.Ctx) error {
 	var pageInfo request.PageInfo
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	list, total, err := excelService.GetFileList(&pageInfo)
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
@@ -178,8 +180,8 @@ func (e *ExcelApi) GetFileList(c *fiber.Ctx) error {
 	}
 }
 
-func (e *ExcelApi) DeleteFile(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (e *ExcelApi) DeleteFile(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if err := excelService.DeleteFile(int64(id)); err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))
 		return response.FailWithMessage("删除失败", c)

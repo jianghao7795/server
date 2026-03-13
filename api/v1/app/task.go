@@ -4,7 +4,7 @@ import (
 	global "server/model"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 // StartTasking 启动任务
@@ -21,7 +21,7 @@ import (
 // @Failure 404 {object} response.Response "任务不存在"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tasking/start [get]
-func (*TaskNameApi) StartTasking(c *fiber.Ctx) error {
+func (*TaskNameApi) StartTasking(c fiber.Ctx) error {
 	tasking := c.Query("task")
 	if tasking == "" {
 		global.LOG.Error("请传入任务名!")
@@ -52,7 +52,7 @@ func (*TaskNameApi) StartTasking(c *fiber.Ctx) error {
 // @Failure 404 {object} response.Response "任务不存在"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tasking/stop [get]
-func (*TaskNameApi) StopTasking(c *fiber.Ctx) error {
+func (*TaskNameApi) StopTasking(c fiber.Ctx) error {
 	tasking := c.Query("task")
 	if tasking == "" {
 		global.LOG.Error("请传入任务名!")

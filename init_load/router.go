@@ -12,10 +12,11 @@ import (
 	"server/router"
 	"time"
 
-	"github.com/gofiber/contrib/swagger"
-	"github.com/gofiber/contrib/websocket"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
+	swaggo "github.com/gofiber/contrib/v3/swaggo"
+	"github.com/gofiber/contrib/v3/websocket"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/logger"
+	"github.com/gofiber/fiber/v3/middleware/static"
 )
 
 // 初始化总路由
@@ -28,43 +29,26 @@ func Routers(
 	frontendRouter *router.FrontendRouter,
 	mobileRouter *router.MobileRouter,
 ) *fiber.App {
-	cfg := swagger.Config{
-		Next:     nil,
-		BasePath: "/",
-		FilePath: "./docs/swagger.json",
-		Path:     "./docs",
-		Title:    "server API documentation",
-		CacheAge: 3600, // Default to 1 hour
+	// Fiber v3: 使用 static 中间件替代 app.Static
+	staticConfig := static.Config{
+		Compress:      true,
+		ByteRange:     true,
+		Browse:        true,
+		CacheDuration: 100 * time.Second,
+		MaxAge:        3600,
 	}
+	app.Get("/api/uploads/*", static.New("uploads", staticConfig))     // 本地的frontend api文件路由
+	app.Get("/backend/uploads/*", static.New("uploads", staticConfig)) // 本地的backend文件路由
+	app.Get("/backend/public/*", static.New("public", staticConfig))
+	app.Get("/mobile/uploads/*", static.New("uploads", staticConfig)) // 本地的mobile文件路由
+	app.Get("/docs/*", static.New("./docs"))                          // swagger json 等文档
 
-	app.Static("/api/uploads/", "uploads/", fiber.Static{
-		Compress:      true,
-		ByteRange:     true,
-		Browse:        true,
-		CacheDuration: 100 * time.Second,
-		MaxAge:        3600,
-	}) // 本地的frontend api文件路由转化
-	app.Static("/backend/uploads/", "uploads/", fiber.Static{
-		Compress:      true,
-		ByteRange:     true,
-		Browse:        true,
-		CacheDuration: 100 * time.Second,
-		MaxAge:        3600,
-	}) // 本地的backend文件路由转化
-	app.Static("/backend/public/", "public/", fiber.Static{
-		Compress:      true,
-		ByteRange:     true,
-		Browse:        true,
-		CacheDuration: 100 * time.Second,
-		MaxAge:        3600,
-	})
-	app.Static("/mobile/uploads/", "uploads/", fiber.Static{
-		Compress:      true,
-		ByteRange:     true,
-		Browse:        true,
-		CacheDuration: 100 * time.Second,
-		MaxAge:        3600,
-	}) // 本地的mobile文件路由转化
+	// Swagger UI (v3 使用 swaggo)
+	app.Get("/swagger/*", swaggo.New(swaggo.Config{
+		URL:    "/docs/swagger.json",
+		Title:  "server API documentation",
+		Layout: "StandaloneLayout",
+	}))
 
 	app.Use("/ws", middleware.Ws)
 	app.Get("/ws/:id", websocket.New(func(c *websocket.Conn) {
@@ -99,11 +83,10 @@ func Routers(
 	// })
 	// 使用注入的路由组
 	mobile := mobileRouter
-	routers := app.Use(swagger.New(cfg), logger.New(logger.Config{
+	routers := app.Use(logger.New(logger.Config{
 		Done: global.Done,
-	})) // swagger文档配置
-	// routers = routers.Use() // log 日志配置
-	routers = routers.Static("/backend/form-generator", "resource/page")
+	}))
+	routers.Get("/backend/form-generator/*", static.New("resource/page"))
 	routers = routers.Use(middleware.DefaultLimit)
 
 	// app.Static("/form-generator", "./resource/page") // 生成form组件的js代码

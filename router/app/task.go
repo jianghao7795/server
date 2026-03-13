@@ -4,7 +4,7 @@ import (
 	v1 "server/api/v1/app"
 	"server/middleware"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type TaskRouter struct{}

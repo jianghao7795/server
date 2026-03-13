@@ -5,7 +5,7 @@ import (
 	"server/plugin/email"
 	"server/utils/plugin"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 func PluginInit(group fiber.Router, Plugin ...plugin.Plugin) {

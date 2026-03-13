@@ -4,7 +4,7 @@ import (
 	"server/plugin/email/global"
 	"server/plugin/email/router"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type emailPlugin struct{}

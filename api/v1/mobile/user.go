@@ -1,13 +1,15 @@
 package mobile
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	"server/model/mobile"
 	mobileReq "server/model/mobile/request"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -26,9 +28,9 @@ type UserApi struct{}
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobileUser/createMobileUser [post]
-func (userApi *UserApi) CreateMobileUser(c *fiber.Ctx) error {
+func (userApi *UserApi) CreateMobileUser(c fiber.Ctx) error {
 	var mobileUser mobile.MobileUser
-	if err := c.BodyParser(&mobileUser); err != nil {
+	if err := c.Bind().Body(&mobileUser); err != nil {
 		global.LOG.Error("获取用户数据失败", zap.Error(err))
 		return response.FailWithMessage("获取用户数据失败", c)
 	}
@@ -53,8 +55,8 @@ func (userApi *UserApi) CreateMobileUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobileUser/deleteMobileUser/{id} [delete]
-func (userApi *UserApi) DeleteMobileUser(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (userApi *UserApi) DeleteMobileUser(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if err := userService.DeleteMobileUser(uint(id)); err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))
 		return response.FailWithMessage("删除失败", c)
@@ -76,9 +78,9 @@ func (userApi *UserApi) DeleteMobileUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobileUser/deleteMobileUserByIds [delete]
-func (userApi *UserApi) DeleteMobileUserByIds(c *fiber.Ctx) error {
+func (userApi *UserApi) DeleteMobileUserByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
-	if err := c.BodyParser(&IDS); err != nil {
+	if err := c.Bind().Body(&IDS); err != nil {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("批量获取id失败", c)
 	}
@@ -103,9 +105,9 @@ func (userApi *UserApi) DeleteMobileUserByIds(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobileUser/updateMobileUser [put]
-func (userApi *UserApi) UpdateMobileUser(c *fiber.Ctx) error {
+func (userApi *UserApi) UpdateMobileUser(c fiber.Ctx) error {
 	var mobileUser mobile.MobileUser
-	if err := c.BodyParser(&mobileUser); err != nil {
+	if err := c.Bind().Body(&mobileUser); err != nil {
 		global.LOG.Error("获取用户信息失败", zap.Error(err))
 		return response.FailWithMessage("获取用户信息失败", c)
 	}
@@ -129,8 +131,8 @@ func (userApi *UserApi) UpdateMobileUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobileUser/findMobileUser/:id [get]
-func (userApi *UserApi) FindMobileUser(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (userApi *UserApi) FindMobileUser(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
@@ -155,9 +157,9 @@ func (userApi *UserApi) FindMobileUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobileUser/getMobileUserList [get]
-func (userApi *UserApi) GetMobileUserList(c *fiber.Ctx) error {
+func (userApi *UserApi) GetMobileUserList(c fiber.Ctx) error {
 	var pageInfo mobileReq.MobileUserSearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if list, total, err := userService.GetMobileUserInfoList(&pageInfo); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)

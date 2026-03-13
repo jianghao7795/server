@@ -3,22 +3,22 @@ package middleware
 import (
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 // ValidationMiddleware provides common validation utilities
 type ValidationMiddleware struct{}
 
 // ValidateBody validates request body and binds to struct
-func (vm *ValidationMiddleware) ValidateBody(c *fiber.Ctx, dest any) error {
-	if err := c.BodyParser(dest); err != nil {
+func (vm *ValidationMiddleware) ValidateBody(c fiber.Ctx, dest any) error {
+	if err := c.Bind().Body(dest); err != nil {
 		return utils.ErrorHandlerInstance.HandleValidationError(c, "request body", err)
 	}
 	return nil
 }
 
 // ValidateParams validates URL parameters
-func (vm *ValidationMiddleware) ValidateParams(c *fiber.Ctx, paramName string) (string, error) {
+func (vm *ValidationMiddleware) ValidateParams(c fiber.Ctx, paramName string) (string, error) {
 	value := c.Params(paramName)
 	if value == "" {
 		return "", utils.ErrorHandlerInstance.HandleValidationError(c, paramName, fiber.NewError(400, "missing required parameter"))
@@ -27,7 +27,7 @@ func (vm *ValidationMiddleware) ValidateParams(c *fiber.Ctx, paramName string) (
 }
 
 // ValidateQuery validates query parameters
-func (vm *ValidationMiddleware) ValidateQuery(c *fiber.Ctx, queryName string) (string, error) {
+func (vm *ValidationMiddleware) ValidateQuery(c fiber.Ctx, queryName string) (string, error) {
 	value := c.Query(queryName)
 	if value == "" {
 		return "", utils.ErrorHandlerInstance.HandleValidationError(c, queryName, fiber.NewError(400, "missing required query parameter"))
@@ -36,11 +36,8 @@ func (vm *ValidationMiddleware) ValidateQuery(c *fiber.Ctx, queryName string) (s
 }
 
 // ValidateID validates and converts ID parameter to uint
-func (vm *ValidationMiddleware) ValidateID(c *fiber.Ctx) (uint, error) {
-	id, err := c.ParamsInt("id")
-	if err != nil {
-		return 0, utils.ErrorHandlerInstance.HandleValidationError(c, "id", err)
-	}
+func (vm *ValidationMiddleware) ValidateID(c fiber.Ctx) (uint, error) {
+	id := fiber.Params[int](c, "id", 0)
 	if id <= 0 {
 		return 0, utils.ErrorHandlerInstance.HandleValidationError(c, "id", fiber.NewError(400, "invalid ID"))
 	}

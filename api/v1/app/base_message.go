@@ -2,12 +2,14 @@ package app
 
 import (
 	"errors"
+	"strconv"
+
 	"server/model/app"
 	"server/model/common/response"
 
 	global "server/model"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -25,9 +27,9 @@ import (
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /base_message/createBaseMessage [post]
-func (a *BaseMessageApi) CreateBaseMessage(c *fiber.Ctx) error {
+func (a *BaseMessageApi) CreateBaseMessage(c fiber.Ctx) error {
 	var baseMessage app.BaseMessage
-	err := c.BodyParser(&baseMessage)
+	err := c.Bind().Body(&baseMessage)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -54,14 +56,14 @@ func (a *BaseMessageApi) CreateBaseMessage(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /base_message/updateBaseMessage/{id} [put]
-func (a *BaseMessageApi) UpdateBaseMessage(c *fiber.Ctx) error {
+func (a *BaseMessageApi) UpdateBaseMessage(c fiber.Ctx) error {
 	var baseMessage app.BaseMessage
-	id, err := c.ParamsInt("id", 0)
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
 	}
-	err = c.BodyParser(&baseMessage)
+	err = c.Bind().Body(&baseMessage)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -88,8 +90,8 @@ func (a *BaseMessageApi) UpdateBaseMessage(c *fiber.Ctx) error {
 // @Failure 404 {object} response.Response "基础消息不存在"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /base_message/getBaseMessage/{id} [get]
-func (a *BaseMessageApi) FindBaseMessage(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (a *BaseMessageApi) FindBaseMessage(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		global.LOG.Error("获取id失败!", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)

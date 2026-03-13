@@ -5,7 +5,7 @@ import (
 	"server/model/common/response"
 	systemRes "server/model/system/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/mojocn/base64Captcha"
 	"github.com/wenlng/go-captcha/captcha"
 	"go.uber.org/zap"
@@ -29,7 +29,7 @@ type BaseApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /base/captcha [get]
-func (b *BaseApi) Captcha(c *fiber.Ctx) error {
+func (b *BaseApi) Captcha(c fiber.Ctx) error {
 	// 字符,公式,验证码配置
 	// 生成默认数字的driver
 	driver := base64Captcha.NewDriverDigit(global.CONFIG.Captcha.ImgHeight, global.CONFIG.Captcha.ImgWidth, global.CONFIG.Captcha.KeyLong, global.CONFIG.Captcha.MaxSkew, global.CONFIG.Captcha.DotCount)
@@ -58,7 +58,7 @@ func (b *BaseApi) Captcha(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /base/captcha/img [get]
-func (b *BaseApi) CaptchaImg(c *fiber.Ctx) error {
+func (b *BaseApi) CaptchaImg(c fiber.Ctx) error {
 	capt := captcha.GetCaptcha()
 	dots, imageBase64, thumbImageBase64, key, err := capt.Generate()
 	// 设置图片属性

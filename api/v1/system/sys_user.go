@@ -11,7 +11,7 @@ import (
 	systemReq "server/model/system/request"
 	systemRes "server/model/system/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -29,9 +29,9 @@ import (
 // @Failure 401 {object} response.Response "登录失败"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /base/login [post]
-func (b *BaseApi) Login(c *fiber.Ctx) error {
+func (b *BaseApi) Login(c fiber.Ctx) error {
 	var l systemReq.Login
-	if err := c.BodyParser(&l); err != nil {
+	if err := c.Bind().Body(&l); err != nil {
 		global.LOG.Error("参数解析失败!", zap.Error(err))
 		return response.FailWithMessage("参数错误", c)
 	}
@@ -66,9 +66,9 @@ func (b *BaseApi) Login(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "登录失败"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /base/getToken/login [post]
-func (b *BaseApi) LoginToken(c *fiber.Ctx) error {
+func (b *BaseApi) LoginToken(c fiber.Ctx) error {
 	var l systemReq.LoginToken
-	_ = c.BodyParser(&l)
+	_ = c.Bind().Body(&l)
 	if err := utils.Verify(l, utils.TokenLoginVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -82,7 +82,7 @@ func (b *BaseApi) LoginToken(c *fiber.Ctx) error {
 }
 
 // 登录以后签发jwt
-func (b *BaseApi) tokenNext(c *fiber.Ctx, user *system.SysUser) error {
+func (b *BaseApi) tokenNext(c fiber.Ctx, user *system.SysUser) error {
 	j := utils.NewJWT() // 唯一签名
 	claims := j.CreateClaims(systemReq.BaseClaims{
 		UUID:        user.UUID,
@@ -144,9 +144,9 @@ func (b *BaseApi) tokenNext(c *fiber.Ctx, user *system.SysUser) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/admin_register [post]
-func (b *BaseApi) Register(c *fiber.Ctx) error {
+func (b *BaseApi) Register(c fiber.Ctx) error {
 	var r systemReq.Register
-	_ = c.BodyParser(&r)
+	_ = c.Bind().Body(&r)
 	if err := utils.Verify(r, utils.RegisterVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -177,9 +177,9 @@ func (b *BaseApi) Register(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/changePassword [post]
-func (b *BaseApi) ChangePassword(c *fiber.Ctx) error {
+func (b *BaseApi) ChangePassword(c fiber.Ctx) error {
 	var user systemReq.ChangePasswordStruct
-	_ = c.BodyParser(&user)
+	_ = c.Bind().Body(&user)
 	if err := utils.Verify(user, utils.ChangePasswordVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -204,9 +204,9 @@ func (b *BaseApi) ChangePassword(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/getUserList [get]
-func (b *BaseApi) GetUserList(c *fiber.Ctx) error {
+func (b *BaseApi) GetUserList(c fiber.Ctx) error {
 	var searchInfo systemReq.SearchInfo
-	_ = c.QueryParser(&searchInfo)
+	_ = c.Bind().Query(&searchInfo)
 	if err := utils.Verify(searchInfo, utils.PageInfoVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -236,9 +236,9 @@ func (b *BaseApi) GetUserList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/setUserAuthority [post]
-func (b *BaseApi) SetUserAuthority(c *fiber.Ctx) error {
+func (b *BaseApi) SetUserAuthority(c fiber.Ctx) error {
 	var sua systemReq.SetUserAuth
-	_ = c.BodyParser(&sua)
+	_ = c.Bind().Body(&sua)
 	if UserVerifyErr := utils.Verify(sua, utils.SetUserAuthorityVerify); UserVerifyErr != nil {
 		return response.FailWithMessage(UserVerifyErr.Error(), c)
 	}
@@ -276,9 +276,9 @@ func (b *BaseApi) SetUserAuthority(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/setUserAuthorities [post]
-func (b *BaseApi) SetUserAuthorities(c *fiber.Ctx) error {
+func (b *BaseApi) SetUserAuthorities(c fiber.Ctx) error {
 	var sua systemReq.SetUserAuthorities
-	_ = c.BodyParser(&sua)
+	_ = c.Bind().Body(&sua)
 	if err := userService.SetUserAuthorities(sua.ID, sua.AuthorityIds); err != nil {
 		global.LOG.Error("修改失败!", zap.Error(err))
 		return response.FailWithMessage("修改失败", c)
@@ -301,8 +301,8 @@ func (b *BaseApi) SetUserAuthorities(c *fiber.Ctx) error {
 // @Failure 403 {object} response.Response "不能删除自己"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/deleteUser/{id} [delete]
-func (b *BaseApi) DeleteUser(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (b *BaseApi) DeleteUser(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	jwtId, _ := utils.GetUserID(c)
 	if jwtId == uint(id) {
 		return response.FailWithMessage("删除失败, 自杀失败", c)
@@ -328,9 +328,9 @@ func (b *BaseApi) DeleteUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/setUserInfo [put]
-func (b *BaseApi) SetUserInfo(c *fiber.Ctx) error {
+func (b *BaseApi) SetUserInfo(c fiber.Ctx) error {
 	var user systemReq.ChangeUserInfo
-	_ = c.BodyParser(&user)
+	_ = c.Bind().Body(&user)
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -371,9 +371,9 @@ func (b *BaseApi) SetUserInfo(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/SetSelfInfo [put]
-func (b *BaseApi) SetSelfInfo(c *fiber.Ctx) error {
+func (b *BaseApi) SetSelfInfo(c fiber.Ctx) error {
 	var user systemReq.ChangeUserInfo
-	_ = c.BodyParser(&user)
+	_ = c.Bind().Body(&user)
 	user.ID, _ = utils.GetUserID(c)
 	if err := userService.SetUserInfo(system.SysUser{
 		MODEL: global.MODEL{
@@ -402,7 +402,7 @@ func (b *BaseApi) SetSelfInfo(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/getUserInfo [get]
-func (b *BaseApi) GetUserInfo(c *fiber.Ctx) error {
+func (b *BaseApi) GetUserInfo(c fiber.Ctx) error {
 	uuid := utils.GetUserUuid(c)
 	if ReqUser, err := userService.GetUserInfo(uuid); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
@@ -423,9 +423,9 @@ func (b *BaseApi) GetUserInfo(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/resetPassword [post]
-func (b *BaseApi) ResetPassword(c *fiber.Ctx) error {
+func (b *BaseApi) ResetPassword(c fiber.Ctx) error {
 	var user system.SysUser
-	_ = c.BodyParser(&user)
+	_ = c.Bind().Body(&user)
 	if err := userService.ResetPassword(user.ID); err != nil {
 		global.LOG.Error("重置失败!", zap.Error(err))
 		return response.FailWithMessage("重置失败"+err.Error(), c)
@@ -444,7 +444,7 @@ func (b *BaseApi) ResetPassword(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /user/getUserCount [get]
-func (b *BaseApi) GetUserCount(c *fiber.Ctx) error {
+func (b *BaseApi) GetUserCount(c fiber.Ctx) error {
 	if userCount, err := userService.UserCount(); err != nil {
 		global.LOG.Error("获取总数失败!", zap.Error(err))
 		return response.FailWithMessage("获取总数失败"+err.Error(), c)
@@ -453,7 +453,7 @@ func (b *BaseApi) GetUserCount(c *fiber.Ctx) error {
 	}
 }
 
-func (b *BaseApi) GetFlow(c *fiber.Ctx) error {
+func (b *BaseApi) GetFlow(c fiber.Ctx) error {
 	receiveBytes, transmitBytes, _ := utils.TotalFlowByDevice("lo")
 	return response.OkWithDetailed(fiber.Map{"receiveBytes": receiveBytes, "transmitBytes": transmitBytes}, "获取成功", c)
 }

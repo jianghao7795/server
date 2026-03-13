@@ -1,11 +1,13 @@
 package system
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	"server/model/system/request"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -22,9 +24,9 @@ type AuthorityBtnApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authorityBtn/getAuthorityBtn [post]
-func (a *AuthorityBtnApi) GetAuthorityBtn(c *fiber.Ctx) error {
+func (a *AuthorityBtnApi) GetAuthorityBtn(c fiber.Ctx) error {
 	var req request.SysAuthorityBtnReq
-	_ = c.QueryParser(&req)
+	_ = c.Bind().Query(&req)
 	if res, err := authorityBtnService.GetAuthorityBtn(req); err != nil {
 		global.LOG.Error("查询失败!", zap.Error(err))
 		return response.FailWithMessage("查询失败", c)
@@ -44,9 +46,9 @@ func (a *AuthorityBtnApi) GetAuthorityBtn(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authorityBtn/setAuthorityBtn [post]
-func (a *AuthorityBtnApi) SetAuthorityBtn(c *fiber.Ctx) error {
+func (a *AuthorityBtnApi) SetAuthorityBtn(c fiber.Ctx) error {
 	var req request.SysAuthorityBtnReq
-	_ = c.BodyParser(&req)
+	_ = c.Bind().Body(&req)
 	if err := authorityBtnService.SetAuthorityBtn(req); err != nil {
 		global.LOG.Error("分配失败!", zap.Error(err))
 		return response.FailWithMessage("分配失败", c)
@@ -65,8 +67,8 @@ func (a *AuthorityBtnApi) SetAuthorityBtn(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authorityBtn/canRemoveAuthorityBtn [post]
-func (a *AuthorityBtnApi) CanRemoveAuthorityBtn(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (a *AuthorityBtnApi) CanRemoveAuthorityBtn(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if err := authorityBtnService.CanRemoveAuthorityBtn(id); err != nil {
 		global.LOG.Error("删除失败!", zap.Error(err))
 		return response.FailWithMessage(err.Error(), c)

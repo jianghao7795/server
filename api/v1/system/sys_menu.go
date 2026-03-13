@@ -1,6 +1,8 @@
 package system
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
@@ -9,7 +11,7 @@ import (
 	systemRes "server/model/system/response"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -26,7 +28,7 @@ type AuthorityMenuApi struct{}
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/getMenu [get]
-func (a *AuthorityMenuApi) GetMenu(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) GetMenu(c fiber.Ctx) error {
 	authorityId, err := utils.GetUserAuthorityId(c)
 	if err != nil {
 		global.LOG.Error("获取权限id失败", zap.Error(err))
@@ -54,7 +56,7 @@ func (a *AuthorityMenuApi) GetMenu(c *fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/getBaseMenuTree [get]
-func (a *AuthorityMenuApi) GetBaseMenuTree(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) GetBaseMenuTree(c fiber.Ctx) error {
 	if menus, err := menuService.GetBaseMenuTree(); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)
@@ -76,9 +78,9 @@ func (a *AuthorityMenuApi) GetBaseMenuTree(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/addMenuAuthority [post]
-func (a *AuthorityMenuApi) AddMenuAuthority(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) AddMenuAuthority(c fiber.Ctx) error {
 	var authorityMenu systemReq.AddMenuAuthorityInfo
-	_ = c.BodyParser(&authorityMenu)
+	_ = c.Bind().Body(&authorityMenu)
 	if err := utils.Verify(authorityMenu, utils.AuthorityIdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -103,9 +105,9 @@ func (a *AuthorityMenuApi) AddMenuAuthority(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/getMenuAuthority [get]
-func (a *AuthorityMenuApi) GetMenuAuthority(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) GetMenuAuthority(c fiber.Ctx) error {
 	var param request.GetAuthorityId
-	_ = c.QueryParser(&param)
+	_ = c.Bind().Query(&param)
 	if err := utils.Verify(param, utils.AuthorityIdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -128,9 +130,9 @@ func (a *AuthorityMenuApi) GetMenuAuthority(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/addBaseMenu [post]
-func (a *AuthorityMenuApi) AddBaseMenu(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) AddBaseMenu(c fiber.Ctx) error {
 	var menu system.SysBaseMenu
-	_ = c.BodyParser(&menu)
+	_ = c.Bind().Body(&menu)
 	if err := utils.Verify(menu, utils.MenuVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -157,9 +159,9 @@ func (a *AuthorityMenuApi) AddBaseMenu(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/deleteBaseMenu [post]
-func (a *AuthorityMenuApi) DeleteBaseMenu(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) DeleteBaseMenu(c fiber.Ctx) error {
 	var menu request.GetById
-	menu.ID, _ = c.ParamsInt("id")
+	menu.ID, _ = strconv.Atoi(c.Params("id"))
 	if err := utils.Verify(menu, utils.IdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -182,9 +184,9 @@ func (a *AuthorityMenuApi) DeleteBaseMenu(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/updateBaseMenu [post]
-func (a *AuthorityMenuApi) UpdateBaseMenu(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) UpdateBaseMenu(c fiber.Ctx) error {
 	var menu system.SysBaseMenu
-	_ = c.BodyParser(&menu)
+	_ = c.Bind().Body(&menu)
 	if err := utils.Verify(menu, utils.MenuVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -210,9 +212,9 @@ func (a *AuthorityMenuApi) UpdateBaseMenu(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/getBaseMenuById/:id [get]
-func (a *AuthorityMenuApi) GetBaseMenuById(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) GetBaseMenuById(c fiber.Ctx) error {
 	var idInfo request.GetById
-	idInfo.ID, _ = c.ParamsInt("id")
+	idInfo.ID, _ = strconv.Atoi(c.Params("id"))
 	if err := utils.Verify(idInfo, utils.IdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -236,9 +238,9 @@ func (a *AuthorityMenuApi) GetBaseMenuById(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /menu/getMenuList [post]
-func (a *AuthorityMenuApi) GetMenuList(c *fiber.Ctx) error {
+func (a *AuthorityMenuApi) GetMenuList(c fiber.Ctx) error {
 	var pageInfo request.PageInfo
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}

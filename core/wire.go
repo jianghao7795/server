@@ -8,7 +8,7 @@ import (
 	"server/model"
 	"server/router"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"

@@ -1,7 +1,7 @@
 package ws
 
 import (
-	"github.com/gofiber/contrib/websocket"
+	"github.com/gofiber/contrib/v3/websocket"
 )
 
 type Ws struct{}

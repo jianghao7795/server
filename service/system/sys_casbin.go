@@ -7,9 +7,10 @@ import (
 
 	global "server/model"
 
-	"github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v3"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	_ "gorm.io/driver/mysql"
+	"go.uber.org/zap"
 )
 
 //
@@ -54,7 +55,7 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 
 func (casbinService *CasbinService) GetPolicyPathByAuthorityId(authorityId string) (pathMaps []request.CasbinInfo) {
 	e := casbinService.Casbin()
-	list := e.GetFilteredPolicy(0, authorityId)
+	list, _ := e.GetFilteredPolicy(0, authorityId)
 	for _, v := range list {
 		pathMaps = append(pathMaps, request.CasbinInfo{
 			Path:   v[1],
@@ -88,9 +89,23 @@ var (
 
 func (casbinService *CasbinService) Casbin() *casbin.SyncedEnforcer {
 	once.Do(func() {
+		defer func() {
+			if r := recover(); r != nil {
+				// gorm-adapter 在策略为空或 ptype 为空时会 panic: slice bounds out of range
+				// 回退为仅模型、无 DB 策略的 Enforcer，避免服务崩溃
+				global.LOG.Warn("casbin 从数据库加载策略时发生 panic，使用空策略 Enforcer。请检查 casbin_rule 表：ptype 字段不能为空，且无异常数据", zap.Any("panic", r))
+				var err error
+				syncedEnforcer, err = casbin.NewSyncedEnforcer(global.CONFIG.Casbin.ModelPath)
+				if err != nil {
+					global.LOG.Error("casbin 回退 Enforcer 创建失败", zap.Error(err))
+				}
+			}
+		}()
 		a, _ := gormadapter.NewAdapterByDB(global.DB)
 		syncedEnforcer, _ = casbin.NewSyncedEnforcer(global.CONFIG.Casbin.ModelPath, a)
 	})
-	_ = syncedEnforcer.LoadPolicy()
+	if syncedEnforcer != nil {
+		_ = syncedEnforcer.LoadPolicy()
+	}
 	return syncedEnforcer
 }

@@ -11,7 +11,7 @@ import (
 
 	// json "github.com/bytedance/sonic"
 	"github.com/fsnotify/fsnotify"
-	"github.com/gofiber/fiber/v2"      // fiber
+	"github.com/gofiber/fiber/v3"      // fiber
 	jwt "github.com/golang-jwt/jwt/v5" // jwt
 	"github.com/songzhibin97/gkit/cache/local_cache"
 	"github.com/spf13/viper" // viper配置文件读取
@@ -127,7 +127,7 @@ func viperInit() (*viper.Viper, error) {
 	{
 		// global.RunCONFIG.FiberConfig.JSONEncoder = json.Marshal   // 自定义JSON编码器/解码器
 		// global.RunCONFIG.FiberConfig.JSONDecoder = json.Unmarshal // 自定义JSON编码器/解码器
-		global.RunCONFIG.FiberConfig.ErrorHandler = func(ctx *fiber.Ctx, err error) error {
+		global.RunCONFIG.FiberConfig.ErrorHandler = func(ctx fiber.Ctx, err error) error {
 			// 状态代码默认为500
 			code := fiber.StatusInternalServerError
 			var message string = "服务器错误"

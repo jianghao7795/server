@@ -5,11 +5,11 @@ import (
 	"server/utils"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
-func JWTAuthMobileMiddleware() func(c *fiber.Ctx) error {
-	return func(c *fiber.Ctx) error {
+func JWTAuthMobileMiddleware() func(c fiber.Ctx) error {
+	return func(c fiber.Ctx) error {
 		// 解决访问文件的401问题
 		if strings.Contains(c.Get("Accept"), "image/") {
 			code := c.Response().StatusCode()

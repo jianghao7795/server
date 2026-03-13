@@ -7,7 +7,7 @@ import (
 	"server/model/common/response"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 // ExampleAPI demonstrates improved API implementation
@@ -23,7 +23,7 @@ func NewExampleAPI() *ExampleAPI {
 }
 
 // CreateArticleExample demonstrates improved article creation
-func (api *ExampleAPI) CreateArticleExample(c *fiber.Ctx) error {
+func (api *ExampleAPI) CreateArticleExample(c fiber.Ctx) error {
 	var article app.Article
 
 	// Use validation middleware for cleaner code
@@ -40,7 +40,7 @@ func (api *ExampleAPI) CreateArticleExample(c *fiber.Ctx) error {
 }
 
 // GetArticleExample demonstrates improved article retrieval
-func (api *ExampleAPI) GetArticleExample(c *fiber.Ctx) error {
+func (api *ExampleAPI) GetArticleExample(c fiber.Ctx) error {
 	// Use validation middleware for ID validation
 	id, err := middleware.ValidationMiddlewareInstance.ValidateID(c)
 	if err != nil {
@@ -57,7 +57,7 @@ func (api *ExampleAPI) GetArticleExample(c *fiber.Ctx) error {
 }
 
 // UpdateArticleExample demonstrates improved article update
-func (api *ExampleAPI) UpdateArticleExample(c *fiber.Ctx) error {
+func (api *ExampleAPI) UpdateArticleExample(c fiber.Ctx) error {
 	var article app.Article
 
 	// Validate request body
@@ -82,7 +82,7 @@ func (api *ExampleAPI) UpdateArticleExample(c *fiber.Ctx) error {
 }
 
 // DeleteArticleExample demonstrates improved article deletion
-func (api *ExampleAPI) DeleteArticleExample(c *fiber.Ctx) error {
+func (api *ExampleAPI) DeleteArticleExample(c fiber.Ctx) error {
 	// Validate ID parameter
 	id, err := middleware.ValidationMiddlewareInstance.ValidateID(c)
 	if err != nil {
@@ -98,11 +98,11 @@ func (api *ExampleAPI) DeleteArticleExample(c *fiber.Ctx) error {
 }
 
 // GetArticleListExample demonstrates improved article listing
-func (api *ExampleAPI) GetArticleListExample(c *fiber.Ctx) error {
+func (api *ExampleAPI) GetArticleListExample(c fiber.Ctx) error {
 	var pageInfo request.PageInfo
 
 	// Parse query parameters
-	if err := c.QueryParser(&pageInfo); err != nil {
+	if err := c.Bind().Query(&pageInfo); err != nil {
 		return utils.ErrorHandlerInstance.HandleValidationError(c, "分页参数", err)
 	}
 
@@ -129,7 +129,7 @@ func (api *ExampleAPI) GetArticleListExample(c *fiber.Ctx) error {
 }
 
 // DeleteArticlesExample demonstrates batch deletion
-func (api *ExampleAPI) DeleteArticlesExample(c *fiber.Ctx) error {
+func (api *ExampleAPI) DeleteArticlesExample(c fiber.Ctx) error {
 	var ids request.IdsReq
 
 	// Validate request body

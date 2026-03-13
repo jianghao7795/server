@@ -1,13 +1,15 @@
 package system
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	"server/model/system"
 	"server/model/system/request"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -24,9 +26,9 @@ type DictionaryApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionary/createSysDictionary [post]
-func (s *DictionaryApi) CreateSysDictionary(c *fiber.Ctx) error {
+func (s *DictionaryApi) CreateSysDictionary(c fiber.Ctx) error {
 	var dictionary system.SysDictionary
-	_ = c.BodyParser(&dictionary)
+	_ = c.Bind().Body(&dictionary)
 	if err := dictionaryService.CreateSysDictionary(dictionary); err != nil {
 		global.LOG.Error("创建失败!", zap.Error(err))
 		return response.FailWithMessage("创建失败", c)
@@ -46,8 +48,8 @@ func (s *DictionaryApi) CreateSysDictionary(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionary/deleteSysDictionary/:id [delete]
-func (s *DictionaryApi) DeleteSysDictionary(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (s *DictionaryApi) DeleteSysDictionary(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if id == 0 {
 		global.LOG.Error("id获取失败!")
 		return response.FailWithMessage("id获取失败", c)
@@ -71,10 +73,10 @@ func (s *DictionaryApi) DeleteSysDictionary(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionary/updateSysDictionary/:id [put]
-func (s *DictionaryApi) UpdateSysDictionary(c *fiber.Ctx) error {
+func (s *DictionaryApi) UpdateSysDictionary(c fiber.Ctx) error {
 	var dictionary system.SysDictionary
-	_ = c.BodyParser(&dictionary)
-	id, _ := c.ParamsInt("id")
+	_ = c.Bind().Body(&dictionary)
+	id, _ := strconv.Atoi(c.Params("id"))
 	if dictionary.ID != uint(id) {
 		return response.FailWithMessage("id不一致", c)
 	}
@@ -97,7 +99,7 @@ func (s *DictionaryApi) UpdateSysDictionary(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionary/findSysDictionary [get]
-func (s *DictionaryApi) FindSysDictionary(c *fiber.Ctx) error {
+func (s *DictionaryApi) FindSysDictionary(c fiber.Ctx) error {
 	fieldType := c.Query("type")
 	fieldID := c.Query("ID")
 	if fieldType == "" && fieldID == "" {
@@ -123,9 +125,9 @@ func (s *DictionaryApi) FindSysDictionary(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /sysDictionary/getSysDictionaryList [get]
-func (s *DictionaryApi) GetSysDictionaryList(c *fiber.Ctx) error {
+func (s *DictionaryApi) GetSysDictionaryList(c fiber.Ctx) error {
 	var pageInfo request.SysDictionarySearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if err := utils.Verify(pageInfo.PageInfo, utils.PageInfoVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}

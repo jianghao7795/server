@@ -1,6 +1,8 @@
 package app
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/app"
 	appReq "server/model/app/request"
@@ -8,7 +10,7 @@ import (
 	"server/model/common/response"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -25,9 +27,9 @@ import (
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /article/createArticle [post]
-func (a *ArticleApi) CreateArticle(c *fiber.Ctx) error {
+func (a *ArticleApi) CreateArticle(c fiber.Ctx) error {
 	var article app.Article
-	if err := c.BodyParser(&article); err != nil {
+	if err := c.Bind().Body(&article); err != nil {
 		return utils.ErrorHandlerInstance.HandleValidationError(c, "article data", err)
 	}
 
@@ -51,9 +53,9 @@ func (a *ArticleApi) CreateArticle(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /article/deleteArticle/{id} [delete]
-func (*ArticleApi) DeleteArticle(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
-	if err != nil {
+func (*ArticleApi) DeleteArticle(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil || id <= 0 {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
 	}
@@ -80,9 +82,9 @@ func (*ArticleApi) DeleteArticle(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /article/deleteArticleByIds [delete]
-func (a *ArticleApi) DeleteArticleByIds(c *fiber.Ctx) error {
+func (a *ArticleApi) DeleteArticleByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
-	err := c.BodyParser(&IDS)
+	err := c.Bind().Body(&IDS)
 	if err != nil {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("获取id失败", c)
@@ -111,22 +113,21 @@ func (a *ArticleApi) DeleteArticleByIds(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /article/updateArticle/{id} [put]
-func (*ArticleApi) UpdateArticle(c *fiber.Ctx) error {
+func (*ArticleApi) UpdateArticle(c fiber.Ctx) error {
 	var article app.Article
-	err := c.BodyParser(&article)
+	err := c.Bind().Body(&article)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败: "+err.Error(), c)
 	}
-	var id int
-	id, err = c.ParamsInt("id")
-	if err != nil {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil || id <= 0 {
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
 		}, err.Error(), c)
 	}
 	article.ID = uint(id)
-	if err = articleService.UpdateArticle(&article); err != nil {
+	if err := articleService.UpdateArticle(&article); err != nil {
 		global.LOG.Error("更新失败!", zap.Error(err))
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
@@ -148,9 +149,9 @@ func (*ArticleApi) UpdateArticle(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /article/findArticle/{id} [get]
-func (*ArticleApi) FindArticle(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
-	if err != nil {
+func (*ArticleApi) FindArticle(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil || id <= 0 {
 		global.LOG.Error("获取id失败", zap.Error(err))
 		return response.FailWithMessage("获取id失败: "+err.Error(), c)
 	}
@@ -179,10 +180,10 @@ func (*ArticleApi) FindArticle(c *fiber.Ctx) error {
 // @Failure 500 {object} response.Response "服务器错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Router /article/getArticleList [get]
-func (*ArticleApi) GetArticleList(c *fiber.Ctx) error {
+func (*ArticleApi) GetArticleList(c fiber.Ctx) error {
 	var pageInfo appReq.ArticleSearch
-	_ = c.QueryParser(&pageInfo)
-	IsImportant := c.QueryInt("is_important")
+	_ = c.Bind().Query(&pageInfo)
+	IsImportant := fiber.Query[int](c, "is_important", 0)
 	pageInfo.IsImportant = IsImportant
 	// log.Println("origin: ", c.Get("Origin"))
 	if list, total, err := articleService.GetArticleInfoList(&pageInfo); err != nil {
@@ -214,9 +215,9 @@ func (*ArticleApi) GetArticleList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /article/putArticleByIds [put]
-func (*ArticleApi) PutArticleByIds(c *fiber.Ctx) error {
+func (*ArticleApi) PutArticleByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
-	if err := c.BodyParser(&IDS); err != nil {
+	if err := c.Bind().Body(&IDS); err != nil {
 		// log.Println("ids 获取失败")
 		global.LOG.Fatal("ids 获取失败", zap.Error(err))
 		return response.FailWithMessage("ids 获取失败", c)
@@ -243,7 +244,7 @@ func (*ArticleApi) PutArticleByIds(c *fiber.Ctx) error {
 // @Failure 500 {object} response.Response "服务器错误"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Router /article/getArticleReading [get]
-func (*ArticleApi) GetArticleReading(c *fiber.Ctx) error {
+func (*ArticleApi) GetArticleReading(c fiber.Ctx) error {
 	userID := c.Locals("user_id")
 	var id uint
 	if userID != nil {

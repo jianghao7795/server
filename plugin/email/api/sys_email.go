@@ -6,7 +6,7 @@ import (
 	email_response "server/plugin/email/model/response"
 	"server/plugin/email/service"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -18,7 +18,7 @@ type EmailApi struct{}
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"发送成功"}"
 // @Router /email/emailTest [post]
-func (s *EmailApi) EmailTest(c *fiber.Ctx) error {
+func (s *EmailApi) EmailTest(c fiber.Ctx) error {
 	if err := service.ServiceGroupApp.EmailTest(); err != nil {
 		global.LOG.Error("发送失败!", zap.Error(err))
 		return response.FailWithMessage("发送失败", c)
@@ -34,9 +34,9 @@ func (s *EmailApi) EmailTest(c *fiber.Ctx) error {
 // @Param data body email_response.Email true "发送邮件必须的参数"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"发送成功"}"
 // @Router /email/sendEmail [post]
-func (s *EmailApi) SendEmail(c *fiber.Ctx) error {
+func (s *EmailApi) SendEmail(c fiber.Ctx) error {
 	var email email_response.Email
-	_ = c.QueryParser(&email)
+	_ = c.Bind().Body(&email)
 	if err := service.ServiceGroupApp.SendEmail(email.To, email.Subject, email.Body); err != nil {
 		global.LOG.Error("发送失败!", zap.Error(err))
 		return response.FailWithMessage("发送失败", c)

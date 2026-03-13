@@ -1,6 +1,8 @@
 package example
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	"server/model/example"
@@ -8,7 +10,7 @@ import (
 	exampleRes "server/model/example/response"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -25,9 +27,9 @@ import (
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /customer/customer [post]
-func (e *CustomerApi) CreateExaCustomer(c *fiber.Ctx) error {
+func (e *CustomerApi) CreateExaCustomer(c fiber.Ctx) error {
 	var customer example.ExaCustomer
-	if err := c.BodyParser(&customer); err != nil {
+	if err := c.Bind().Body(&customer); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
 	}
@@ -66,8 +68,8 @@ func (e *CustomerApi) CreateExaCustomer(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /customer/customer/{id} [delete]
-func (e *CustomerApi) DeleteExaCustomer(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (e *CustomerApi) DeleteExaCustomer(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return response.FailWithMessage("请传id参数", c)
 	}
@@ -96,13 +98,13 @@ func (e *CustomerApi) DeleteExaCustomer(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /customer/customer/{id} [put]
-func (e *CustomerApi) UpdateExaCustomer(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (e *CustomerApi) UpdateExaCustomer(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if id == 0 {
 		return response.FailWithMessage("id不存在", c)
 	}
 	var customer example.ExaCustomer
-	if err := c.BodyParser(&customer); err != nil {
+	if err := c.Bind().Body(&customer); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
 	}
@@ -134,8 +136,8 @@ func (e *CustomerApi) UpdateExaCustomer(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /customer/customer/:id [get]
-func (e *CustomerApi) GetExaCustomer(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (e *CustomerApi) GetExaCustomer(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if id == 0 {
 		return response.FailWithMessage("id不存在", c)
 	}
@@ -159,9 +161,9 @@ func (e *CustomerApi) GetExaCustomer(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /customer/customerList [get]
-func (e *CustomerApi) GetExaCustomerList(c *fiber.Ctx) error {
+func (e *CustomerApi) GetExaCustomerList(c fiber.Ctx) error {
 	var pageInfo request.SearchCustomerParams
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}

@@ -1,6 +1,6 @@
 package plugin
 
-import "github.com/gofiber/fiber/v2"
+import "github.com/gofiber/fiber/v3"
 
 const (
 	OnlyFuncName = "Plugin"

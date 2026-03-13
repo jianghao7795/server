@@ -1,11 +1,13 @@
 package frontend
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	"server/model/frontend"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -22,8 +24,8 @@ type CommentApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /frontend/comment/{articleId} [get]
-func (s *CommentApi) GetCommentByArticleId(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("articleId")
+func (s *CommentApi) GetCommentByArticleId(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("articleId"))
 	if err != nil {
 		global.LOG.Error("获取articleId 失败!", zap.Error(err))
 		return response.FailWithMessage("获取articleId 失败", c)
@@ -48,9 +50,9 @@ func (s *CommentApi) GetCommentByArticleId(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /frontend/comment [post]
-func (s *CommentApi) CreatedComment(c *fiber.Ctx) error {
+func (s *CommentApi) CreatedComment(c fiber.Ctx) error {
 	var comment frontend.Comment
-	if err := c.BodyParser(&comment); err != nil {
+	if err := c.Bind().Body(&comment); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage(err.Error(), c)
 	}

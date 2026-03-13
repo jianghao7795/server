@@ -15,7 +15,7 @@ import (
 	global "server/model"
 	"server/service/system"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 

@@ -12,7 +12,7 @@ import (
 	"time"
 
 	// json "github.com/bytedance/sonic"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 
 	frontendReq "server/model/frontend/request"
 
@@ -22,7 +22,7 @@ import (
 
 type Article struct{}
 
-func (s *Article) GetArticleList(info *frontendReq.ArticleSearch, c *fiber.Ctx) (list []frontend.Article, total int64, err error) {
+func (s *Article) GetArticleList(info *frontendReq.ArticleSearch, c fiber.Ctx) (list []frontend.Article, total int64, err error) {
 	cacheTime := global.CONFIG.Cache.Time
 	var articleStr string
 	db := global.DB.Model(&frontend.Article{})
@@ -89,7 +89,7 @@ func (s *Article) GetArticleList(info *frontendReq.ArticleSearch, c *fiber.Ctx) 
 	return list, total, err
 }
 
-func (s *Article) GetArticleDetail(articleId int, c *fiber.Ctx) (articleDetail frontend.Article, err error) {
+func (s *Article) GetArticleDetail(articleId int, c fiber.Ctx) (articleDetail frontend.Article, err error) {
 	reqIP := c.IP()
 	var ipUser frontend.Ip
 	t := time.Now()

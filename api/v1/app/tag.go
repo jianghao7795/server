@@ -1,13 +1,15 @@
 package app
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/app"
 	appReq "server/model/app/request"
 	"server/model/common/request"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -24,9 +26,9 @@ import (
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tag/createTag [post]
-func (TagApi *TagApi) CreateTag(c *fiber.Ctx) error {
+func (TagApi *TagApi) CreateTag(c fiber.Ctx) error {
 	var appTab app.Tag
-	err := c.BodyParser(&appTab)
+	err := c.Bind().Body(&appTab)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -52,8 +54,8 @@ func (TagApi *TagApi) CreateTag(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tag/deleteTag/{id} [delete]
-func (TagApi *TagApi) DeleteTag(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+func (TagApi *TagApi) DeleteTag(c fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return response.FailWithDetailed(fiber.Map{"msg": "获取id参数失败"}, "参数错误", c)
 	}
@@ -78,9 +80,9 @@ func (TagApi *TagApi) DeleteTag(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tag/deleteTagByIds [delete]
-func (TagApi *TagApi) DeleteTagByIds(c *fiber.Ctx) error {
+func (TagApi *TagApi) DeleteTagByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
-	_ = c.BodyParser(&IDS)
+	_ = c.Bind().Body(&IDS)
 	if err := appTabService.DeleteTagByIds(IDS); err != nil {
 		global.LOG.Error("批量删除失败!", zap.Error(err))
 		return response.FailWithMessage("批量删除失败", c)
@@ -102,9 +104,9 @@ func (TagApi *TagApi) DeleteTagByIds(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tag/updateTag [put]
-func (TagApi *TagApi) UpdateTag(c *fiber.Ctx) error {
+func (TagApi *TagApi) UpdateTag(c fiber.Ctx) error {
 	var appTab app.Tag
-	err := c.BodyParser(&appTab)
+	err := c.Bind().Body(&appTab)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
@@ -129,8 +131,8 @@ func (TagApi *TagApi) UpdateTag(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tag/:id [get]
-func (TagApi *TagApi) FindTag(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+func (TagApi *TagApi) FindTag(c fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
 	if tag, err := appTabService.GetTag(uint(id)); err != nil {
 		global.LOG.Error("查询失败!", zap.Error(err))
 		return response.FailWithMessage("查询失败", c)
@@ -151,9 +153,9 @@ func (TagApi *TagApi) FindTag(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /tag/getTagList [get]
-func (TagApi *TagApi) GetTagList(c *fiber.Ctx) error {
+func (TagApi *TagApi) GetTagList(c fiber.Ctx) error {
 	var pageInfo appReq.TagSearch
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if list, total, err := appTabService.GetTagInfoList(&pageInfo); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)

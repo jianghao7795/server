@@ -1,11 +1,13 @@
 package app
 
 import (
+	"strconv"
+
 	global "server/model"
 	"server/model/common/response"
 	appService "server/service/app"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -27,8 +29,8 @@ var likeService = appService.LikeServer
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /like/likePost/{post_id} [post]
-func (l *LikeApi) LikePost(c *fiber.Ctx) error {
-	postId, err := c.ParamsInt("post_id")
+func (l *LikeApi) LikePost(c fiber.Ctx) error {
+	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
 		global.LOG.Error("获取帖子ID失败", zap.Error(err))
 		return response.FailWithMessage("获取帖子ID失败", c)
@@ -62,8 +64,8 @@ func (l *LikeApi) LikePost(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /like/unlikePost/{post_id} [delete]
-func (l *LikeApi) UnlikePost(c *fiber.Ctx) error {
-	postId, err := c.ParamsInt("post_id")
+func (l *LikeApi) UnlikePost(c fiber.Ctx) error {
+	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
 		global.LOG.Error("获取帖子ID失败", zap.Error(err))
 		return response.FailWithMessage("获取帖子ID失败", c)
@@ -96,15 +98,15 @@ func (l *LikeApi) UnlikePost(c *fiber.Ctx) error {
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /like/getPostLikes/{post_id} [get]
-func (l *LikeApi) GetPostLikes(c *fiber.Ctx) error {
-	postId, err := c.ParamsInt("post_id")
+func (l *LikeApi) GetPostLikes(c fiber.Ctx) error {
+	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
 		global.LOG.Error("获取帖子ID失败", zap.Error(err))
 		return response.FailWithMessage("获取帖子ID失败", c)
 	}
 
-	page := c.QueryInt("page", 1)
-	pageSize := c.QueryInt("page_size", 10)
+	page := fiber.Query[int](c, "page", 1)
+	pageSize := fiber.Query[int](c, "page_size", 10)
 
 	if page < 1 {
 		page = 1
@@ -139,8 +141,8 @@ func (l *LikeApi) GetPostLikes(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /like/checkUserLiked/{post_id} [get]
-func (l *LikeApi) CheckUserLiked(c *fiber.Ctx) error {
-	postId, err := c.ParamsInt("post_id")
+func (l *LikeApi) CheckUserLiked(c fiber.Ctx) error {
+	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
 		global.LOG.Error("获取帖子ID失败", zap.Error(err))
 		return response.FailWithMessage("获取帖子ID失败", c)
@@ -175,7 +177,7 @@ func (l *LikeApi) CheckUserLiked(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /like/getUserLikedPosts [get]
-func (l *LikeApi) GetUserLikedPosts(c *fiber.Ctx) error {
+func (l *LikeApi) GetUserLikedPosts(c fiber.Ctx) error {
 	// 从JWT中获取用户ID
 	userID := c.Locals("user_id")
 	if userID == nil {
@@ -183,8 +185,8 @@ func (l *LikeApi) GetUserLikedPosts(c *fiber.Ctx) error {
 	}
 	userId := userID.(uint)
 
-	page := c.QueryInt("page", 1)
-	pageSize := c.QueryInt("page_size", 10)
+	page := fiber.Query[int](c, "page", 1)
+	pageSize := fiber.Query[int](c, "page_size", 10)
 
 	if page < 1 {
 		page = 1
@@ -217,8 +219,8 @@ func (l *LikeApi) GetUserLikedPosts(c *fiber.Ctx) error {
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /like/getPostLikeCount/{post_id} [get]
-func (l *LikeApi) GetPostLikeCount(c *fiber.Ctx) error {
-	postId, err := c.ParamsInt("post_id")
+func (l *LikeApi) GetPostLikeCount(c fiber.Ctx) error {
+	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
 		global.LOG.Error("获取帖子ID失败", zap.Error(err))
 		return response.FailWithMessage("获取帖子ID失败", c)

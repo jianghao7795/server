@@ -12,7 +12,7 @@ import (
 	responseUploadFile "server/model/app/response"
 	"server/model/common/response"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -28,7 +28,7 @@ import (
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /base_message/upload [post]
-func (u *FileUploadAndDownloadApi) UploadFile(c *fiber.Ctx) error {
+func (u *FileUploadAndDownloadApi) UploadFile(c fiber.Ctx) error {
 	// var file app.FileUploadAndDownload
 	noSave := c.Query("noSave", "0")
 	header, err := c.FormFile("file")

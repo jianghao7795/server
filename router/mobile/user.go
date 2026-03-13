@@ -4,7 +4,7 @@ import (
 	v1 "server/api/v1/mobile"
 	"server/middleware"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type MobileUserRouter struct{}

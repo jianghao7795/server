@@ -10,7 +10,7 @@ import (
 	"server/model/mobile/request"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -28,9 +28,9 @@ type LoginApi struct{}
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobile/login [post]
-func (*LoginApi) Login(c *fiber.Ctx) error {
+func (*LoginApi) Login(c fiber.Ctx) error {
 	var l mobile.Login
-	if err := c.BodyParser(&l); err != nil {
+	if err := c.Bind().Body(&l); err != nil {
 		global.LOG.Error("获取登录数据失败", zap.Error(err))
 		return response.FailWithMessage("获取登录数据失败", c)
 	}
@@ -58,8 +58,8 @@ func (*LoginApi) Login(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobile/getUserInfo [get]
-func (*LoginApi) GetUserInfo(c *fiber.Ctx) error {
-	authorization := c.Get("user_id")
+func (*LoginApi) GetUserInfo(c fiber.Ctx) error {
+	authorization := c.Get("user_id", "")
 	if authorization == "" {
 		global.LOG.Error("获取user_id失败!", zap.Error(errors.New("失败")))
 		return response.FailWithMessage400("获取失败", c)
@@ -87,13 +87,13 @@ func (*LoginApi) GetUserInfo(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobile/updateMobileUser [put]
-func (*LoginApi) UpdateMobileUser(c *fiber.Ctx) error {
+func (*LoginApi) UpdateMobileUser(c fiber.Ctx) error {
 	var data request.MobileUpdate
-	if err := c.BodyParser(&data); err != nil {
+	if err := c.Bind().Body(&data); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
 	}
-	authorization := c.Get("user_id") // user_id 在请求头信息中
+	authorization := c.Get("user_id", "") // user_id 在请求头信息中
 
 	if authorization == "" {
 		global.LOG.Error("获取User_id 失败")
@@ -125,9 +125,9 @@ func (*LoginApi) UpdateMobileUser(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobile/updatePassword [put]
-func (*LoginApi) UpdatePassword(c *fiber.Ctx) error {
+func (*LoginApi) UpdatePassword(c fiber.Ctx) error {
 	var data request.MobileUpdatePassword
-	if err := c.BodyParser(&data); err != nil {
+	if err := c.Bind().Body(&data); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
 	}

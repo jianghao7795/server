@@ -9,7 +9,7 @@ import (
 	systemRes "server/model/system/response"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
@@ -28,9 +28,9 @@ type AuthorityApi struct{}
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authority/createAuthority [post]
-func (a *AuthorityApi) CreateAuthority(c *fiber.Ctx) error {
+func (a *AuthorityApi) CreateAuthority(c fiber.Ctx) error {
 	var authority system.SysAuthority
-	if err := c.BodyParser(&authority); err != nil {
+	if err := c.Bind().Body(&authority); err != nil {
 		global.LOG.Error("获取更新数据失败", zap.Error(err))
 		return response.FailWithMessage("获取更新数据失败", c)
 	}
@@ -65,9 +65,9 @@ func (a *AuthorityApi) CreateAuthority(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authority/copyAuthority [post]
-func (a *AuthorityApi) CopyAuthority(c *fiber.Ctx) error {
+func (a *AuthorityApi) CopyAuthority(c fiber.Ctx) error {
 	var copyInfo systemRes.SysAuthorityCopyResponse
-	err := c.BodyParser(&copyInfo)
+	err := c.Bind().Body(&copyInfo)
 	if err != nil {
 		global.LOG.Error("获取数据错误", zap.Error(err))
 		return response.FailWithMessage("获取数据错误", c)
@@ -99,9 +99,9 @@ func (a *AuthorityApi) CopyAuthority(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authority/deleteAuthority [delete]
-func (a *AuthorityApi) DeleteAuthority(c *fiber.Ctx) error {
+func (a *AuthorityApi) DeleteAuthority(c fiber.Ctx) error {
 	var authority system.SysAuthority
-	_ = c.QueryParser(&authority)
+	_ = c.Bind().Query(&authority)
 	if err := utils.Verify(authority, utils.AuthorityIdVerify); err != nil {
 		return response.FailWithMessage(err.Error(), c)
 	}
@@ -124,9 +124,9 @@ func (a *AuthorityApi) DeleteAuthority(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authority/updateAuthority [post]
-func (a *AuthorityApi) UpdateAuthority(c *fiber.Ctx) error {
+func (a *AuthorityApi) UpdateAuthority(c fiber.Ctx) error {
 	var auth system.SysAuthority
-	if err := c.BodyParser(&auth); err != nil {
+	if err := c.Bind().Body(&auth); err != nil {
 		global.LOG.Error("获取数据失败", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
 	}
@@ -153,9 +153,9 @@ func (a *AuthorityApi) UpdateAuthority(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authority/getAuthorityList [post]
-func (a *AuthorityApi) GetAuthorityList(c *fiber.Ctx) error {
+func (a *AuthorityApi) GetAuthorityList(c fiber.Ctx) error {
 	var pageInfo request.PageInfo
-	_ = c.QueryParser(&pageInfo)
+	_ = c.Bind().Query(&pageInfo)
 	if pageInfo.Page == 0 {
 		pageInfo.Page = 1
 	}
@@ -189,9 +189,9 @@ func (a *AuthorityApi) GetAuthorityList(c *fiber.Ctx) error {
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /authority/setDataAuthority [post]
-func (a *AuthorityApi) SetDataAuthority(c *fiber.Ctx) error {
+func (a *AuthorityApi) SetDataAuthority(c fiber.Ctx) error {
 	var auth system.SysAuthority
-	if err := c.BodyParser(&auth); err != nil {
+	if err := c.Bind().Body(&auth); err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithMessage("获取数据失败", c)
 	}

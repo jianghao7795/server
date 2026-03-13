@@ -5,13 +5,13 @@ import (
 	service "server/service/system"
 	"server/utils"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 var casbinService = new(service.CasbinService)
 
 // 拦截器
-func CasbinHandler(c *fiber.Ctx) error {
+func CasbinHandler(c fiber.Ctx) error {
 	waitUse, err := utils.GetClaims(c)
 	if err != nil {
 		return response.FailWithMessage401("token 错误", c)
