@@ -93,7 +93,7 @@ func (u *FileUploadAndDownloadApi) BreakpointContinue(c fiber.Ctx) error {
 func (u *FileUploadAndDownloadApi) FindFile(c fiber.Ctx) error {
 	fileMd5 := c.Query("fileMd5")
 	fileName := c.Query("fileName")
-	chunkTotal := fiber.Query[int](c, "chunkTotal", 0)
+	chunkTotal, _ := strconv.Atoi(c.Query("chunkTotal", "0"))
 	if chunkTotal == 0 {
 		global.LOG.Error("获取文件大小失败")
 		return response.FailWithMessage("获取文件大小失败", c)
@@ -185,8 +185,8 @@ func (u *FileUploadAndDownloadApi) RemoveChunk(c fiber.Ctx) error {
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /fileUploadAndDownload/findFileBreakpoint [get]
 func (u *FileUploadAndDownloadApi) FindFileBreakpoint(c fiber.Ctx) error {
-	page := fiber.Query[int](c, "page", 1)
-	pageSize := fiber.Query[int](c, "pageSize", 10)
+	page, _ := strconv.Atoi(c.Query("page", "1"))
+	pageSize, _ := strconv.Atoi(c.Query("pageSize", "10"))
 	file, total, err := fileUploadAndDownloadService.FindFileBreakpoint(page, pageSize)
 	if err != nil {
 		global.LOG.Error("查找失败!", zap.Error(err))

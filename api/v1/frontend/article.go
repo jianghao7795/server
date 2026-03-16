@@ -105,12 +105,11 @@ func (s *ArticleApi) GetArticleDetail(c fiber.Ctx) error {
 // @Router /getSearchArticle/{name}/{value} [get]
 func (s *ArticleApi) GetSearchArticle(c fiber.Ctx) error {
 	var searchValue request.ArticleSearch
-	err := c.Bind().URI(&searchValue)
+	err := c.Bind().Query(&searchValue)
 	if err != nil {
 		global.LOG.Error("获取数据失败!", zap.Error(err))
 		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取数据失败", c)
 	}
-	searchValue.Sort = c.Query("sort")
 	if searchValue.Name != "tags" && searchValue.Name != "articles" {
 		return response.FailWithDetailed(fiber.Map{"msg": "查询的不是tag 或 article"}, "查询的不是tag 或 article", c)
 	}

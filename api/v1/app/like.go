@@ -7,6 +7,8 @@ import (
 	"server/model/common/response"
 	appService "server/service/app"
 
+	"server/model/common/request"
+
 	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
@@ -105,17 +107,18 @@ func (l *LikeApi) GetPostLikes(c fiber.Ctx) error {
 		return response.FailWithMessage("获取帖子ID失败", c)
 	}
 
-	page := fiber.Query[int](c, "page", 1)
-	pageSize := fiber.Query[int](c, "page_size", 10)
+	var page request.Empty
 
-	if page < 1 {
-		page = 1
+	_ = c.Bind().Query(page)
+
+	if page.Page < 1 {
+		page.Page = 1
 	}
-	if pageSize < 1 || pageSize > 100 {
-		pageSize = 10
+	if page.PageSize < 1 || page.PageSize > 100 {
+		page.PageSize = 10
 	}
 
-	likes, total, err := likeService.GetPostLikes(uint(postId), page, pageSize)
+	likes, total, err := likeService.GetPostLikes(uint(postId), page.Page, page.PageSize)
 	if err != nil {
 		global.LOG.Error("获取点赞列表失败", zap.Error(err))
 		return response.FailWithMessage("获取点赞列表失败", c)
@@ -124,8 +127,8 @@ func (l *LikeApi) GetPostLikes(c fiber.Ctx) error {
 	return response.OkWithDetailed(response.PageResult{
 		List:     likes,
 		Total:    total,
-		Page:     page,
-		PageSize: pageSize,
+		Page:     page.Page,
+		PageSize: page.PageSize,
 	}, "获取成功", c)
 }
 
@@ -185,8 +188,8 @@ func (l *LikeApi) GetUserLikedPosts(c fiber.Ctx) error {
 	}
 	userId := userID.(uint)
 
-	page := fiber.Query[int](c, "page", 1)
-	pageSize := fiber.Query[int](c, "page_size", 10)
+	page, _ := strconv.Atoi(c.Query("page", "1"))
+	pageSize, _ := strconv.Atoi(c.Query("page_size", "10"))
 
 	if page < 1 {
 		page = 1

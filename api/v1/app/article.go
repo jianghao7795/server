@@ -183,8 +183,8 @@ func (*ArticleApi) FindArticle(c fiber.Ctx) error {
 func (*ArticleApi) GetArticleList(c fiber.Ctx) error {
 	var pageInfo appReq.ArticleSearch
 	_ = c.Bind().Query(&pageInfo)
-	IsImportant := fiber.Query[int](c, "is_important", 0)
-	pageInfo.IsImportant = IsImportant
+	IsImportant := c.Query("is_important", "0")
+	pageInfo.IsImportant, _ = strconv.Atoi(IsImportant)
 	// log.Println("origin: ", c.Get("Origin"))
 	if list, total, err := articleService.GetArticleInfoList(&pageInfo); err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
