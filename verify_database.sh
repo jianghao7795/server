@@ -11,11 +11,11 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # 数据库配置
-DB_HOST=${DB_HOST:-"localhost"}
+DB_HOST=${DB_HOST:-"127.0.0.1"}
 DB_PORT=${DB_PORT:-"3306"}
 DB_NAME=${DB_NAME:-"server_fiber"}
 DB_USER=${DB_USER:-"root"}
-DB_PASSWORD=${DB_PASSWORD:-""}
+DB_PASSWORD=${DB_PASSWORD:-"123456"}
 
 echo -e "${BLUE}==========================================${NC}"
 echo -e "${BLUE}数据库结构验证工具${NC}"
