@@ -12,7 +12,7 @@ WORKDIR /app
 COPY . /app
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -tags=jsoniter -trimpath -o fiber -ldflags="-s -w" cmd/main.go #CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o fiber cmd/main.go
-RUN upx -5 fiber
+RUN upx -6 fiber
 RUN ls -lh
 
 FROM docker.io/library/rockylinux:9-minimal AS runner
