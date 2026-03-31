@@ -7,13 +7,12 @@
 package core
 
 import (
-	"server/init_load"
-	"server/model"
-	"server/router"
-
 	"github.com/gofiber/fiber/v3"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"server/init_load"
+	"server/model"
+	"server/router"
 )
 
 // Injectors from wire.go:
