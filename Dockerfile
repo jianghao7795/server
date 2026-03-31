@@ -1,4 +1,4 @@
-FROM golang:1.25-alpine AS builder
+FROM golang:1.26-alpine AS builder
 
 LABEL org.opencontainers.image.authors="jianghao"
 
@@ -19,12 +19,13 @@ FROM docker.io/library/rockylinux:9-minimal AS runner
 WORKDIR /app
 
 COPY --from=builder /app/fiber .
+COPY --from=builder /app/conf/ ./conf/
 COPY --from=builder /app/config.yaml ./conf/config.yaml
 COPY --from=builder /app/rbac_model.conf .
 COPY --from=builder /app/docs/ ./docs/
 
 EXPOSE 3100
-CMD ["/app/fiber", "-c", "./conf/"]
+CMD ["/app/fiber"]
 # ENTRYPOINT ["/app/server", "-c", "config.yaml"]
 
 

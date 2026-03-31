@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"os"
 	"time"
 
 	global "server/model"
@@ -9,9 +10,23 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+type zap struct{}
+
 var Zap = new(zap)
 
-type zap struct{}
+type fileRotatelogs struct{}
+
+var FileRotatelogs = new(fileRotatelogs)
+
+// GetWriteSyncer 获取 zapcore.WriteSyncer
+// Author wuhao
+func (r *fileRotatelogs) GetWriteSyncer(level string) zapcore.WriteSyncer {
+	fileWriter := NewCutter(global.CONFIG.Zap.Director, level, WithCutterFormat("2006-01-02"))
+	if global.CONFIG.Zap.LogInConsole {
+		return zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(fileWriter))
+	}
+	return zapcore.AddSync(fileWriter)
+}
 
 // GetEncoder 获取 zapcore.Encoder
 // Author wuhao
@@ -41,20 +56,17 @@ func (z *zap) GetEncoderConfig() zapcore.EncoderConfig {
 }
 
 // GetEncoderCore 获取Encoder的 zapcore.Core
-// Author wuhao
 func (z *zap) GetEncoderCore(l zapcore.Level, level gozap.LevelEnablerFunc) zapcore.Core {
 	writer := FileRotatelogs.GetWriteSyncer(l.String()) // 日志分割
 	return zapcore.NewCore(z.GetEncoder(), writer, level)
 }
 
 // CustomTimeEncoder 自定义日志输出时间格式
-// Author wuhao
 func (z *zap) CustomTimeEncoder(t time.Time, encoder zapcore.PrimitiveArrayEncoder) {
 	encoder.AppendString(global.CONFIG.Zap.Prefix + t.Format("2006/01/02 - 15:04:05.000"))
 }
 
 // GetZapCores 根据配置文件的Level获取 []zapcore.Core
-// Author wuhao
 func (z *zap) GetZapCores() []zapcore.Core {
 	cores := make([]zapcore.Core, 0, 7)
 	for level := global.CONFIG.Zap.TransportLevel(); level <= zapcore.FatalLevel; level++ {
@@ -64,7 +76,6 @@ func (z *zap) GetZapCores() []zapcore.Core {
 }
 
 // GetLevelPriority 根据 zapcore.Level 获取 zap.LevelEnablerFunc
-// Author wuhao
 func (z *zap) GetLevelPriority(level zapcore.Level) gozap.LevelEnablerFunc {
 	switch level {
 	case zapcore.DebugLevel:

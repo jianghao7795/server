@@ -9,7 +9,7 @@ start:
 	air
 
 dev:
-	go run cmd/main.go -c ./conf/
+	go run cmd/main.go
 
 local:
 	go run . -c ./conf/
@@ -26,6 +26,9 @@ air:
 
 test:
 	go test -v ./...
+
+wire:
+	cd core && wire
 
 help:
 	@echo "make: compile packages and dependencies"

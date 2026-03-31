@@ -29,20 +29,12 @@ aws-s3:
   secret-key: xxxxxxxx
   base-url: http://localhost:8080
   path-prefix: server
-cache:
-  time: 100
-captcha:
-  key-long: 6 # 验证码长度
-  img-width: 240 # 宽度
-  img-height: 80 # 高度
-  dot-count: 80 # 干扰线点数
-  max-skew: 0.7 # 倾斜度
 casbin:
   model-path: ./rbac_model.conf
 cors:
-  mode: allow-all # whitelist 白名单 allow-all允许全部
+  mode: allow-all # whitelist 白名单 allow-all允许全部 固定域名 strict-whitelist
   whitelist:
-    - allow-origin: example1.com # 允许访问的域名
+    - allow-origin: www.wutong.com # 允许访问的域名
       allow-methods: GET, POST, PUT, DELETE, PATCH
       allow-headers: content-type
       expose-headers:
@@ -91,21 +83,6 @@ jwt:
   expires-time: 24
   buffer-time: 60
   issuer: jianghao
-local:
-  path: uploads/file # 上传文件保存路径
-  size: 10 # 上传文件大小单位M
-mysql: # mysql 配置
-  path: 192.168.0.100
-  port: "3306"
-  config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: server
-  username: root
-  password: "123456"
-  max-idle-conns: 100
-  max-open-conns: 1000
-  log-mode: error # silent
-  log-zap: true
-  debug: false
 pgsql:
   path: ""
   port: ""
@@ -125,11 +102,6 @@ qiniu:
   access-key: "bLwYhR1boJaw77pjh6TOTZ4XmHwDF35SZJwInOg6"
   secret-key: "cCg2OgCmdlgTmHu40prSXDN78H8LEusNFD_vezeN"
   use-cdn-domains: false
-redis: # redis 配置
-  db: 0
-  addr: 192.168.0.100
-  password: ""
-  port: "6379"
 system:
   domain: localhost
   env: develop
@@ -164,9 +136,9 @@ zap:
   level: info
   format: console
   prefix: "[server]-"
-  director: log
+  director: logs
   show-line: true
-  encode-level: LowercaseLevelEncoder # LowercaseColorLevelEncoder
+  encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true
 fiberconifg: # fiber config

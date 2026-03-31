@@ -1,34 +1,3 @@
-aliyun-oss:
-  endpoint: yourEndpoint
-  access-key-id: yourAccessKeyId
-  access-key-secret: yourAccessKeySecret
-  bucket-name: yourBucketName
-  bucket-url: yourBucketUrl
-  base-path: yourBasePath
-autocode:
-  transfer-restart: true
-  root: /home/jianghao/man/server-web
-  server: /server
-  server-api: /api/v1/%s
-  server-initialize: /initialize
-  server-model: /model/%s
-  server-request: /model/%s/request/
-  server-router: /router/%s
-  server-service: /service/%s
-  web: /web/src
-  web-api: /api
-  web-form: /view
-  web-table: /view
-aws-s3:
-  bucket: xxxxx-10005608
-  region: ap-shanghai
-  endpoint: ""
-  s3-force-path-style: false
-  disable-ssl: false
-  secret-id: xxxxxxxx
-  secret-key: xxxxxxxx
-  base-url: http://localhost:8080
-  path-prefix: server
 cache:
   time: 100
 captcha:
@@ -37,60 +6,6 @@ captcha:
   img-height: 80 # 高度
   dot-count: 80 # 干扰线点数
   max-skew: 0.7 # 倾斜度
-casbin:
-  model-path: ./rbac_model.conf
-cors:
-  mode: allow-all # whitelist 白名单 allow-all允许全部 固定域名 strict-whitelist
-  whitelist:
-    - allow-origin: www.wutong.com # 允许访问的域名
-      allow-methods: GET, POST, PUT, DELETE, PATCH
-      allow-headers: content-type
-      expose-headers:
-        Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,
-        Content-Type
-      allow-credentials: true
-    - allow-origin: example2.com # 允许访问的域名
-      allow-methods: GET, POST, PUT, DELETE
-      allow-headers: content-type
-      expose-headers:
-        Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,
-        Content-Type
-      allow-credentials: true
-db-list:
-  - disable: false # 是否禁用
-    type: ""
-    alias-name: ""
-    path: ""
-    port: ""
-    config: ""
-    db-name: ""
-    username: ""
-    password: ""
-    max-idle-conns: 10
-    max-open-conns: 100
-    log-mode: ""
-    log-zap: false
-email:
-  to: 760986739@qq.com
-  port: 465
-  from: 978561120@qq.com
-  host: smtp.qq.com
-  is-ssl: true
-  secret: bwxrwofxhqapbahg
-  nickname: "C"
-excel:
-  dir: uploads/excel/
-hua-wei-obs:
-  path: you-path
-  bucket: you-bucket
-  endpoint: you-endpoint
-  access-key: you-access-key
-  secret-key: you-secret-key
-jwt:
-  signing-key: 519fb1f4-4321-446a-bb7b-bfb13b68b960
-  expires-time: 24
-  buffer-time: 60
-  issuer: jianghao
 local:
   path: uploads/file # 上传文件保存路径
   size: 10 # 上传文件大小单位M
@@ -107,81 +22,8 @@ mysql: # mysql 配置
   log-mode: silent # silent
   log-zap: true
   debug: true
-pgsql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-qiniu:
-  zone: ZoneHuadong
-  bucket: "jianghaoimages"
-  img-path: ""
-  use-https: false
-  access-key: "bLwYhR1boJaw77pjh6TOTZ4XmHwDF35SZJwInOg6"
-  secret-key: "cCg2OgCmdlgTmHu40prSXDN78H8LEusNFD_vezeN"
-  use-cdn-domains: false
 redis: # redis 配置
   db: 0
   addr: 127.0.0.1
   password: ""
   port: "6379"
-system:
-  domain: localhost
-  env: develop
-  addr: 3100
-  db-type: mysql
-  oss-type: local
-  use-multipoint: false
-  use-redis: true
-  iplimit-count: 15000
-  iplimit-time: 3600
-tencent-cos:
-  bucket: xxxxx-10005608
-  region: ap-shanghai
-  secret-id: xxxxxxxx
-  secret-key: xxxxxxxx
-  base-url: http://localhost:8080
-  path-prefix: server
-timer:
-  start: true
-  spec: "@every 24h"
-  detail:
-    # - tableName: sys_operation_records
-    #   compareField: created_at
-    #   interval: 2160h
-    # - tableName: jwt_blacklists
-    #   compareField: created_at
-    #   interval: 2160h
-    - tableName: githubs
-      compareField: created_at
-      interval: 1s
-zap:
-  level: info
-  format: console
-  prefix: "[server]-"
-  director: logs
-  show-line: true
-  encode-level: LowercaseColorLevelEncoder
-  stacktrace-key: stacktrace
-  log-in-console: true
-fiberconifg: # fiber config
-  prefork: false
-  server_header: ""
-  strict_routing: true # 严格路由
-  case_sensitive: true # 区分大小写#
-  body_limit: 10485760 # Body 限制
-  app_name: sever-fiber
-  concurrency: 262144 # 并发
-  disable_startup_message: true #关闭启动信息
-  enable_splitting_on_parsers: true
-# fiberlogger:
-#   format: "server-[${time}] ${ip} ${status} ${latency} ${method} ${path} ${error}\n" #格式
-#   time_format: "15:04:05" # 时间格式
-#   time_zone: Local #时区
-#   is_open: true

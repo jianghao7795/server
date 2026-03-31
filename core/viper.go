@@ -1,12 +1,10 @@
 package core
 
 import (
-	"flag"
-	"fmt"
-	"os"
 	"path/filepath"
 	global "server/model"
 	"server/utils"
+	"sort"
 	"time"
 
 	// json "github.com/bytedance/sonic"
@@ -45,46 +43,59 @@ nL9o4PchskjTFRVR
 
 // 读取配置 配置文件conf/config.yaml
 func viperInit() (*viper.Viper, error) {
-	var config string
-	flag.StringVar(&config, "c", "./conf", "choose config file.")
-	flag.Parse()
-	if config == "" { // 优先级: 命令行 > 环境变量 > 默认值
-		configEnv := os.Getenv(utils.ConfigEnv)
-		if configEnv == "" {
-			config = utils.ConfigFile
-			if isFile, err := utils.IsExistFile(config); isFile {
-				fmt.Printf("您正在使用config的默认值,config的路径为%v\n", utils.ConfigFile)
-			} else {
-				panic("请检查配置文件" + config + "是否存在: " + err.Error())
-			}
-		} else {
-			config = configEnv
-			if isFile, err := utils.IsExistFile(config); isFile {
-				fmt.Printf("您正在使用CONFIG环境变量,config的路径为%v\n", config)
-			} else {
-				panic("请检查配置文件" + config + "是否存在: " + err.Error())
-			}
-		}
-	} else {
-		if isFile, err := utils.IsExistFile(config); isFile {
-			fmt.Printf("您正在使用命令行的-c参数传递的值,config的路径为%v\n", config) // server -c config.yaml
-		} else {
-			panic("请检查配置文件" + config + "是否存在: " + err.Error())
-		}
-	}
+	// var config string
+	// flag.StringVar(&config, "c", "./conf", "choose config file.")
+	// flag.Parse()
+	// if config == "" { // 优先级: 命令行 > 环境变量 > 默认值
+	// 	configEnv := os.Getenv(utils.ConfigEnv)
+	// 	if configEnv == "" {
+	// 		config = utils.ConfigFile
+	// 		if isFile, err := utils.IsExistFile(config); isFile {
+	// 			fmt.Printf("您正在使用config的默认值,config的路径为%v\n", utils.ConfigFile)
+	// 		} else {
+	// 			panic("请检查配置文件" + config + "是否存在: " + err.Error())
+	// 		}
+	// 	} else {
+	// 		config = configEnv
+	// 		if isFile, err := utils.IsExistFile(config); isFile {
+	// 			fmt.Printf("您正在使用CONFIG环境变量,config的路径为%v\n", config)
+	// 		} else {
+	// 			panic("请检查配置文件" + config + "是否存在: " + err.Error())
+	// 		}
+	// 	}
+	// } else {
+	// 	if isFile, err := utils.IsExistFile(config); isFile {
+	// 		fmt.Printf("您正在使用命令行的-c参数传递的值,config的路径为%v\n", config) // server -c config.yaml
+	// 	} else {
+	// 		panic("请检查配置文件" + config + "是否存在: " + err.Error())
+	// 	}
+	// }
 
 	v := viper.New()
-	// v.SetConfigFile(config)
-	v.SetConfigName("config") // 指定文件名
-	// v.SetConfigName("base")
-	v.AddConfigPath(config) // 配置目录
-	v.SetConfigType("yaml") // 配置文件类型
 
-	// // 处理找不到配置文件的情况
-	err := v.ReadInConfig()
-	if err != nil {
-		return nil, err
+	v.SetConfigType("yaml") // 配置文件类型
+	// // v.SetConfigFile(config)
+	// v.SetConfigName("config") // 指定文件名
+	// // v.SetConfigName("base")
+	// v.AddConfigPath(utils.ConfigEnv) // 配置目录
+	// 先读 base
+	v.SetConfigFile(filepath.Join(utils.ConfigEnv, "base.yaml"))
+	_ = v.ReadInConfig()
+	// 再按顺序合并目录里的其他 *.yaml（顺序你自己定义，后者覆盖前者）
+	files, _ := filepath.Glob(filepath.Join(utils.ConfigEnv, "*.yaml"))
+	sort.Strings(files)
+	for _, f := range files {
+		if filepath.Base(f) == "base.yaml" {
+			continue
+		}
+		v.SetConfigFile(f)
+		_ = v.MergeInConfig()
 	}
+	// // 处理找不到配置文件的情况
+	// err := v.ReadInConfig()
+	// if err != nil {
+	// 	return nil, err
+	// }
 	v.WatchConfig() // 监听变化
 	// config 变动之后的回调
 	v.OnConfigChange(func(e fsnotify.Event) {
@@ -115,6 +126,7 @@ func viperInit() (*viper.Viper, error) {
 	// jwt
 	global.RunCONFIG.JWT.PrivateKey = privateKey
 	global.RunCONFIG.JWT.PublicKey = publicKey
+	// fmt.Println(global.RunCONFIG.JWT.PrivateKey, global.RunCONFIG.JWT.PublicKey, "global.RunCONFIG.JWT")
 	// root 适配性
 	// 根据root位置去找到对应迁移位置,保证root路径有效
 	global.CONFIG.AutoCode.Root, err = filepath.Abs("..") // filepath.Abs 是相对路径 变为绝对路径

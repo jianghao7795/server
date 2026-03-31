@@ -18,16 +18,15 @@ type Zap struct {
 }
 
 // ZapEncodeLevel 根据 EncodeLevel 返回 zapcore.LevelEncoder
-// Author wuhao
 func (z *Zap) ZapEncodeLevel() zapcore.LevelEncoder {
-	switch {
-	case z.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
+	switch z.EncodeLevel {
+	case "LowercaseLevelEncoder": // 小写编码器(默认)
 		return zapcore.LowercaseLevelEncoder
-	case z.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色
+	case "LowercaseColorLevelEncoder": // 小写编码器带颜色
 		return zapcore.LowercaseColorLevelEncoder
-	case z.EncodeLevel == "CapitalLevelEncoder": // 大写编码器
+	case "CapitalLevelEncoder": // 大写编码器
 		return zapcore.CapitalLevelEncoder
-	case z.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
+	case "CapitalColorLevelEncoder": // 大写编码器带颜色
 		return zapcore.CapitalColorLevelEncoder
 	default:
 		return zapcore.LowercaseLevelEncoder
@@ -35,7 +34,6 @@ func (z *Zap) ZapEncodeLevel() zapcore.LevelEncoder {
 }
 
 // TransportLevel 根据字符串转化为 zapcore.Level
-// Author wuhao
 func (z *Zap) TransportLevel() zapcore.Level {
 	z.Level = strings.ToLower(z.Level)
 	switch z.Level {
