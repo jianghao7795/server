@@ -66,7 +66,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 	}
 	// 删除文件
 
-	for _, path := range strings.Split(md.AutoCodePath, ";") {
+	for path := range strings.SplitSeq(md.AutoCodePath, ";") {
 		// 增加安全判断补丁:
 		_path, err := filepath.Abs(path)
 		if err != nil || _path != path {
@@ -85,7 +85,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 		}
 	}
 	// 清除注入
-	for _, v := range strings.Split(md.InjectionMeta, ";") {
+	for v := range strings.SplitSeq(md.InjectionMeta, ";") {
 		// RouterPath@functionName@RouterString
 		meta := strings.Split(v, "@")
 		if len(meta) == 3 {

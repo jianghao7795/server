@@ -5,6 +5,7 @@ import (
 	"server/model/system"
 	"server/model/system/response"
 	"strconv"
+	"strings"
 )
 
 func (*Problem) GetUserProblemList(info *system.SysUserProblem) (list any, err error) {
@@ -26,7 +27,7 @@ func (*Problem) SetUserProblemSetting(problem []system.SysUserProblem) (string, 
 		return "没有新建和更新", nil
 	}
 
-	var messageString string = ""
+	var messageString strings.Builder
 	for index, item := range problem {
 		if item.ID == 0 {
 			db := global.DB.Model(&system.SysUserProblem{})
@@ -34,7 +35,7 @@ func (*Problem) SetUserProblemSetting(problem []system.SysUserProblem) (string, 
 			if err != nil {
 				return "", err
 			}
-			messageString += "[" + strconv.Itoa(index) + "]" + "新建成功 "
+			messageString.WriteString("[" + strconv.Itoa(index) + "]" + "新建成功 ")
 		} else {
 			db := global.DB.Model(&system.SysUserProblem{})
 			var dataProblemFirst system.SysUserProblem
@@ -49,11 +50,11 @@ func (*Problem) SetUserProblemSetting(problem []system.SysUserProblem) (string, 
 			if err != nil {
 				return "", err
 			}
-			messageString += "[" + strconv.Itoa(index) + "]" + "更新成功 "
+			messageString.WriteString("[" + strconv.Itoa(index) + "]" + "更新成功 ")
 		}
 	}
 
-	return messageString, nil
+	return messageString.String(), nil
 }
 
 func (*Problem) HasSetting(uid int) (bool, error) {

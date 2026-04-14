@@ -211,7 +211,7 @@ func TestCommentsAndLikesIntegration(t *testing.T) {
 
 		// 模拟多个用户同时点赞
 		done := make(chan bool, 10)
-		for i := 0; i < 10; i++ {
+		for i := range 10 {
 			go func(userId uint) {
 				defer func() { done <- true }()
 				likeService.LikePost(post3.ID, userId)
@@ -219,7 +219,7 @@ func TestCommentsAndLikesIntegration(t *testing.T) {
 		}
 
 		// 等待所有goroutine完成
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			<-done
 		}
 
@@ -264,7 +264,7 @@ func TestCommentService(t *testing.T) {
 
 	t.Run("测试获取评论列表", func(t *testing.T) {
 		// 创建多条评论
-		for i := 0; i < 5; i++ {
+		for i := range 5 {
 			comment := app.Comment{
 				PostId:   post.ID,
 				Content:  fmt.Sprintf("评论内容 %d", i+1),

@@ -38,8 +38,8 @@ func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	defer f.Close() // 创建文件 defer 关闭
 
 	_, err := uploader.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(global.CONFIG.AwsS3.Bucket),
-		Key:    aws.String(filename),
+		Bucket: new(global.CONFIG.AwsS3.Bucket),
+		Key:    new(filename),
 		Body:   f,
 	})
 	if err != nil {
@@ -63,8 +63,8 @@ func (*AwsS3) DeleteFile(key string) error {
 	bucket := global.CONFIG.AwsS3.Bucket
 
 	_, err := svc.DeleteObject(&s3.DeleteObjectInput{
-		Bucket: aws.String(bucket),
-		Key:    aws.String(filename),
+		Bucket: new(bucket),
+		Key:    new(filename),
 	})
 	if err != nil {
 		global.LOG.Error("function svc.DeleteObject() Filed", zap.Any("err", err.Error()))
@@ -72,8 +72,8 @@ func (*AwsS3) DeleteFile(key string) error {
 	}
 
 	_ = svc.WaitUntilObjectNotExists(&s3.HeadObjectInput{
-		Bucket: aws.String(bucket),
-		Key:    aws.String(filename),
+		Bucket: new(bucket),
+		Key:    new(filename),
 	})
 	return nil
 }
@@ -81,10 +81,10 @@ func (*AwsS3) DeleteFile(key string) error {
 // newSession Create S3 session
 func newSession() *session.Session {
 	sess, _ := session.NewSession(&aws.Config{
-		Region:           aws.String(global.CONFIG.AwsS3.Region),
-		Endpoint:         aws.String(global.CONFIG.AwsS3.Endpoint), //minio在这里设置地址,可以兼容
-		S3ForcePathStyle: aws.Bool(global.CONFIG.AwsS3.S3ForcePathStyle),
-		DisableSSL:       aws.Bool(global.CONFIG.AwsS3.DisableSSL),
+		Region:           new(global.CONFIG.AwsS3.Region),
+		Endpoint:         new(global.CONFIG.AwsS3.Endpoint), //minio在这里设置地址,可以兼容
+		S3ForcePathStyle: new(global.CONFIG.AwsS3.S3ForcePathStyle),
+		DisableSSL:       new(global.CONFIG.AwsS3.DisableSSL),
 		Credentials: credentials.NewStaticCredentials(
 			global.CONFIG.AwsS3.SecretID,
 			global.CONFIG.AwsS3.SecretKey,

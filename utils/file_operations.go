@@ -56,7 +56,7 @@ func DeleteFile(filePath string) error {
 
 func TrimSpace(target any) {
 	t := reflect.TypeOf(target)
-	if t.Kind() != reflect.Ptr {
+	if t.Kind() != reflect.Pointer {
 		return
 	}
 	t = t.Elem()

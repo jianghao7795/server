@@ -48,18 +48,18 @@ func TotalFlowByDevice(dev string) (ReceiveBytes, TransmitBytes, error) {
 	var receiveBytes uint64
 	var transmitBytes uint64
 
-	lines := strings.Split(string(devInfo), "\n")
-	for _, line := range lines {
+	lines := strings.SplitSeq(string(devInfo), "\n")
+	for line := range lines {
 		// logger.Debug(line)
 		if strings.Contains(line, dev) {
 			i := 0
-			fields := strings.Split(line, ":")
-			for _, field := range fields {
+			fields := strings.SplitSeq(line, ":")
+			for field := range fields {
 				if strings.Contains(field, dev) {
 					i = 1
 				} else {
-					values := strings.Fields(field)
-					for _, value := range values {
+					values := strings.FieldsSeq(field)
+					for value := range values {
 						//logger.Debug(value)
 						if receive == i {
 							bytes, _ := strconv.ParseInt(value, 10, 64)
@@ -75,13 +75,13 @@ func TotalFlowByDevice(dev string) (ReceiveBytes, TransmitBytes, error) {
 		} else if strings.Contains(line, "face") {
 			index := 0
 			tag := false
-			fields := strings.Split(line, "|")
-			for _, field := range fields {
+			fields := strings.SplitSeq(line, "|")
+			for field := range fields {
 				if strings.Contains(field, "face") {
 					index = 1
 				} else if strings.Contains(field, "bytes") {
-					values := strings.Fields(field)
-					for _, value := range values {
+					values := strings.FieldsSeq(field)
+					for value := range values {
 						//logger.Debug(value)
 						if strings.Contains(value, "bytes") {
 							if !tag {
