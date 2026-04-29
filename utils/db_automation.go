@@ -16,11 +16,11 @@ import (
 )
 
 // ClearTable clears database table data based on time interval
-// @param db database connection
-// @param tableName name of the table to clear
-// @param compareField field to compare with time
-// @param interval time interval string (e.g., "24h", "7d")
-// @return error if operation fails
+// Param db database connection
+// Param tableName name of the table to clear
+// Param compareField field to compare with time
+// Param interval time interval string (e.g., "24h", "7d")
+// Returns error if operation fails
 func ClearTable(db *gorm.DB, tableName string, compareField string, interval string) error {
 	if db == nil {
 		return errors.New("database connection cannot be empty")
@@ -42,11 +42,11 @@ func ClearTable(db *gorm.DB, tableName string, compareField string, interval str
 }
 
 // UpdateTable fetches GitHub commits and updates database
-// @param db database connection
-// @param tableName name of the table (unused in current implementation)
-// @param compareField field to compare with time (unused in current implementation)
-// @param interval time interval string (unused in current implementation)
-// @return error if operation fails
+// Param db database connection
+// Param tableName name of the table (unused in current implementation)
+// Param compareField field to compare with time (unused in current implementation)
+// Param interval time interval string (unused in current implementation)
+// Returns error if operation fails
 func UpdateTable(db *gorm.DB, tableName string, compareField string, interval string) error {
 	if db == nil {
 		return errors.New("database connection cannot be empty")
@@ -194,8 +194,8 @@ func insertNewCommits(db *gorm.DB, commits []system.SysGithub) (int, error) {
 }
 
 // timeStrToUnix converts time string to Unix timestamp
-// @param valueStr time string in format "2006-01-02 15:04:05"
-// @return Unix timestamp
+// Param valueStr time string in format "2006-01-02 15:04:05"
+// Returns Unix timestamp
 func timeStrToUnix(valueStr string) int64 {
 	const timeFormat = "2006-01-02 15:04:05"
 	loc := time.Local

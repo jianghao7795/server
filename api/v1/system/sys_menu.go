@@ -100,7 +100,7 @@ func (a *AuthorityMenuApi) AddMenuAuthority(c fiber.Ctx) error {
 // @Accept application/json
 // @Produce application/json
 // @Param authorityId query string true "角色ID"
-// @Success 200 {object} response.Response{data=system.SysMenus,msg=string} "获取指定角色菜单成功"
+// @Success 200 {object} response.Response{data=[]system.SysMenu,msg=string} "获取指定角色菜单成功"
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"

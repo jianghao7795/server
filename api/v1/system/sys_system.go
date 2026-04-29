@@ -78,7 +78,7 @@ func (s *SystemApi) ReloadSystem(c fiber.Ctx) error {
 // @Summary 获取服务器信息
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Success 200 {object} response.Response{data=systemRes.ServerInfo,msg=string} "获取服务器信息"
+// @Success 200 {object} response.Response{data=utils.Server,msg=string} "获取服务器信息"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"

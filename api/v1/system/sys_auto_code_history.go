@@ -5,6 +5,7 @@ import (
 	"server/model/common/request"
 	"server/model/common/response"
 	systemReq "server/model/system/request"
+	systemRes "server/model/system/response"
 
 	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
@@ -19,7 +20,7 @@ type AutoCodeHistoryApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body request.GetById true "请求参数"
-// @Success 200 {object} response.Response{data=system.SysAutoCodeHistory,msg=string} "获取meta信息"
+// @Success 200 {object} response.Response{data=string,msg=string} "获取meta信息"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
@@ -85,7 +86,7 @@ func (a *AutoCodeHistoryApi) RollBack(c fiber.Ctx) error {
 // @accept application/json
 // @Produce application/json
 // @Param data body systemReq.SysAutoHistory true "请求参数"
-// @Success 200 {object} response.Response{data=response.PageResult{list=[]response.AutoCodeHistory,total=int64,page=int,pageSize=int},msg=string} "查询回滚记录,返回包括列表,总数,页码,每页数量"
+// @Success 200 {object} response.Response{data=response.PageResult{list=[]systemRes.AutoCodeHistory,total=int64,page=int,pageSize=int},msg=string} "查询回滚记录,返回包括列表,总数,页码,每页数量"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
@@ -93,7 +94,10 @@ func (a *AutoCodeHistoryApi) RollBack(c fiber.Ctx) error {
 func (a *AutoCodeHistoryApi) GetList(c fiber.Ctx) error {
 	var search systemReq.SysAutoHistory
 	_ = c.Bind().Query(&search)
-	list, total, err := autoCodeHistoryService.GetList(search.PageInfo)
+	var list []systemRes.AutoCodeHistory
+	var total int64
+	var err error
+	list, total, err = autoCodeHistoryService.GetList(search.PageInfo)
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)

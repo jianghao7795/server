@@ -6,6 +6,7 @@ import (
 
 	global "server/model"
 	"server/model/common/response"
+	modelFrontend "server/model/frontend"
 	"server/model/frontend/request"
 
 	"github.com/gofiber/fiber/v3"
@@ -25,7 +26,7 @@ type ArticleApi struct{}
 // @Param title query string false "文章标题搜索"
 // @Param state query integer false "文章状态"
 // @Param is_important query integer false "是否首页显示"
-// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]app.Article,total=integer,page=integer,pageSize=integer},code=integer} "获取成功"
+// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]modelFrontend.Article,total=integer,page=integer,pageSize=integer},code=integer} "获取成功"
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
@@ -45,7 +46,10 @@ func (s *ArticleApi) GetArticleList(c fiber.Ctx) error {
 		pageInfo.PageSize = 10
 	}
 
-	if list, total, err := articleServiceApp.GetArticleList(&pageInfo, c); err != nil {
+	var list []modelFrontend.Article
+	var total int64
+	list, total, err = articleServiceApp.GetArticleList(&pageInfo, c)
+	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
 	} else {

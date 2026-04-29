@@ -143,7 +143,7 @@ func (*ArticleApi) UpdateArticle(c fiber.Ctx) error {
 // @Description 根据文章ID获取文章详情
 // @Produce application/json
 // @Param id path integer true "文章ID" minimum(1)
-// @Success 200 {object} response.Response{msg=string} "获取成功"
+// @Success 200 {object} response.Response{msg=string,data=app.Article,code=integer} "获取成功"
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 404 {object} response.Response "文章不存在"
 // @Failure 401 {object} response.Response{msg=string} "未授权"

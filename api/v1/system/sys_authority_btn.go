@@ -6,6 +6,7 @@ import (
 	global "server/model"
 	"server/model/common/response"
 	"server/model/system/request"
+	modelSystemResponse "server/model/system/response"
 
 	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
@@ -19,7 +20,7 @@ type AuthorityBtnApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body request.SysAuthorityBtnReq true "菜单id, 角色id, 选中的按钮id"
-// @Success 200 {object} response.Response{data=[]system.SysAuthorityBtn,msg=string} "返回列表成功"
+// @Success 200 {object} response.Response{data=modelSystemResponse.SysAuthorityBtnRes,msg=string,code=integer} "返回列表成功"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
@@ -27,7 +28,10 @@ type AuthorityBtnApi struct{}
 func (a *AuthorityBtnApi) GetAuthorityBtn(c fiber.Ctx) error {
 	var req request.SysAuthorityBtnReq
 	_ = c.Bind().Query(&req)
-	if res, err := authorityBtnService.GetAuthorityBtn(req); err != nil {
+	var res modelSystemResponse.SysAuthorityBtnRes
+	var err error
+	res, err = authorityBtnService.GetAuthorityBtn(req)
+	if err != nil {
 		global.LOG.Error("查询失败!", zap.Error(err))
 		return response.FailWithMessage("查询失败", c)
 	} else {
@@ -41,7 +45,7 @@ func (a *AuthorityBtnApi) GetAuthorityBtn(c fiber.Ctx) error {
 // @accept application/json
 // @Produce application/json
 // @Param data body request.SysAuthorityBtnReq true "菜单id, 角色id, 选中的按钮id"
-// @Success 200 {object} response.Response{msg=string} "返回列表成功"
+// @Success 200 {object} response.Response{msg=string,data=modelSystemResponse.SysAuthorityBtnRes,code=integer} "返回列表成功"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"

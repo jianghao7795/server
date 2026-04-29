@@ -155,7 +155,7 @@ func (e *CustomerApi) GetExaCustomer(c fiber.Ctx) error {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query request.PageInfo true "页码, 每页大小"
+// @Param data query request.SearchCustomerParams true "页码, 每页大小"
 // @Success 200 {object} response.Response{data=response.PageResult{list=example.ExaCustomer[]},msg=string} "分页获取权限客户列表,返回包括列表,总数,页码,每页数量"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"

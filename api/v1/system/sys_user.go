@@ -198,7 +198,7 @@ func (b *BaseApi) ChangePassword(c fiber.Ctx) error {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param query query request.PageInfo true "页码, 每页大小"
+// @Param query query systemReq.SearchInfo true "页码, 每页大小"
 // @Success 200 {object} response.Response{data=object,msg=string} "分页获取用户列表,返回包括列表,总数,页码,每页数量"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"

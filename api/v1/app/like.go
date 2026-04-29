@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	global "server/model"
+	modelApp "server/model/app"
 	"server/model/common/response"
 	appService "server/service/app"
 
@@ -96,7 +97,7 @@ func (l *LikeApi) UnlikePost(c fiber.Ctx) error {
 // @Param post_id path integer true "帖子ID" minimum(1)
 // @Param page query integer false "页码" default(1) minimum(1)
 // @Param page_size query integer false "每页数量" default(10) minimum(1) maximum(100)
-// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]app.Like,total=integer,page=integer,pageSize=integer},code=integer} "获取成功"
+// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]modelApp.Like,total=integer,page=integer,pageSize=integer},code=integer} "获取成功"
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Router /like/getPostLikes/{post_id} [get]
@@ -117,8 +118,9 @@ func (l *LikeApi) GetPostLikes(c fiber.Ctx) error {
 	if page.PageSize < 1 || page.PageSize > 100 {
 		page.PageSize = 10
 	}
-
-	likes, total, err := likeService.GetPostLikes(uint(postId), page.Page, page.PageSize)
+	var likes []modelApp.Like
+	var total int64
+	likes, total, err = likeService.GetPostLikes(uint(postId), page.Page, page.PageSize)
 	if err != nil {
 		global.LOG.Error("获取点赞列表失败", zap.Error(err))
 		return response.FailWithMessage("获取点赞列表失败", c)
@@ -175,7 +177,7 @@ func (l *LikeApi) CheckUserLiked(c fiber.Ctx) error {
 // @Produce application/json
 // @Param page query integer false "页码" default(1) minimum(1)
 // @Param page_size query integer false "每页数量" default(10) minimum(1) maximum(100)
-// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]app.Like,total=integer,page=integer,pageSize=integer},code=integer} "获取成功"
+// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]modelApp.Like,total=integer,page=integer,pageSize=integer},code=integer} "获取成功"
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"

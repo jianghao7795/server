@@ -6,6 +6,7 @@ import (
 	global "server/model"
 	appReq "server/model/app/request"
 	"server/model/common/response"
+	modelFrontend "server/model/frontend"
 
 	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
@@ -20,7 +21,7 @@ type TagApi struct{}
 // @Produce application/json
 // @Param page query integer false "页码" default(1) minimum(1)
 // @Param pageSize query integer false "每页数量" default(10) minimum(1) maximum(100)
-// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]app.Tag},code=integer} "获取成功"
+// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]modelFrontend.Tag},code=integer} "获取成功"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
@@ -44,7 +45,7 @@ func (appTabApi *TagApi) GetTagList(c fiber.Ctx) error {
 // @Description 根据标签ID获取标签及其关联的文章
 // @Produce application/json
 // @Param id path integer true "标签ID" minimum(1)
-// @Success 200 {object} response.Response{msg=string,data=object{tag=[]app.Tag},code=integer} "获取成功"
+// @Success 200 {object} response.Response{msg=string,data=object{tag=[]modelFrontend.Tag},code=integer} "获取成功"
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
@@ -54,7 +55,9 @@ func (appTabApi *TagApi) GetTag(c fiber.Ctx) error {
 	if err != nil {
 		return response.FailWithMessage("获取Ids失败", c)
 	}
-	if tagArticles, err := tagServiceApp.GetTagArticle(id, c); err != nil {
+	var tagArticles modelFrontend.Tag
+	tagArticles, err = tagServiceApp.GetTagArticle(id, c)
+	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)
 	} else {

@@ -7,6 +7,7 @@ import (
 	"os"
 	"server/model/common/response"
 	"server/model/system"
+	systemRes "server/model/system/response"
 	"server/utils"
 
 	global "server/model"
@@ -145,7 +146,7 @@ func (autoApi *AutoCodeApi) GetTables(c fiber.Ctx) error {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {object} response.Response{data=fiber.Map{columns=[]system.ColumnInfo},msg=string} "获取当前表所有字段"
+// @Success 200 {object} response.Response{data=fiber.Map{columns=[]systemRes.Column},msg=string} "获取当前表所有字段"
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
@@ -153,7 +154,9 @@ func (autoApi *AutoCodeApi) GetTables(c fiber.Ctx) error {
 func (autoApi *AutoCodeApi) GetColumn(c fiber.Ctx) error {
 	dbName := c.Query("dbName", global.CONFIG.Mysql.Dbname)
 	tableName := c.Query("tableName")
-	columns, err := autoCodeService.Database().GetColumn(tableName, dbName)
+	var columns []systemRes.Column
+	var err error
+	columns, err = autoCodeService.Database().GetColumn(tableName, dbName)
 	if err != nil {
 		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithMessage("获取失败", c)
