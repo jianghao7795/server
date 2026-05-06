@@ -41,6 +41,9 @@ func Routers(
 	app.Get("/backend/uploads/*", static.New("uploads", staticConfig)) // 本地的backend文件路由
 	app.Get("/backend/public/*", static.New("public", staticConfig))
 	app.Get("/mobile/uploads/*", static.New("uploads", staticConfig)) // 本地的mobile文件路由
+	// 日志目录（Browse 与 uploads 一致，便于本地/内网排查；生产环境建议用反向代理限制或关闭）
+	app.Get("/backend/logs/*", static.New("logs", staticConfig))
+	app.Get("/api/logs/*", static.New("logs", staticConfig))
 	app.Get("/docs/*", static.New("./docs"))                          // swagger json 等文档
 
 	// Swagger UI (v3 使用 swaggo)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
@@ -13,7 +12,6 @@ import (
 	"server/core"
 	_ "server/docs" // 引入生成的文档
 	global "server/model"
-	"server/service/system"
 
 	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
@@ -61,17 +59,17 @@ func runServer(app *fiber.App) {
 	global.LOG.Info("server run success on ", zap.String("address", address))
 	log.Println(`Welcome to Fiber API`)
 
-	if global.DB != nil {
-		system.LoadAll() // 加载所有的 拉黑的jwt数据 避免盗用jwt
-		// 程序结束前关闭数据库链接
-		db, _ := global.DB.DB()
-		defer func(db *sql.DB) {
-			err := db.Close()
-			if err != nil {
-				global.LOG.Error("数据库关闭失败: " + err.Error())
-			}
-		}(db)
-	}
+	// if global.DB != nil {
+	// 	system.LoadAll() // 加载所有的 拉黑的jwt数据 避免盗用jwt
+	// 	// 程序结束前关闭数据库链接
+	// 	db, _ := global.DB.DB()
+	// 	defer func(db *sql.DB) {
+	// 		err := db.Close()
+	// 		if err != nil {
+	// 			global.LOG.Error("数据库关闭失败: " + err.Error())
+	// 		}
+	// 	}(db)
+	// }
 
 	err := app.Listen(address)
 	if err != nil {

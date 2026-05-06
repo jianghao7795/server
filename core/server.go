@@ -60,7 +60,7 @@ func initConfig() {
 
 }
 
-func RunServerElectron(app *fiber.App) {
+func runServerElectron(app *fiber.App) {
 	// 使用全局路由实例（向后兼容）
 	appRouter := router.AppRouterInstance
 	systemRouter := router.SystemRouterInstance
@@ -95,7 +95,7 @@ func RunServerElectron(app *fiber.App) {
 func RunServer() {
 	initConfig()
 	app := fiber.New(global.RunCONFIG.FiberConfig)
-	go RunServerElectron(app)
+	go runServerElectron(app)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
