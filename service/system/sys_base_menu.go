@@ -71,18 +71,15 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 		db := tx.Where("id = ?", menu.ID).Find(&oldMenu)
 		if oldMenu.Name != menu.Name {
 			if !errors.Is(tx.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
-				global.LOG.Debug("存在相同name修改失败")
 				return errors.New("存在相同name修改失败")
 			}
 		}
 		txErr := tx.Unscoped().Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
 		if txErr != nil {
-			global.LOG.Debug(txErr.Error())
 			return txErr
 		}
 		txErr = tx.Unscoped().Delete(&system.SysBaseMenuBtn{}, "sys_base_menu_id = ?", menu.ID).Error
 		if txErr != nil {
-			global.LOG.Debug(txErr.Error())
 			return txErr
 		}
 		if len(menu.Parameters) > 0 {
@@ -91,7 +88,6 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 			}
 			txErr = tx.Create(&menu.Parameters).Error
 			if txErr != nil {
-				global.LOG.Debug(txErr.Error())
 				return txErr
 			}
 		}
@@ -102,14 +98,12 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 			}
 			txErr = tx.Create(&menu.MenuBtn).Error
 			if txErr != nil {
-				global.LOG.Debug(txErr.Error())
 				return txErr
 			}
 		}
 
 		txErr = db.Updates(upDateMap).Error
 		if txErr != nil {
-			global.LOG.Debug(txErr.Error())
 			return txErr
 		}
 		return nil

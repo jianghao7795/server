@@ -3,14 +3,12 @@ package system
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/common/response"
 	"server/model/system"
 	"server/model/system/request"
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type DictionaryApi struct{}
@@ -30,8 +28,7 @@ func (s *DictionaryApi) CreateSysDictionary(c fiber.Ctx) error {
 	var dictionary system.SysDictionary
 	_ = c.Bind().Body(&dictionary)
 	if err := dictionaryService.CreateSysDictionary(dictionary); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithMessage("创建失败", c)
+		return response.FailWithMessage("创建失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("创建成功", c)
 	}
@@ -51,12 +48,10 @@ func (s *DictionaryApi) CreateSysDictionary(c fiber.Ctx) error {
 func (s *DictionaryApi) DeleteSysDictionary(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if id == 0 {
-		global.LOG.Error("id获取失败!")
-		return response.FailWithMessage("id获取失败", c)
+		return response.FailWithMessage("id获取失败", 3, nil, c)
 	}
 	if err := dictionaryService.DeleteSysDictionary(uint(id)); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -78,11 +73,10 @@ func (s *DictionaryApi) UpdateSysDictionary(c fiber.Ctx) error {
 	_ = c.Bind().Body(&dictionary)
 	id, _ := strconv.Atoi(c.Params("id"))
 	if dictionary.ID != uint(id) {
-		return response.FailWithMessage("id不一致", c)
+		return response.FailWithMessage("id不一致", 3, nil, c)
 	}
 	if err := dictionaryService.UpdateSysDictionary(&dictionary); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败", c)
+		return response.FailWithMessage("更新失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -103,12 +97,10 @@ func (s *DictionaryApi) FindSysDictionary(c fiber.Ctx) error {
 	fieldType := c.Query("type")
 	fieldID := c.Query("ID")
 	if fieldType == "" && fieldID == "" {
-		global.LOG.Error("获取参数失败!")
-		return response.FailWithMessage("获取参数失败", c)
+		return response.FailWithMessage("获取参数失败", 3, nil, c)
 	}
 	if sysDictionary, err := dictionaryService.GetSysDictionary(fieldType, fieldID); err != nil {
-		global.LOG.Error("查询失败!", zap.Error(err))
-		return response.FailWithMessage("查询失败", c)
+		return response.FailWithMessage("查询失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(sysDictionary, "查询成功", c)
 	}
@@ -129,11 +121,10 @@ func (s *DictionaryApi) GetSysDictionaryList(c fiber.Ctx) error {
 	var pageInfo request.SysDictionarySearch
 	_ = c.Bind().Query(&pageInfo)
 	if err := utils.Verify(pageInfo.PageInfo, utils.PageInfoVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if list, total, err := dictionaryService.GetSysDictionaryInfoList(pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,

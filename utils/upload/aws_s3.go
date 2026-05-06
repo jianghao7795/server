@@ -67,7 +67,6 @@ func (*AwsS3) DeleteFile(key string) error {
 		Key:    new(filename),
 	})
 	if err != nil {
-		global.LOG.Error("function svc.DeleteObject() Filed", zap.Any("err", err.Error()))
 		return errors.New("function svc.DeleteObject() Filed, err:" + err.Error())
 	}
 

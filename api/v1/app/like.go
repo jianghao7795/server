@@ -3,7 +3,6 @@ package app
 import (
 	"strconv"
 
-	global "server/model"
 	modelApp "server/model/app"
 	"server/model/common/response"
 	appService "server/service/app"
@@ -11,7 +10,6 @@ import (
 	"server/model/common/request"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // LikeApi 点赞API
@@ -35,20 +33,18 @@ var likeService = appService.LikeServer
 func (l *LikeApi) LikePost(c fiber.Ctx) error {
 	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
-		global.LOG.Error("获取帖子ID失败", zap.Error(err))
-		return response.FailWithMessage("获取帖子ID失败", c)
+		return response.FailWithMessage("获取帖子ID失败", 3, err, c)
 	}
 
 	// 从JWT中获取用户ID
 	userID := c.Locals("user_id")
 	if userID == nil {
-		return response.FailWithMessage("用户未登录", c)
+		return response.FailWithMessage("用户未登录", 3, err, c)
 	}
 	userId := userID.(uint)
 
 	if err := likeService.LikePost(uint(postId), userId); err != nil {
-		global.LOG.Error("点赞失败", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 
 	return response.OkWithMessage("点赞成功", c)
@@ -70,20 +66,18 @@ func (l *LikeApi) LikePost(c fiber.Ctx) error {
 func (l *LikeApi) UnlikePost(c fiber.Ctx) error {
 	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
-		global.LOG.Error("获取帖子ID失败", zap.Error(err))
-		return response.FailWithMessage("获取帖子ID失败", c)
+		return response.FailWithMessage("获取帖子ID失败", 3, err, c)
 	}
 
 	// 从JWT中获取用户ID
 	userID := c.Locals("user_id")
 	if userID == nil {
-		return response.FailWithMessage("用户未登录", c)
+		return response.FailWithMessage("用户未登录", 3, err, c)
 	}
 	userId := userID.(uint)
 
 	if err := likeService.UnlikePost(uint(postId), userId); err != nil {
-		global.LOG.Error("取消点赞失败", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 
 	return response.OkWithMessage("取消点赞成功", c)
@@ -104,8 +98,7 @@ func (l *LikeApi) UnlikePost(c fiber.Ctx) error {
 func (l *LikeApi) GetPostLikes(c fiber.Ctx) error {
 	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
-		global.LOG.Error("获取帖子ID失败", zap.Error(err))
-		return response.FailWithMessage("获取帖子ID失败", c)
+		return response.FailWithMessage("获取帖子ID失败", 3, err, c)
 	}
 
 	var page request.Empty
@@ -122,8 +115,7 @@ func (l *LikeApi) GetPostLikes(c fiber.Ctx) error {
 	var total int64
 	likes, total, err = likeService.GetPostLikes(uint(postId), page.Page, page.PageSize)
 	if err != nil {
-		global.LOG.Error("获取点赞列表失败", zap.Error(err))
-		return response.FailWithMessage("获取点赞列表失败", c)
+		return response.FailWithMessage("获取点赞列表失败", 3, err, c)
 	}
 
 	return response.OkWithDetailed(response.PageResult{
@@ -149,21 +141,19 @@ func (l *LikeApi) GetPostLikes(c fiber.Ctx) error {
 func (l *LikeApi) CheckUserLiked(c fiber.Ctx) error {
 	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
-		global.LOG.Error("获取帖子ID失败", zap.Error(err))
-		return response.FailWithMessage("获取帖子ID失败", c)
+		return response.FailWithMessage("获取帖子ID失败", 3, err, c)
 	}
 
 	// 从JWT中获取用户ID
 	userID := c.Locals("user_id")
 	if userID == nil {
-		return response.FailWithMessage("用户未登录", c)
+		return response.FailWithMessage("用户未登录", 1, nil, c)
 	}
 	userId := userID.(uint)
 
 	liked, err := likeService.CheckUserLiked(uint(postId), userId)
 	if err != nil {
-		global.LOG.Error("检查点赞状态失败", zap.Error(err))
-		return response.FailWithMessage("检查点赞状态失败", c)
+		return response.FailWithMessage("检查点赞状态失败", 3, err, c)
 	}
 
 	return response.OkWithDetailed(fiber.Map{"liked": liked}, "获取成功", c)
@@ -186,7 +176,7 @@ func (l *LikeApi) GetUserLikedPosts(c fiber.Ctx) error {
 	// 从JWT中获取用户ID
 	userID := c.Locals("user_id")
 	if userID == nil {
-		return response.FailWithMessage("用户未登录", c)
+		return response.FailWithMessage("用户未登录", 3, nil, c)
 	}
 	userId := userID.(uint)
 
@@ -202,8 +192,7 @@ func (l *LikeApi) GetUserLikedPosts(c fiber.Ctx) error {
 
 	likes, total, err := likeService.GetUserLikedPosts(userId, page, pageSize)
 	if err != nil {
-		global.LOG.Error("获取用户点赞列表失败", zap.Error(err))
-		return response.FailWithMessage("获取用户点赞列表失败", c)
+		return response.FailWithMessage("获取用户点赞列表失败", 3, err, c)
 	}
 
 	return response.OkWithDetailed(response.PageResult{
@@ -227,14 +216,12 @@ func (l *LikeApi) GetUserLikedPosts(c fiber.Ctx) error {
 func (l *LikeApi) GetPostLikeCount(c fiber.Ctx) error {
 	postId, err := strconv.Atoi(c.Params("post_id"))
 	if err != nil {
-		global.LOG.Error("获取帖子ID失败", zap.Error(err))
-		return response.FailWithMessage("获取帖子ID失败", c)
+		return response.FailWithMessage("获取帖子ID失败", 3, err, c)
 	}
 
 	count, err := likeService.GetPostLikeCount(uint(postId))
 	if err != nil {
-		global.LOG.Error("获取点赞数失败", zap.Error(err))
-		return response.FailWithMessage("获取点赞数失败", c)
+		return response.FailWithMessage("获取点赞数失败", 3, err, c)
 	}
 
 	return response.OkWithDetailed(fiber.Map{"like_count": count}, "获取成功", c)

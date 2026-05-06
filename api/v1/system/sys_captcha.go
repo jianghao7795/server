@@ -8,7 +8,6 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/mojocn/base64Captcha"
 	"github.com/wenlng/go-captcha/captcha"
-	"go.uber.org/zap"
 	"golang.org/x/image/font"
 )
 
@@ -36,8 +35,7 @@ func (b *BaseApi) Captcha(c fiber.Ctx) error {
 	// cp := base64Captcha.NewCaptcha(driver, store.UseWithCtx(c))   // v8下使用redis
 	newCaptcha := base64Captcha.NewCaptcha(driver, store)
 	if id, b64s, _, err := newCaptcha.Generate(); err != nil {
-		global.LOG.Error("验证码获取失败!", zap.Error(err))
-		return response.FailWithMessage("验证码获取失败", c)
+		return response.FailWithMessage("验证码获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(systemRes.SysCaptchaResponse{
 			CaptchaId:     id,
@@ -145,8 +143,7 @@ func (b *BaseApi) CaptchaImg(c fiber.Ctx) error {
 	capt.SetImageFontDistort(captcha.DistortLevel2)
 
 	if err != nil {
-		global.LOG.Error("验证码获取失败!", zap.Error(err))
-		return response.FailWithMessage("验证码获取失败", c)
+		return response.FailWithMessage("验证码获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(systemRes.SysCaptchaImgResponse{
 			CaptchaKey: key,

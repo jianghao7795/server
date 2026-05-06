@@ -3,14 +3,12 @@ package app
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/app"
 	commentReq "server/model/app/request"
 	"server/model/common/request"
 	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // CreateComment 创建评论
@@ -30,12 +28,10 @@ func (commentApi *CommentApi) CreateComment(c fiber.Ctx) error {
 	var commentData app.Comment
 	err := c.Bind().Body(&commentData)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err := commentService.CreateComment(&commentData); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithMessage("创建失败"+err.Error(), c)
+		return response.FailWithMessage("创建失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("创建成功", c)
 	}
@@ -57,12 +53,10 @@ func (commentApi *CommentApi) CreateComment(c fiber.Ctx) error {
 func (commentApi *CommentApi) DeleteComment(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败!", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	if err := commentService.DeleteComment(uint(id)); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithDetailed(err.Error(), "删除失败", c)
+		return response.FailWithDetailed(err.Error(), "删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -85,12 +79,10 @@ func (commentApi *CommentApi) DeleteCommentByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	err := c.Bind().Body(&IDS)
 	if err != nil {
-		global.LOG.Error("获取id组失败", zap.Error(err))
-		return response.FailWithMessage("获取id组失败", c)
+		return response.FailWithMessage("获取id组失败", 3, err, c)
 	}
 	if err := commentService.DeleteCommentByIds(IDS); err != nil {
-		global.LOG.Error("批量删除失败!", zap.Error(err))
-		return response.FailWithMessage("批量删除失败", c)
+		return response.FailWithMessage("批量删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("批量删除成功", c)
 	}
@@ -114,18 +106,15 @@ func (commentApi *CommentApi) UpdateComment(c fiber.Ctx) error {
 	var comment2 app.Comment
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败!", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	comment2.ID = uint(id)
 	err = c.Bind().Body(&comment2)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err = commentService.UpdateComment(&comment2); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败"+err.Error(), c)
+		return response.FailWithMessage("更新失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -146,12 +135,10 @@ func (commentApi *CommentApi) UpdateComment(c fiber.Ctx) error {
 func (commentApi *CommentApi) FindComment(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("未获取到id参数!", zap.Error(err))
-		return response.FailWithMessage("未获取到id参数", c)
+		return response.FailWithMessage("未获取到id参数", 3, err, c)
 	}
 	if comment, err := commentService.GetComment(id); err != nil {
-		global.LOG.Error("查询失败!", zap.Error(err))
-		return response.FailWithMessage("查询失败"+err.Error(), c)
+		return response.FailWithMessage("查询失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithData(comment, c)
 	}
@@ -180,8 +167,7 @@ func (commentApi *CommentApi) GetCommentList(c fiber.Ctx) error {
 		pageInfo.PageSize = 10
 	}
 	if list, total, err := commentService.GetCommentInfoList(&pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败"+err.Error(), c)
+		return response.FailWithMessage("获取失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -209,8 +195,7 @@ func (*CommentApi) GetCommentTreeList(c fiber.Ctx) error {
 	_ = c.Bind().Query(&pageInfo)
 
 	if list, total, err := commentService.GetCommentTreeList(&pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败"+err.Error(), c)
+		return response.FailWithMessage("获取失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -237,13 +222,11 @@ func (*CommentApi) PutLikeItOrDislike(c fiber.Ctx) error {
 	var likeIt app.Praise
 	err := c.Bind().Body(&likeIt)
 	if err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 
 	if err := commentService.PutLikeItOrDislike(&likeIt); err != nil {
-		global.LOG.Error("点赞失败!", zap.Error(err))
-		return response.FailWithDetailed(err, "点赞失败", c)
+		return response.FailWithDetailed(err.Error(), "点赞失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(likeIt, "点赞成功", c)
 	}

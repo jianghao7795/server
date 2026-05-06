@@ -13,7 +13,6 @@ import (
 	global "server/model"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -36,13 +35,12 @@ func (autoApi *AutoCodeApi) PreviewTemp(c fiber.Ctx) error {
 	var a system.AutoCodeStruct
 	_ = c.Bind().Body(&a)
 	if err := utils.Verify(a, utils.AutoCodeVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	a.PackageT = cases.Title(language.Dutch).String(a.Package)
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
-		global.LOG.Error("预览失败", zap.Error(err))
-		return response.FailWithMessage("预览失败： "+err.Error(), c)
+		return response.FailWithMessage("预览失败： "+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(fiber.Map{"autoCode": autoCode}, "预览成功", c)
 	}
@@ -64,12 +62,11 @@ func (autoApi *AutoCodeApi) CreateTemp(c fiber.Ctx) error {
 	var a system.AutoCodeStruct
 	_ = c.Bind().Body(&a)
 	if err := utils.Verify(a, utils.AutoCodeVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	var apiIds []uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {
-			global.LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
 			c.Set("success", "false")
 			c.Set("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
 		} else {
@@ -111,8 +108,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c fiber.Ctx) error {
 func (autoApi *AutoCodeApi) GetDB(c fiber.Ctx) error {
 	dbs, err := autoCodeService.Database().GetDB()
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(fiber.Map{"dbs": dbs}, "获取成功", c)
 	}
@@ -133,8 +129,7 @@ func (autoApi *AutoCodeApi) GetTables(c fiber.Ctx) error {
 	dbName := c.Query("dbName", global.CONFIG.Mysql.Dbname)
 	tables, err := autoCodeService.Database().GetTables(dbName)
 	if err != nil {
-		global.LOG.Error("查询table失败!", zap.Error(err))
-		return response.FailWithMessage("查询table失败", c)
+		return response.FailWithMessage("查询table失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(fiber.Map{"tables": tables}, "获取成功", c)
 	}
@@ -158,8 +153,7 @@ func (autoApi *AutoCodeApi) GetColumn(c fiber.Ctx) error {
 	var err error
 	columns, err = autoCodeService.Database().GetColumn(tableName, dbName)
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(fiber.Map{"columns": columns}, "获取成功", c)
 	}
@@ -181,12 +175,11 @@ func (autoApi *AutoCodeApi) CreatePackage(c fiber.Ctx) error {
 	var a system.SysAutoCode
 	_ = c.Bind().Body(&a)
 	if err := utils.Verify(a, utils.AutoPackageVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	err := autoCodeService.CreateAutoCode(&a)
 	if err != nil {
-		global.LOG.Error("创建成功!", zap.Error(err))
-		return response.FailWithMessage("创建失败", c)
+		return response.FailWithMessage("创建失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("创建成功", c)
 	}
@@ -206,8 +199,7 @@ func (autoApi *AutoCodeApi) CreatePackage(c fiber.Ctx) error {
 func (autoApi *AutoCodeApi) GetPackage(c fiber.Ctx) error {
 	pkgs, err := autoCodeService.GetPackage()
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(fiber.Map{"pkgs": pkgs}, "获取成功", c)
 	}
@@ -230,8 +222,7 @@ func (autoApi *AutoCodeApi) DelPackage(c fiber.Ctx) error {
 	_ = c.Bind().Query(&a)
 	err := autoCodeService.DelPackage(a)
 	if err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}

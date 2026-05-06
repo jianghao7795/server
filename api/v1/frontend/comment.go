@@ -3,12 +3,10 @@ package frontend
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/common/response"
 	"server/model/frontend"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type CommentApi struct{}
@@ -27,12 +25,10 @@ type CommentApi struct{}
 func (s *CommentApi) GetCommentByArticleId(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("articleId"))
 	if err != nil {
-		global.LOG.Error("获取articleId 失败!", zap.Error(err))
-		return response.FailWithMessage("获取articleId 失败", c)
+		return response.FailWithMessage("获取articleId 失败", 3, err, c)
 	}
 	if articleComment, err := commentServiceApp.GetCommentByArticleId(id); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(articleComment, "获取成功", c)
 	}
@@ -53,12 +49,10 @@ func (s *CommentApi) GetCommentByArticleId(c fiber.Ctx) error {
 func (s *CommentApi) CreatedComment(c fiber.Ctx) error {
 	var comment frontend.Comment
 	if err := c.Bind().Body(&comment); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := commentServiceApp.CreatedComment(&comment); err != nil {
-		global.LOG.Error("评论失败!", zap.Error(err))
-		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "评论失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "评论失败", 3, err, c)
 	} else {
 		return response.OkWithId("评论成功", comment.ID, c)
 	}

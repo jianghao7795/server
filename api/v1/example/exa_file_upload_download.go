@@ -16,7 +16,6 @@ import (
 	exampleRes "server/model/example/response"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // UploadFile 上传文件示例
@@ -39,16 +38,13 @@ func (u *FileUploadAndDownloadApi) UploadFile(c fiber.Ctx) error {
 	noSave := c.Query("noSave", "0")
 	isCropper, err := strconv.Atoi(c.Query("is_cropper", "1"))
 	if err != nil {
-		global.LOG.Error("获取是否为裁剪图片失败", zap.Error(err))
 	}
 	fileImages, err := c.FormFile("file")
 	if err != nil {
-		global.LOG.Error("接收文件失败!", zap.Error(err))
-		return response.FailWithMessage("接收文件失败", c)
+		return response.FailWithMessage("接收文件失败", 3, err, c)
 	}
 	if fileImages.Size > global.CONFIG.Local.Size*1024*1024 {
-		global.LOG.Error("文件大小超过10M!")
-		return response.FailWithMessage("文件大小超过10M", c)
+		return response.FailWithMessage("文件大小超过10M", 3, err, c)
 	} // 文件大小限制10M
 	header := c.Get("content-type")
 	if string(header) == "image/svg+xml" {
@@ -58,15 +54,13 @@ func (u *FileUploadAndDownloadApi) UploadFile(c fiber.Ctx) error {
 		fileDimension.Proportion = 2.00
 		file, err = fileUploadAndDownloadService.UploadFile(fileImages, noSave, &fileDimension, isCropper) // 文件上传后拿到文件路径
 		if err != nil {
-			global.LOG.Error("修改数据库链接失败!", zap.Error(err))
-			return response.FailWithMessage("修改数据库链接失败", c)
+			return response.FailWithMessage("修改数据库链接失败", 3, err, c)
 		}
 	} else {
 		reader, _ := fileImages.Open()
 		ct, _, err := image.Decode(reader)
 		if err != nil {
-			global.LOG.Error("获取文件失败!", zap.Error(err))
-			return response.FailWithMessage("获取文件失败", c)
+			return response.FailWithMessage("获取文件失败", 3, err, c)
 		}
 		fileCtx := ct.Bounds()
 		var fileDimension fileDimensionReq.FileDimension
@@ -76,8 +70,7 @@ func (u *FileUploadAndDownloadApi) UploadFile(c fiber.Ctx) error {
 
 		file, err = fileUploadAndDownloadService.UploadFile(fileImages, noSave, &fileDimension, isCropper) // 文件上传后拿到文件路径
 		if err != nil {
-			global.LOG.Error("修改数据库链接失败!", zap.Error(err))
-			return response.FailWithMessage("修改数据库链接失败"+err.Error(), c)
+			return response.FailWithMessage("修改数据库链接失败"+err.Error(), 3, err, c)
 		}
 
 		defer reader.Close()
@@ -102,12 +95,10 @@ func (u *FileUploadAndDownloadApi) UploadFile(c fiber.Ctx) error {
 func (u *FileUploadAndDownloadApi) EditFileName(c fiber.Ctx) error {
 	var data example.ExaFileUploadAndDownload
 	if err := c.Bind().Body(&data); err != nil {
-		global.LOG.Error("获取文件失败!", zap.Error(err))
-		return response.FailWithMessage("获取文件失败"+err.Error(), c)
+		return response.FailWithMessage("获取文件失败"+err.Error(), 3, err, c)
 	}
 	if err := fileUploadAndDownloadService.EditFileName(&data); err != nil {
-		global.LOG.Error("编辑失败!", zap.Error(err))
-		return response.FailWithMessage("编辑失败"+err.Error(), c)
+		return response.FailWithMessage("编辑失败"+err.Error(), 3, err, c)
 	}
 	return response.OkWithMessage("编辑成功", c)
 }
@@ -128,12 +119,10 @@ func (u *FileUploadAndDownloadApi) EditFileName(c fiber.Ctx) error {
 func (u *FileUploadAndDownloadApi) DeleteFile(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败!", zap.Error(err))
-		return response.FailWithMessage("获取id失败"+err.Error(), c)
+		return response.FailWithMessage("获取id失败"+err.Error(), 3, err, c)
 	}
 	if err := fileUploadAndDownloadService.DeleteFile(uint(id)); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithDetailed(err.Error(), "删除失败", c)
+		return response.FailWithDetailed(err.Error(), "删除失败", 3, err, c)
 	}
 	return response.OkWithMessage("删除成功", c)
 }
@@ -154,8 +143,7 @@ func (u *FileUploadAndDownloadApi) GetFileList(c fiber.Ctx) error {
 	_ = c.Bind().Query(&pageInfo)
 	list, total, err := fileUploadAndDownloadService.GetFileRecordInfoList(&pageInfo)
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败"+err.Error(), c)
+		return response.FailWithMessage("获取失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,

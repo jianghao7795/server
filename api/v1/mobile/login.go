@@ -1,17 +1,14 @@
 package mobile
 
 import (
-	"errors"
 	"strconv"
 
-	global "server/model"
 	"server/model/common/response"
 	"server/model/mobile"
 	"server/model/mobile/request"
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type LoginApi struct{}
@@ -31,16 +28,14 @@ type LoginApi struct{}
 func (*LoginApi) Login(c fiber.Ctx) error {
 	var l mobile.Login
 	if err := c.Bind().Body(&l); err != nil {
-		global.LOG.Error("获取登录数据失败", zap.Error(err))
-		return response.FailWithMessage("获取登录数据失败", c)
+		return response.FailWithMessage("获取登录数据失败", 3, err, c)
 	}
 	if err := utils.Verify(l, utils.MobileLoginVerify); err != nil { // 验证用户密码的规则
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	loginResponse, err := loginService.Login(&l)
 	if err != nil {
-		global.LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
-		return response.FailWithMessage400("用户名不存在或者密码错误", c)
+		return response.FailWithMessage400("用户名不存在或者密码错误", 3, err, c)
 	} else {
 		return response.OkWithDetailed(loginResponse, "登录成功", c)
 	}
@@ -61,13 +56,11 @@ func (*LoginApi) Login(c fiber.Ctx) error {
 func (*LoginApi) GetUserInfo(c fiber.Ctx) error {
 	authorization := c.Get("user_id", "")
 	if authorization == "" {
-		global.LOG.Error("获取user_id失败!", zap.Error(errors.New("失败")))
-		return response.FailWithMessage400("获取失败", c)
+		return response.FailWithMessage400("获取失败", 3, nil, c)
 	}
 	authorityId, _ := strconv.Atoi(authorization)
 	if user, err := loginService.GetUserInfo(uint(authorityId)); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage400("获取失败", c)
+		return response.FailWithMessage400("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(user, "获取成功", c)
 	}
@@ -90,22 +83,18 @@ func (*LoginApi) GetUserInfo(c fiber.Ctx) error {
 func (*LoginApi) UpdateMobileUser(c fiber.Ctx) error {
 	var data request.MobileUpdate
 	if err := c.Bind().Body(&data); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	authorization := c.Get("user_id", "") // user_id 在请求头信息中
 
 	if authorization == "" {
-		global.LOG.Error("获取User_id 失败")
-		return response.FailWithDetailed400(fiber.Map{"id": 0}, "更新失败", c)
+		return response.FailWithDetailed400(fiber.Map{"id": 0}, "更新失败", 3, nil, c)
 	} else {
 		authId, _ := strconv.Atoi(authorization)
 		if authId == 0 {
-			global.LOG.Error("user_id 转化错误")
 		}
 		if err := loginService.UpdateUser(&data, uint(authId)); err != nil {
-			global.LOG.Error("更新用户失败!", zap.Error(err))
-			return response.FailWithMessage("更新用户失败", c)
+			return response.FailWithMessage("更新用户失败", 3, err, c)
 		} else {
 			return response.OkWithDetailed(data, "更新成功", c)
 		}
@@ -128,17 +117,15 @@ func (*LoginApi) UpdateMobileUser(c fiber.Ctx) error {
 func (*LoginApi) UpdatePassword(c fiber.Ctx) error {
 	var data request.MobileUpdatePassword
 	if err := c.Bind().Body(&data); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 
 	if err := utils.Verify(data, utils.MobileUpdatePasswordVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 
 	if err := loginService.UpdatePassword(data); err != nil {
-		global.LOG.Error("更新密码失败!", zap.Error(err))
-		return response.FailWithMessage("更新用户密码失败", c)
+		return response.FailWithMessage("更新用户密码失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(data.NewPassword, "更新成功", c)
 	}

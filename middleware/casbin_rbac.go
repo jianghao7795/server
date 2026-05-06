@@ -14,7 +14,7 @@ var casbinService = new(service.CasbinService)
 func CasbinHandler(c fiber.Ctx) error {
 	waitUse, err := utils.GetClaims(c)
 	if err != nil {
-		return response.FailWithMessage401("token 错误", c)
+		return response.FailWithMessage401("token 错误", 3, err, c)
 	}
 	// 获取请求的PATH
 	obj := c.Path()
@@ -28,12 +28,12 @@ func CasbinHandler(c fiber.Ctx) error {
 	// log.Println("error is ", err, success, obj, act, sub)
 	// if global.CONFIG.System.Env == "develop" || success {
 	if err != nil {
-		return response.FailWithMessage403("验证失败", c)
+		return response.FailWithMessage403("验证失败", 3, err, c)
 	}
 	if success {
 		return c.Next()
 	} else {
 		// 上传文件 由于是ajxs 必须返回403 错误 才能展示错误信息
-		return response.FailWithMessage403("权限不足", c)
+		return response.FailWithMessage403("权限不足", 3, nil, c)
 	}
 }

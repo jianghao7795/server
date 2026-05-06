@@ -48,15 +48,12 @@ func main() {
 	defer cancel()
 
 	if err := app.ShutdownWithContext(ctx); err != nil {
-		global.LOG.Error("Server Shutdown: ", zap.Error(err))
 		os.Exit(1)
 	}
-	global.LOG.Info("Server exiting")
 }
 
 func runServer(app *fiber.App) {
 	address := fmt.Sprintf(":%d", global.CONFIG.System.Addr)
-	global.LOG.Info("server run success on ", zap.String("address", address))
 	log.Println(`Welcome to Fiber API`)
 
 	// if global.DB != nil {
@@ -73,7 +70,6 @@ func runServer(app *fiber.App) {
 
 	err := app.Listen(address)
 	if err != nil {
-		global.LOG.Error("Server run failed: " + err.Error())
 		os.Exit(1)
 	}
 }

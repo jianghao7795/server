@@ -5,7 +5,6 @@ import (
 	"mime/multipart"
 	"strconv"
 
-	global "server/model"
 	"server/model/common/response"
 	"server/model/example"
 	"server/model/example/request"
@@ -14,7 +13,6 @@ import (
 	exampleRes "server/model/example/response"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // BreakpointContinue @Tags ExaFileUploadAndDownload
@@ -32,49 +30,40 @@ func (u *FileUploadAndDownloadApi) BreakpointContinue(c fiber.Ctx) error {
 	var breakpoint example.ExaFileData
 	err := c.Bind().Body(&breakpoint)
 	if err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	breakpoint.FileHeader, err = c.FormFile("file")
 	if err != nil {
-		global.LOG.Error("接收文件失败!", zap.Error(err))
-		return response.FailWithMessage("接收文件失败: "+err.Error(), c)
+		return response.FailWithMessage("接收文件失败: "+err.Error(), 3, err, c)
 	}
 	f, err := breakpoint.FileHeader.Open()
 	if err != nil {
-		global.LOG.Error("文件读取失败!", zap.Error(err))
-		return response.FailWithMessage("文件读取失败"+err.Error(), c)
+		return response.FailWithMessage("文件读取失败"+err.Error(), 3, err, c)
 	}
 	defer func(f multipart.File) {
 		err := f.Close()
 		if err != nil {
-			global.LOG.Error("文件关闭失败!", zap.Error(err))
 		}
 	}(f)
 
 	cen, err := ioutil.ReadAll(f)
 	if err != nil {
-		global.LOG.Error("文件分段读取失败!", zap.Error(err))
-		return response.FailWithMessage("文件分段读取失败", c)
+		return response.FailWithMessage("文件分段读取失败", 3, err, c)
 	}
 	if !utils.CheckMd5(cen, breakpoint.ChunkMd5) {
-		global.LOG.Error("检查md5失败!", zap.Error(err))
-		return response.FailWithMessage("检查md5失败", c)
+		return response.FailWithMessage("检查md5失败", 3, err, c)
 	}
 	file, err := fileUploadAndDownloadService.FindOrCreateFile(breakpoint.FileMd5, breakpoint.FileName, breakpoint.ChunkTotal)
 	if err != nil {
-		global.LOG.Error("查找或创建记录失败!", zap.Error(err))
-		return response.FailWithMessage("查找或创建记录失败", c)
+		return response.FailWithMessage("查找或创建记录失败", 3, err, c)
 	}
 	paths, err := utils.BreakPointContinue(cen, breakpoint.FileName, breakpoint.ChunkNumber, breakpoint.ChunkTotal, breakpoint.FileMd5)
 	if err != nil {
-		global.LOG.Error("断点续传失败!", zap.Error(err))
-		return response.FailWithMessage("断点续传失败: "+err.Error(), c)
+		return response.FailWithMessage("断点续传失败: "+err.Error(), 3, err, c)
 	}
 
 	if err = fileUploadAndDownloadService.CreateFileChunk(file.ID, paths, breakpoint.ChunkNumber); err != nil {
-		global.LOG.Error("创建文件记录失败!", zap.Error(err))
-		return response.FailWithMessage("创建文件记录失败: "+err.Error(), c)
+		return response.FailWithMessage("创建文件记录失败: "+err.Error(), 3, err, c)
 	}
 	return response.OkWithMessage("切片创建成功", c)
 }
@@ -95,13 +84,11 @@ func (u *FileUploadAndDownloadApi) FindFile(c fiber.Ctx) error {
 	fileName := c.Query("fileName")
 	chunkTotal, _ := strconv.Atoi(c.Query("chunkTotal", "0"))
 	if chunkTotal == 0 {
-		global.LOG.Error("获取文件大小失败")
-		return response.FailWithMessage("获取文件大小失败", c)
+		return response.FailWithMessage("获取文件大小失败", 3, nil, c)
 	}
 	file, err := fileUploadAndDownloadService.FindOrCreateFile(fileMd5, fileName, chunkTotal)
 	if err != nil {
-		global.LOG.Error("查找失败!", zap.Error(err))
-		return response.FailWithMessage("查找失败: "+err.Error(), c)
+		return response.FailWithMessage("查找失败: "+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(exampleRes.FileResponse{File: file}, "查找成功", c)
 	}
@@ -123,19 +110,17 @@ func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c fiber.Ctx) error {
 	// filepath := c.Body("filePath")
 	err := c.Bind().Body(&file)
 	if err != nil {
-		global.LOG.Error("获取文件信息错误", zap.Error(err))
-		return response.FailWithMessage("获取文件信息错误: "+err.Error(), c)
+		return response.FailWithMessage("获取文件信息错误: "+err.Error(), 3, err, c)
 	}
 	// log.Println("filename: ", file.FileName, " fileMd5: ", file.FileMd5)
 	filePath, err := utils.MakeFile(file.FileName, file.FileMd5)
 	if err != nil {
-		global.LOG.Error("文件创建失败!", zap.Error(err))
-		return response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "文件创建失败", c)
+		return response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "文件创建失败", 3, err, c)
 	}
 	// err = fileUploadAndDownloadService.DeleteFileChunk(file.FileMd5, file.FileName, filePath)
 	// if err != nil {
 	// 	global.LOG.Error("删除切片失败", zap.Error(err))
-	// 	return response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "删除切片失败", c)
+	// 	return response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "删除切片失败", nil, c)
 	// }
 
 	return response.OkWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "文件创建成功", c)
@@ -156,18 +141,15 @@ func (u *FileUploadAndDownloadApi) RemoveChunk(c fiber.Ctx) error {
 	var file example.ExaFile
 	err := c.Bind().Body(&file)
 	if err != nil {
-		global.LOG.Error("获取切片信息失败!", zap.Error(err))
-		return response.FailWithMessage("缓存切片删除失败", c)
+		return response.FailWithMessage("缓存切片删除失败", 3, err, c)
 	}
 	err = utils.RemoveChunk(file.FileMd5)
 	if err != nil {
-		global.LOG.Error("缓存切片文件删除失败!", zap.Error(err))
-		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "缓存切片文件删除失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "缓存切片文件删除失败", 3, err, c)
 	}
 	err = fileUploadAndDownloadService.DeleteFileChunk(file.FileMd5, file.FileName, file.FilePath)
 	if err != nil {
-		global.LOG.Error(err.Error(), zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("表缓存切片删除成功", c)
 	}
@@ -189,8 +171,7 @@ func (u *FileUploadAndDownloadApi) FindFileBreakpoint(c fiber.Ctx) error {
 	pageSize, _ := strconv.Atoi(c.Query("pageSize", "10"))
 	file, total, err := fileUploadAndDownloadService.FindFileBreakpoint(page, pageSize)
 	if err != nil {
-		global.LOG.Error("查找失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败: "+err.Error(), c)
+		return response.FailWithMessage("获取失败: "+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     file,
@@ -215,13 +196,11 @@ func (u *FileUploadAndDownloadApi) FindFileBreakpoint(c fiber.Ctx) error {
 func (u *FileUploadAndDownloadApi) DeleteFileBreakpoint(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败!", zap.Error(err))
-		return response.FailWithMessage("获取id失败: "+err.Error(), c)
+		return response.FailWithMessage("获取id失败: "+err.Error(), 3, err, c)
 	}
 	err = fileUploadAndDownloadService.DeleteFileBreakpoint(id)
 	if err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败: "+err.Error(), c)
+		return response.FailWithMessage("删除失败: "+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("删除失败", c)
 	}

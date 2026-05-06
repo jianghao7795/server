@@ -31,7 +31,7 @@ func getJWTMiddleware() fiber.Handler {
 		// 关键：不要在包初始化阶段捕获 Key（那时 RunCONFIG 还没被 viperInit 赋值）
 		if global.RunCONFIG.JWT.PublicKey == nil {
 			jwtMiddleware = func(c fiber.Ctx) error {
-				return response.FailWithMessage403("JWT 公钥未初始化", c)
+				return response.FailWithMessage403("JWT 公钥未初始化", 3, nil, c)
 			}
 			return
 		}
@@ -53,16 +53,16 @@ func getJWTMiddleware() fiber.Handler {
 				} else if err != nil && err.Error() != "" {
 					msg = err.Error()
 				}
-				return response.FailWithDetailed401(fiber.Map{"reload": true}, msg, c)
+				return response.FailWithDetailed401(fiber.Map{"reload": true}, msg, err, c)
 			},
 			SuccessHandler: func(c fiber.Ctx) error {
 				rawToken := c.Get("Authorization", "")
 				tokenStr := strings.TrimPrefix(strings.TrimSpace(rawToken), "Bearer ")
 				if tokenStr == "" {
-					return response.FailWithDetailed401(fiber.Map{"reload": true}, "未登录或非法访问", c)
+					return response.FailWithDetailed401(fiber.Map{"reload": true}, "未登录或非法访问", nil, c)
 				}
 				if jwtService.IsBlacklist(tokenStr) {
-					return response.FailWithDetailed401(fiber.Map{"reload": true}, "您的帐户异地登陆或令牌失效", c)
+					return response.FailWithDetailed401(fiber.Map{"reload": true}, "您的帐户异地登陆或令牌失效", nil, c)
 				}
 				token := jwtware.FromContext(c)
 				if token != nil && token.Valid {

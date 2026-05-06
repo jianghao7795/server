@@ -3,7 +3,6 @@ package app
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/app"
 	appReq "server/model/app/request"
 	"server/model/common/request"
@@ -11,7 +10,6 @@ import (
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // CreateArticle 创建文章
@@ -56,14 +54,12 @@ func (a *ArticleApi) CreateArticle(c fiber.Ctx) error {
 func (*ArticleApi) DeleteArticle(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil || id <= 0 {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	if err := articleService.DeleteArticle(uint(id)); err != nil {
-		global.LOG.Error("删除失败", zap.Error(err))
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
-		}, "删除失败", c)
+		}, "删除失败", 3, err, c)
 
 	}
 	return response.OkWithMessage("删除成功", c)
@@ -86,14 +82,12 @@ func (a *ArticleApi) DeleteArticleByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	err := c.Bind().Body(&IDS)
 	if err != nil {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	if err := articleService.DeleteArticleByIds(IDS); err != nil {
-		global.LOG.Error("批量删除失败!", zap.Error(err))
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
-		}, "批量删除失败", c)
+		}, "批量删除失败", 3, err, c)
 
 	}
 	return response.OkWithMessage("批量删除成功", c)
@@ -117,21 +111,19 @@ func (*ArticleApi) UpdateArticle(c fiber.Ctx) error {
 	var article app.Article
 	err := c.Bind().Body(&article)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败: "+err.Error(), c)
+		return response.FailWithMessage("获取数据失败: "+err.Error(), 3, err, c)
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil || id <= 0 {
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
-		}, err.Error(), c)
+		}, err.Error(), 3, err, c)
 	}
 	article.ID = uint(id)
 	if err := articleService.UpdateArticle(&article); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
-		}, "更新失败", c)
+		}, "更新失败", 3, err, c)
 
 	}
 	return response.OkWithMessage("更新成功", c)
@@ -152,14 +144,12 @@ func (*ArticleApi) UpdateArticle(c fiber.Ctx) error {
 func (*ArticleApi) FindArticle(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil || id <= 0 {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("获取id失败: "+err.Error(), c)
+		return response.FailWithMessage("获取id失败: "+err.Error(), 3, err, c)
 	}
 	if articles, err := articleService.GetArticle(uint(id)); err != nil {
-		global.LOG.Error("查询失败!", zap.Error(err))
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
-		}, "查询失败", c)
+		}, "查询失败", 3, err, c)
 	} else {
 		return response.OkWithData(articles, c)
 	}
@@ -187,10 +177,9 @@ func (*ArticleApi) GetArticleList(c fiber.Ctx) error {
 	pageInfo.IsImportant, _ = strconv.Atoi(IsImportant)
 	// log.Println("origin: ", c.Get("Origin"))
 	if list, total, err := articleService.GetArticleInfoList(&pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
-		}, "获取失败", c)
+		}, "获取失败", 3, err, c)
 
 	} else {
 		return response.OkWithDetailed(response.PageResult{
@@ -219,14 +208,12 @@ func (*ArticleApi) PutArticleByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	if err := c.Bind().Body(&IDS); err != nil {
 		// log.Println("ids 获取失败")
-		global.LOG.Fatal("ids 获取失败", zap.Error(err))
-		return response.FailWithMessage("ids 获取失败", c)
+		return response.FailWithMessage("ids 获取失败", 3, err, c)
 	}
 	if err := articleService.PutArticleByIds(&IDS); err != nil {
-		global.LOG.Error("批量更新失败!", zap.Error(err))
 		return response.FailWithDetailed(map[string]string{
 			"msg": err.Error(),
-		}, "批量更新失败", c)
+		}, "批量更新失败", 3, err, c)
 
 	} else {
 		return response.OkWithMessage("批量更新成功", c)
@@ -254,10 +241,9 @@ func (*ArticleApi) GetArticleReading(c fiber.Ctx) error {
 	}
 	count, err := articleService.GetArticleReading(id)
 	if err != nil {
-		global.LOG.Error("获取阅读量失败!", zap.Error(err))
 		return response.FailWithDetailed(fiber.Map{
 			"msg": err.Error(),
-		}, "获取阅读量失败", c)
+		}, "获取阅读量失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(fiber.Map{"reading_quantity": count}, "获取成功", c)
 	}

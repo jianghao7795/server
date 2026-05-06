@@ -4,13 +4,11 @@ import (
 	"errors"
 	"strconv"
 
-	global "server/model"
 	"server/model/common/response"
 	modelFrontend "server/model/frontend"
 	"server/model/frontend/request"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -35,7 +33,7 @@ func (s *ArticleApi) GetArticleList(c fiber.Ctx) error {
 	var pageInfo request.ArticleSearch
 	err := c.Bind().Query(&pageInfo)
 	if err != nil {
-		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "参数错误", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "参数错误", 3, err, c)
 	}
 	// log.Println("is_promint: ", pageInfo.IsImportant)
 	if pageInfo.Page == 0 {
@@ -50,8 +48,7 @@ func (s *ArticleApi) GetArticleList(c fiber.Ctx) error {
 	var total int64
 	list, total, err = articleServiceApp.GetArticleList(&pageInfo, c)
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -77,17 +74,15 @@ func (s *ArticleApi) GetArticleList(c fiber.Ctx) error {
 func (s *ArticleApi) GetArticleDetail(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取Id失败!", zap.Error(err))
-		return response.FailWithMessage("获取Id失败", c)
+		return response.FailWithMessage("获取Id失败", 3, err, c)
 
 	}
 	articleDetail, err := articleServiceApp.GetArticleDetail(id, c)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return response.FailWithMessage("文章没有，请重新查询", c)
+		return response.FailWithMessage("文章没有，请重新查询", 3, err, c)
 	}
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", 3, err, c)
 
 	} else {
 		return response.OkWithData(articleDetail, c)
@@ -111,15 +106,13 @@ func (s *ArticleApi) GetSearchArticle(c fiber.Ctx) error {
 	var searchValue request.ArticleSearch
 	err := c.Bind().Query(&searchValue)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取数据失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取数据失败", 3, err, c)
 	}
 	if searchValue.Name != "tags" && searchValue.Name != "articles" {
-		return response.FailWithDetailed(fiber.Map{"msg": "查询的不是tag 或 article"}, "查询的不是tag 或 article", c)
+		return response.FailWithDetailed(fiber.Map{"msg": "查询的不是tag 或 article"}, "查询的不是tag 或 article", 3, nil, c)
 	}
 	if list, err := articleServiceApp.GetSearchArticle(&searchValue); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", c)
+		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List: list,

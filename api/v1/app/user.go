@@ -1,17 +1,14 @@
 package app
 
 import (
-	"errors"
 	"strconv"
 
-	global "server/model"
 	"server/model/app"
 	appReq "server/model/app/request"
 	"server/model/common/request"
 	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // CreateUser 创建用户
@@ -31,12 +28,10 @@ func (userApi *UserApi) CreateUser(c fiber.Ctx) error {
 	var user app.User
 	err := c.Bind().Body(&user)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err := userService.CreateUser(&user); err != nil {
-		global.LOG.Error(err.Error(), zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	} else {
 		return response.OkWithId("创建成功", user.ID, c)
 	}
@@ -58,12 +53,10 @@ func (userApi *UserApi) CreateUser(c fiber.Ctx) error {
 func (userApi *UserApi) DeleteUser(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败!", zap.Error(err))
-		return response.FailWithMessage("获取id失败，传正确的id", c)
+		return response.FailWithMessage("获取id失败，传正确的id", 3, err, c)
 	}
 	if err := userService.DeleteUser(id); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败"+err.Error(), c)
+		return response.FailWithMessage("删除失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -86,12 +79,10 @@ func (userApi *UserApi) DeleteUserByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	err := c.Bind().Body(&IDS)
 	if err != nil {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	if err := userService.DeleteUserByIds(IDS); err != nil {
-		global.LOG.Error("批量删除失败!", zap.Error(err))
-		return response.FailWithMessage("批量删除失败"+err.Error(), c)
+		return response.FailWithMessage("批量删除失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("批量删除成功", c)
 	}
@@ -115,24 +106,20 @@ func (userApi *UserApi) UpdateUser(c fiber.Ctx) error {
 	var user app.User
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	var notFound bool
 	notFound, err = userService.FindIsUser(id)
 	if notFound && err != nil {
-		global.LOG.Error("未找到，该用户!", zap.Error(errors.New("未找到，该用户")))
-		return response.FailWithMessage("未找到，该用户", c)
+		return response.FailWithMessage("未找到，该用户", 3, err, c)
 	}
 	err = c.Bind().Body(&user)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败"+err.Error(), c)
+		return response.FailWithMessage("获取数据失败"+err.Error(), 3, err, c)
 	}
 	user.ID = uint(id)
 	if err := userService.UpdateUser(&user); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败"+err.Error(), c)
+		return response.FailWithMessage("更新失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -153,12 +140,10 @@ func (userApi *UserApi) UpdateUser(c fiber.Ctx) error {
 func (userApi *UserApi) FindUser(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	if user, err := userService.GetUser(uint(id)); err != nil {
-		global.LOG.Error("查询失败!", zap.Error(err))
-		return response.FailWithMessage("查询失败"+err.Error(), c)
+		return response.FailWithMessage("查询失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithData(user, c)
 	}
@@ -180,8 +165,7 @@ func (userApi *UserApi) GetUserList(c fiber.Ctx) error {
 	var pageInfo appReq.UserSearch
 	_ = c.Bind().Query(&pageInfo)
 	if list, total, err := userService.GetUserInfoList(&pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败"+err.Error(), c)
+		return response.FailWithMessage("获取失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,

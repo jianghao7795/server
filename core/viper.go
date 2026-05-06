@@ -100,7 +100,7 @@ func viperInit() (*viper.Viper, error) {
 	// config 变动之后的回调
 	v.OnConfigChange(func(e fsnotify.Event) {
 		if err := v.Unmarshal(&global.CONFIG); err != nil {
-			global.LOG.Error("config change error: ", zap.Error(err))
+			global.LOG.Error("配置文件变动失败", zap.Error(err))
 		}
 	})
 	if err := v.Unmarshal(&global.CONFIG); err != nil {

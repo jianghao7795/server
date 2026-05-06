@@ -39,9 +39,7 @@ func initConfig() {
 	db, err := init_load.Gorm() // gorm连接数据库
 	if err == nil {
 		global.DB = db
-		global.LOG.Info("Database connection success", zap.String("port", global.CONFIG.Mysql.Port))
 	} else {
-		global.LOG.Error("The database connection failed: " + err.Error())
 		os.Exit(1)
 	}
 	init_load.Timer() // 定时 执行任务
@@ -53,7 +51,6 @@ func initConfig() {
 	if global.CONFIG.System.UseMultipoint || global.CONFIG.System.UseRedis {
 		err = init_load.Redis()
 		if err != nil {
-			global.LOG.Error("Redis init failed: " + err.Error())
 			os.Exit(1)
 		}
 	}
@@ -70,11 +67,9 @@ func runServerElectron(app *fiber.App) {
 	routerApp := init_load.Routers(app, appRouter, systemRouter, exampleRouter, frontendRouter, mobileRouter)
 	router := routerApp
 	address := fmt.Sprintf(":%d", global.CONFIG.System.Addr)
-	global.LOG.Info("server run success on ", zap.String("address", address))
 	log.Println(`Welcome to Fiber API`)
 	err := router.Listen(address)
 	if err != nil {
-		global.LOG.Error("Server run failed: " + err.Error())
 		os.Exit(1)
 	}
 
@@ -86,7 +81,6 @@ func runServerElectron(app *fiber.App) {
 		defer func(db *sql.DB) {
 			err := db.Close()
 			if err != nil {
-				global.LOG.Error("数据库关闭失败: " + err.Error())
 			}
 		}(db)
 	}
@@ -106,8 +100,6 @@ func RunServer() {
 	defer cancel()
 
 	if err := app.ShutdownWithContext(ctx); err != nil {
-		global.LOG.Error("Server Shutdown: ", zap.Error(err))
 		os.Exit(1)
 	}
-	global.LOG.Info("Server exiting")
 }

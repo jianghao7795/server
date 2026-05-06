@@ -1,13 +1,11 @@
 package api
 
 import (
-	global "server/model"
 	"server/model/common/response"
 	email_response "server/plugin/email/model/response"
 	"server/plugin/email/service"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type EmailApi struct{}
@@ -20,8 +18,7 @@ type EmailApi struct{}
 // @Router /email/emailTest [post]
 func (s *EmailApi) EmailTest(c fiber.Ctx) error {
 	if err := service.ServiceGroupApp.EmailTest(); err != nil {
-		global.LOG.Error("发送失败!", zap.Error(err))
-		return response.FailWithMessage("发送失败", c)
+		return response.FailWithMessage("发送失败", 3, err, c)
 	} else {
 		return response.OkWithData("发送成功", c)
 	}
@@ -38,8 +35,7 @@ func (s *EmailApi) SendEmail(c fiber.Ctx) error {
 	var email email_response.Email
 	_ = c.Bind().Body(&email)
 	if err := service.ServiceGroupApp.SendEmail(email.To, email.Subject, email.Body); err != nil {
-		global.LOG.Error("发送失败!", zap.Error(err))
-		return response.FailWithMessage("发送失败", c)
+		return response.FailWithMessage("发送失败", 3, err, c)
 	} else {
 		return response.OkWithData("发送成功", c)
 	}

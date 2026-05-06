@@ -50,7 +50,7 @@ func CorsByRules(c fiber.Ctx) error {
 
 	// 严格白名单模式且未通过检查，直接拒绝处理请求
 	if whitelist == nil && global.CONFIG.Cors.Mode == "strict-whitelist" {
-		return response.FailWithMessage403("域名拒绝访问", c)
+		return response.FailWithMessage403("域名拒绝访问", 3, nil, c)
 	} else {
 		// 非严格白名单模式，无论是否通过检查均放行所有 OPTIONS 方法
 		if c.Method() == "OPTIONS" {

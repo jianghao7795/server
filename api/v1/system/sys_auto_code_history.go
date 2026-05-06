@@ -1,14 +1,12 @@
 package system
 
 import (
-	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	systemReq "server/model/system/request"
 	systemRes "server/model/system/response"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type AutoCodeHistoryApi struct{}
@@ -30,7 +28,7 @@ func (a *AutoCodeHistoryApi) First(c fiber.Ctx) error {
 	_ = c.Bind().Query(&info)
 	data, err := autoCodeHistoryService.First(&info)
 	if err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	return response.OkWithDetailed(data, "获取成功", c)
 }
@@ -52,8 +50,7 @@ func (a *AutoCodeHistoryApi) Delete(c fiber.Ctx) error {
 	_ = c.Bind().Query(&info)
 	err := autoCodeHistoryService.Delete(&info)
 	if err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	}
 	return response.OkWithMessage("删除成功", c)
 }
@@ -74,7 +71,7 @@ func (a *AutoCodeHistoryApi) RollBack(c fiber.Ctx) error {
 	var info systemReq.RollBack
 	_ = c.Bind().Query(&info)
 	if err := autoCodeHistoryService.RollBack(&info); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	return response.OkWithMessage("回滚成功", c)
 }
@@ -99,8 +96,7 @@ func (a *AutoCodeHistoryApi) GetList(c fiber.Ctx) error {
 	var err error
 	list, total, err = autoCodeHistoryService.GetList(search.PageInfo)
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	}
 	return response.OkWithDetailed(response.PageResult{
 		List:     list,

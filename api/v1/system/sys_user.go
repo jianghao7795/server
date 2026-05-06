@@ -13,7 +13,6 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/redis/go-redis/v9"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -32,25 +31,23 @@ import (
 func (b *BaseApi) Login(c fiber.Ctx) error {
 	var l systemReq.Login
 	if err := c.Bind().Body(&l); err != nil {
-		global.LOG.Error("参数解析失败!", zap.Error(err))
-		return response.FailWithMessage("参数错误", c)
+		return response.FailWithMessage("参数错误", 3, err, c)
 	}
 	if err := utils.Verify(l, utils.LoginVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if store.Verify(l.CaptchaId, l.Captcha, true) {
 		if user, err := userService.Login(l.Username, l.Password); err != nil {
-			global.LOG.Error(err.Error(), zap.Error(err))
 			errorMessage := err.Error()
 			if err == gorm.ErrRecordNotFound {
 				errorMessage = "账户或密码错误"
 			}
-			return response.FailWithMessage("登录失败："+errorMessage, c)
+			return response.FailWithMessage("登录失败："+errorMessage, 3, err, c)
 		} else {
 			return b.tokenNext(c, user)
 		}
 	} else {
-		return response.FailWithMessage("验证码错误", c)
+		return response.FailWithMessage("验证码错误", 3, nil, c)
 	}
 }
 
@@ -70,12 +67,11 @@ func (b *BaseApi) LoginToken(c fiber.Ctx) error {
 	var l systemReq.LoginToken
 	_ = c.Bind().Body(&l)
 	if err := utils.Verify(l, utils.TokenLoginVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	u := &system.SysUser{Username: l.Username, Password: l.Password}
 	if user, err := userService.LoginToken(u); err != nil {
-		global.LOG.Error(err.Error(), zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	} else {
 		return b.tokenNext(c, user)
 	}
@@ -93,8 +89,7 @@ func (b *BaseApi) tokenNext(c fiber.Ctx, user *system.SysUser) error {
 	})
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		global.LOG.Error(err.Error(), zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if !global.CONFIG.System.UseMultipoint {
 		return response.OkWithDetailed(systemRes.LoginResponse{
@@ -106,8 +101,7 @@ func (b *BaseApi) tokenNext(c fiber.Ctx, user *system.SysUser) error {
 
 	if jwtStr, err := jwtService.GetRedisJWT(user.Username); errors.Is(err, redis.Nil) {
 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-			global.LOG.Error("设置登录状态失败!", zap.Error(err))
-			return response.FailWithMessage("设置登录状态失败", c)
+			return response.FailWithMessage("设置登录状态失败", 3, err, c)
 		}
 		return response.OkWithDetailed(systemRes.LoginResponse{
 			User:      *user,
@@ -115,16 +109,15 @@ func (b *BaseApi) tokenNext(c fiber.Ctx, user *system.SysUser) error {
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix(),
 		}, "登录成功", c)
 	} else if err != nil {
-		global.LOG.Error("设置登录状态失败!", zap.Error(err))
-		return response.FailWithMessage("设置登录状态失败", c)
+		return response.FailWithMessage("设置登录状态失败", 3, err, c)
 	} else {
 		var blackJWT system.JwtBlacklist
 		blackJWT.Jwt = jwtStr
 		if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
-			return response.FailWithMessage("jwt作废失败", c)
+			return response.FailWithMessage("jwt作废失败", 3, err, c)
 		}
 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-			return response.FailWithMessage("设置登录状态失败", c)
+			return response.FailWithMessage("设置登录状态失败", 3, err, c)
 		}
 		return response.OkWithDetailed(systemRes.LoginResponse{
 			User:      *user,
@@ -148,7 +141,7 @@ func (b *BaseApi) Register(c fiber.Ctx) error {
 	var r systemReq.Register
 	_ = c.Bind().Body(&r)
 	if err := utils.Verify(r, utils.RegisterVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	var authorities []system.SysAuthority
 	for _, v := range r.AuthorityIds {
@@ -159,8 +152,7 @@ func (b *BaseApi) Register(c fiber.Ctx) error {
 	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities, Phone: r.Phone, Email: r.Email}
 	userReturn, err := userService.Register(user)
 	if err != nil {
-		global.LOG.Error("注册失败!", zap.Error(err))
-		return response.FailWithDetailed(systemRes.SysUserResponse{User: *userReturn}, "注册失败", c)
+		return response.FailWithDetailed(systemRes.SysUserResponse{User: *userReturn}, "注册失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(systemRes.SysUserResponse{User: *userReturn}, "注册成功", c)
 	}
@@ -181,12 +173,11 @@ func (b *BaseApi) ChangePassword(c fiber.Ctx) error {
 	var user systemReq.ChangePasswordStruct
 	_ = c.Bind().Body(&user)
 	if err := utils.Verify(user, utils.ChangePasswordVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	u := &system.SysUser{Username: user.Username, Password: user.Password}
 	if respUser, err := userService.ChangePassword(u, user.NewPassword); err != nil {
-		global.LOG.Error(respUser.Username+"修改失败!", zap.Error(err))
-		return response.FailWithMessage(respUser.Username+"修改失败，原密码与当前账户不符", c)
+		return response.FailWithMessage(respUser.Username+"修改失败，原密码与当前账户不符", 3, err, c)
 	} else {
 		return response.OkWithMessage(respUser.Username+"修改成功", c)
 	}
@@ -208,11 +199,10 @@ func (b *BaseApi) GetUserList(c fiber.Ctx) error {
 	var searchInfo systemReq.SearchInfo
 	_ = c.Bind().Query(&searchInfo)
 	if err := utils.Verify(searchInfo, utils.PageInfoVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if list, total, err := userService.GetUserInfoList(searchInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -240,20 +230,18 @@ func (b *BaseApi) SetUserAuthority(c fiber.Ctx) error {
 	var sua systemReq.SetUserAuth
 	_ = c.Bind().Body(&sua)
 	if UserVerifyErr := utils.Verify(sua, utils.SetUserAuthorityVerify); UserVerifyErr != nil {
-		return response.FailWithMessage(UserVerifyErr.Error(), c)
+		return response.FailWithMessage(UserVerifyErr.Error(), 3, UserVerifyErr, c)
 	}
 	userID, _ := utils.GetUserID(c)
 	uuid := utils.GetUserUuid(c)
 	if err := userService.SetUserAuthority(userID, uuid, sua.AuthorityId); err != nil {
-		global.LOG.Error("修改失败!", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	} else {
 		claims := utils.GetUserInfo(c)
 		j := utils.NewJWT() // 唯一签名
 		claims.AuthorityId = sua.AuthorityId
 		if token, err := j.CreateToken(*claims); err != nil {
-			global.LOG.Error("修改失败!", zap.Error(err))
-			return response.FailWithMessage(err.Error(), c)
+			return response.FailWithMessage(err.Error(), 3, err, c)
 		} else {
 			c.Set("new-token", token)
 			c.Set("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
@@ -280,8 +268,7 @@ func (b *BaseApi) SetUserAuthorities(c fiber.Ctx) error {
 	var sua systemReq.SetUserAuthorities
 	_ = c.Bind().Body(&sua)
 	if err := userService.SetUserAuthorities(sua.ID, sua.AuthorityIds); err != nil {
-		global.LOG.Error("修改失败!", zap.Error(err))
-		return response.FailWithMessage("修改失败", c)
+		return response.FailWithMessage("修改失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("修改成功", c)
 	}
@@ -305,11 +292,10 @@ func (b *BaseApi) DeleteUser(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	jwtId, _ := utils.GetUserID(c)
 	if jwtId == uint(id) {
-		return response.FailWithMessage("删除失败, 自杀失败", c)
+		return response.FailWithMessage("删除失败, 自杀失败", 3, nil, c)
 	}
 	if err := userService.DeleteUser(id); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -332,14 +318,13 @@ func (b *BaseApi) SetUserInfo(c fiber.Ctx) error {
 	var user systemReq.ChangeUserInfo
 	_ = c.Bind().Body(&user)
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 
 	if len(user.AuthorityIds) != 0 {
 		err := userService.SetUserAuthorities(user.ID, user.AuthorityIds)
 		if err != nil {
-			global.LOG.Error("设置失败!", zap.Error(err))
-			return response.FailWithMessage("设置失败", c)
+			return response.FailWithMessage("设置失败", 3, err, c)
 		}
 	}
 
@@ -352,8 +337,7 @@ func (b *BaseApi) SetUserInfo(c fiber.Ctx) error {
 		Phone:     user.Phone,
 		Email:     user.Email,
 	}); err != nil {
-		global.LOG.Error("设置失败!", zap.Error(err))
-		return response.FailWithMessage("设置失败", c)
+		return response.FailWithMessage("设置失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("设置成功", c)
 	}
@@ -384,8 +368,7 @@ func (b *BaseApi) SetSelfInfo(c fiber.Ctx) error {
 		Phone:     user.Phone,
 		Email:     user.Email,
 	}); err != nil {
-		global.LOG.Error("设置失败!", zap.Error(err))
-		return response.FailWithMessage("设置失败", c)
+		return response.FailWithMessage("设置失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("设置成功", c)
 	}
@@ -405,8 +388,7 @@ func (b *BaseApi) SetSelfInfo(c fiber.Ctx) error {
 func (b *BaseApi) GetUserInfo(c fiber.Ctx) error {
 	uuid := utils.GetUserUuid(c)
 	if ReqUser, err := userService.GetUserInfo(uuid); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(ReqUser, "获取成功", c)
 	}
@@ -427,8 +409,7 @@ func (b *BaseApi) ResetPassword(c fiber.Ctx) error {
 	var user system.SysUser
 	_ = c.Bind().Body(&user)
 	if err := userService.ResetPassword(user.ID); err != nil {
-		global.LOG.Error("重置失败!", zap.Error(err))
-		return response.FailWithMessage("重置失败"+err.Error(), c)
+		return response.FailWithMessage("重置失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("重置成功", c)
 	}
@@ -446,8 +427,7 @@ func (b *BaseApi) ResetPassword(c fiber.Ctx) error {
 // @Router /user/getUserCount [get]
 func (b *BaseApi) GetUserCount(c fiber.Ctx) error {
 	if userCount, err := userService.UserCount(); err != nil {
-		global.LOG.Error("获取总数失败!", zap.Error(err))
-		return response.FailWithMessage("获取总数失败"+err.Error(), c)
+		return response.FailWithMessage("获取总数失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(fiber.Map{"count": userCount}, "获取成功", c)
 	}

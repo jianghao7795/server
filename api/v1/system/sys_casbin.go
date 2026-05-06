@@ -1,13 +1,11 @@
 package system
 
 import (
-	global "server/model"
 	"server/model/common/response"
 	"server/model/system/request"
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type CasbinApi struct{}
@@ -28,15 +26,13 @@ type CasbinApi struct{}
 func (cas *CasbinApi) UpdateCasbin(c fiber.Ctx) error {
 	var cmr request.CasbinInReceive
 	if err := c.Bind().Body(&cmr); err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err := utils.Verify(cmr, utils.AuthorityIdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := casbinService.UpdateCasbin(cmr.AuthorityId, cmr.CasbinInfos); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败", c)
+		return response.FailWithMessage("更新失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -60,7 +56,7 @@ func (cas *CasbinApi) GetPolicyPathByAuthorityId(c fiber.Ctx) error {
 	_ = c.Bind().Query(&casbin)
 	casbin.AuthorityId = c.Params("id")
 	if err := utils.Verify(casbin, utils.AuthorityIdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	paths := casbinService.GetPolicyPathByAuthorityId(casbin.AuthorityId)
 	return response.OkWithDetailed(paths, "获取成功", c)

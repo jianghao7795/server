@@ -18,12 +18,12 @@ func JWTAuthMiddleware(c fiber.Ctx) error {
 	authHeader := c.Get("Authorization")
 	token := strings.Replace(authHeader, "Bearer ", "", 1)
 	if token == "" {
-		return response.FailWithMessage401("token 失效， 请重新登录", c)
+		return response.FailWithMessage401("token 失效， 请重新登录", 3, nil, c)
 	}
 	_, err := frontend.ParseToken(token)
 	// c.Locals("frontend_user", user)
 	if err != nil {
-		return response.FailWithMessage("token 失效， 请重新登录", c)
+		return response.FailWithMessage("token 失效， 请重新登录", 3, err, c)
 	}
 
 	return c.Next() //

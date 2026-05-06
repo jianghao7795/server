@@ -3,14 +3,12 @@ package mobile
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	"server/model/mobile"
 	mobileReq "server/model/mobile/request"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type UserApi struct{}
@@ -31,12 +29,10 @@ type UserApi struct{}
 func (userApi *UserApi) CreateMobileUser(c fiber.Ctx) error {
 	var mobileUser mobile.MobileUser
 	if err := c.Bind().Body(&mobileUser); err != nil {
-		global.LOG.Error("获取用户数据失败", zap.Error(err))
-		return response.FailWithMessage("获取用户数据失败", c)
+		return response.FailWithMessage("获取用户数据失败", 3, err, c)
 	}
 	if err := userService.CreateMobileUser(&mobileUser); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithMessage("创建失败", c)
+		return response.FailWithMessage("创建失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("创建成功", c)
 	}
@@ -58,8 +54,7 @@ func (userApi *UserApi) CreateMobileUser(c fiber.Ctx) error {
 func (userApi *UserApi) DeleteMobileUser(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if err := userService.DeleteMobileUser(uint(id)); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -81,12 +76,10 @@ func (userApi *UserApi) DeleteMobileUser(c fiber.Ctx) error {
 func (userApi *UserApi) DeleteMobileUserByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	if err := c.Bind().Body(&IDS); err != nil {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("批量获取id失败", c)
+		return response.FailWithMessage("批量获取id失败", 3, err, c)
 	}
 	if err := userService.DeleteMobileUserByIds(IDS); err != nil {
-		global.LOG.Error("批量删除失败!", zap.Error(err))
-		return response.FailWithMessage("批量删除失败", c)
+		return response.FailWithMessage("批量删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("批量删除成功", c)
 	}
@@ -108,12 +101,10 @@ func (userApi *UserApi) DeleteMobileUserByIds(c fiber.Ctx) error {
 func (userApi *UserApi) UpdateMobileUser(c fiber.Ctx) error {
 	var mobileUser mobile.MobileUser
 	if err := c.Bind().Body(&mobileUser); err != nil {
-		global.LOG.Error("获取用户信息失败", zap.Error(err))
-		return response.FailWithMessage("获取用户信息失败", c)
+		return response.FailWithMessage("获取用户信息失败", 3, err, c)
 	}
 	if err := userService.UpdateMobileUser(&mobileUser); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败", c)
+		return response.FailWithMessage("更新失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -134,12 +125,10 @@ func (userApi *UserApi) UpdateMobileUser(c fiber.Ctx) error {
 func (userApi *UserApi) FindMobileUser(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	if mobileUser, err := userService.GetMobileUser(uint(id)); err != nil {
-		global.LOG.Error("查询失败!", zap.Error(err))
-		return response.FailWithMessage("查询失败", c)
+		return response.FailWithMessage("查询失败", 3, err, c)
 	} else {
 		return response.OkWithData(mobileUser, c)
 	}
@@ -161,8 +150,7 @@ func (userApi *UserApi) GetMobileUserList(c fiber.Ctx) error {
 	var pageInfo mobileReq.MobileUserSearch
 	_ = c.Bind().Query(&pageInfo)
 	if list, total, err := userService.GetMobileUserInfoList(&pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,

@@ -24,14 +24,12 @@ import (
 func (*TaskNameApi) StartTasking(c fiber.Ctx) error {
 	tasking := c.Query("task")
 	if tasking == "" {
-		global.LOG.Error("请传入任务名!")
-		return response.FailWithMessage("请传入任务名", c)
+		return response.FailWithMessage("请传入任务名", 3, nil, c)
 	}
 	_, status := global.Timer.FindCron(tasking)
 
 	if !status {
-		global.LOG.Error("开启失败!")
-		return response.FailWithMessage("开启失败，没有这个任务", c)
+		return response.FailWithMessage("开启失败，没有这个任务", 3, nil, c)
 	} else {
 		global.Timer.StartTask(tasking)
 		return response.OkWithMessage("开启成功", c)
@@ -55,14 +53,12 @@ func (*TaskNameApi) StartTasking(c fiber.Ctx) error {
 func (*TaskNameApi) StopTasking(c fiber.Ctx) error {
 	tasking := c.Query("task")
 	if tasking == "" {
-		global.LOG.Error("请传入任务名!")
-		return response.FailWithMessage("请传入任务名", c)
+		return response.FailWithMessage("请传入任务名", 3, nil, c)
 	}
 	_, status := global.Timer.FindCron(tasking)
 
 	if !status {
-		global.LOG.Error("关闭失败!")
-		return response.FailWithMessage("关闭失败，没有这个任务", c)
+		return response.FailWithMessage("关闭失败，没有这个任务", 3, nil, c)
 	} else {
 		global.Timer.StopTask(tasking)
 		return response.OkWithMessage("关闭成功", c)

@@ -1,7 +1,6 @@
 package frontend
 
 import (
-	"errors"
 	global "server/model"
 	"server/model/common/response"
 	"server/model/frontend"
@@ -14,7 +13,6 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/redis/go-redis/v9"
-	"go.uber.org/zap"
 )
 
 type User struct{}
@@ -27,13 +25,13 @@ type User struct{}
 // 	var user loginRequest.LoginForm
 // 	_ = c.Bind().Query(&user)
 // 	if err := utils.Verify(user, utils.LoginVerifyFrontend); err != nil {
-// 		return response.FailWithMessage(err.Error(), c)
+// 		return response.FailWithMessage(err.Error(), err, c)
 // 		return
 // 	}
 // 	userInfo, err := userServiceApp.Login(user)
 // 	if err != nil {
 // 		global.LOG.Error(err.Error(), zap.Error(err))
-// 		return response.FailWithMessage(err.Error(), c)
+// 		return response.FailWithMessage(err.Error(), err, c)
 // 	} else {
 // 		return response.OkWithDetailed(userInfo, "登录成功", c)
 // 	}
@@ -54,22 +52,20 @@ type User struct{}
 func (b *User) Login(c fiber.Ctx) error {
 	var l systemReq.Login
 	if err := c.Bind().Body(&l); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err := utils.Verify(l, utils.LoginVerifyFrontend); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if user, err := userService.Login(l.Username, l.Password); err != nil {
-		global.LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
-		return response.FailWithMessage("用户名不存在或者密码错误", c)
+		return response.FailWithMessage("用户名不存在或者密码错误", 3, err, c)
 	} else {
 		return b.tokenNext(c, *user)
 	}
 	// if store.Verify(l.CaptchaId, l.Captcha, true) {
 
 	// } else {
-	// 	return response.FailWithMessage("验证码错误", c)
+	// 	return response.FailWithMessage("验证码错误", 3, err, c)
 	// }
 }
 
@@ -85,8 +81,7 @@ func (u *User) tokenNext(c fiber.Ctx, user system.SysUser) error {
 	})
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		global.LOG.Error("获取token失败!", zap.Error(err))
-		return response.FailWithMessage("获取token失败", c)
+		return response.FailWithMessage("获取token失败", 3, err, c)
 	}
 	c.Locals("frontend_user", user)
 	if !global.CONFIG.System.UseMultipoint {
@@ -99,8 +94,7 @@ func (u *User) tokenNext(c fiber.Ctx, user system.SysUser) error {
 
 	if jwtStr, err := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-			global.LOG.Error("设置登录状态失败!", zap.Error(err))
-			return response.FailWithMessage("设置登录状态失败", c)
+			return response.FailWithMessage("设置登录状态失败", 3, err, c)
 		}
 		return response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
@@ -108,16 +102,15 @@ func (u *User) tokenNext(c fiber.Ctx, user system.SysUser) error {
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix(),
 		}, "登录成功", c)
 	} else if err != nil {
-		global.LOG.Error("设置登录状态失败!", zap.Error(err))
-		return response.FailWithMessage("设置登录状态失败", c)
+		return response.FailWithMessage("设置登录状态失败", 3, err, c)
 	} else {
 		var blackJWT system.JwtBlacklist
 		blackJWT.Jwt = jwtStr
 		if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
-			return response.FailWithMessage("jwt作废失败", c)
+			return response.FailWithMessage("jwt作废失败", 3, err, c)
 		}
 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-			return response.FailWithMessage("设置登录状态失败", c)
+			return response.FailWithMessage("设置登录状态失败", 3, err, c)
 		}
 		return response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
@@ -129,19 +122,17 @@ func (u *User) tokenNext(c fiber.Ctx, user system.SysUser) error {
 
 func (*User) RegisterUser(c fiber.Ctx) error {
 	var userInfo loginRequest.RegisterUser
-	_ = c.Bind().Body(&userInfo)
+	err := c.Bind().Body(&userInfo)
 	if userInfo.Password != userInfo.RePassword {
-		global.LOG.Error("密码不一致!", zap.Error(errors.New("密码不一致")))
-		return response.FailWithMessage("密码不一致", c)
+		return response.FailWithMessage("密码不一致", 3, err, c)
 	}
 	if err := utils.Verify(userInfo, utils.RegisterVerifyFrontend); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 
-	err := userServiceApp.RegisterUser(&userInfo)
+	err = userServiceApp.RegisterUser(&userInfo)
 	if err != nil {
-		global.LOG.Error("注册失败!", zap.Error(err))
-		return response.FailWithDetailed(nil, err.Error(), c)
+		return response.FailWithDetailed(nil, err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(nil, "注册成功", c)
 	}
@@ -150,8 +141,7 @@ func (*User) RegisterUser(c fiber.Ctx) error {
 func (u *User) GetCurrent(c fiber.Ctx) error {
 	uuid := utils.GetUserUuid(c)
 	if ReqUser, err := userService.GetUserInfo(uuid); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(ReqUser, "获取成功", c)
 	}
@@ -160,23 +150,21 @@ func (u *User) GetCurrent(c fiber.Ctx) error {
 func (u *User) UpdatePassword(c fiber.Ctx) error {
 	var resetPassword frontend.ResetPassword
 	if err := c.Bind().Body(&resetPassword); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 
 	if err := utils.Verify(resetPassword, utils.ResetPasswordVerifyFrontend); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 
 	if resetPassword.NewPassword != resetPassword.RepeatNewPassword {
-		global.LOG.Error("密码不一致!", zap.Error(errors.New("密码不一致")))
-		return response.FailWithMessage("密码不一致", c)
+		return response.FailWithMessage("密码不一致", 3, nil, c)
 	}
 	// resetPassword.Password = utils.MD5V([]byte(resetPassword.Password))
 	// resetPassword.NewPassword = utils.MD5V([]byte(resetPassword.NewPassword))
 	// resetPassword.RepeatNewPassword = utils.MD5V([]byte(resetPassword.RepeatNewPassword))
 	if err := userServiceApp.ResetPassword(&resetPassword); err != nil {
-		return response.FailWithMessage("重置密码失败："+err.Error(), c)
+		return response.FailWithMessage("重置密码失败："+err.Error(), 3, err, c)
 	}
 
 	return response.OkWithDetailed(nil, "重置密码成功", c)
@@ -187,11 +175,11 @@ func (u *User) UpdateUserBackgroudImage(c fiber.Ctx) error {
 	var err error
 	err = c.Bind().Body(&user)
 	if err != nil {
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	err = userServiceApp.UpdateUserBackgroudImage(&user)
 	if err != nil {
-		return response.FailWithMessage("更新失败："+err.Error(), c)
+		return response.FailWithMessage("更新失败："+err.Error(), 3, err, c)
 	}
 	return response.OkWithDetailed(nil, "更新成功", c)
 }
@@ -201,13 +189,13 @@ func (u *User) UpdateUser(c fiber.Ctx) error {
 	var err error
 	err = c.Bind().Body(&user)
 	if err != nil {
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err = utils.Verify(user, utils.UpdateUserVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err = userServiceApp.UpdateUser(&user); err != nil {
-		return response.FailWithDetailed(err.Error(), "更新失败", c)
+		return response.FailWithDetailed(err.Error(), "更新失败", 3, err, c)
 	}
 	return response.OkWithDetailed(nil, "更新成功", c)
 }

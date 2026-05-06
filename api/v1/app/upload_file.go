@@ -35,13 +35,13 @@ func (u *FileUploadAndDownloadApi) UploadFile(c fiber.Ctx) error {
 	header, err := c.FormFile("file")
 	if err != nil {
 		global.LOG.Error("接收文件失败!", zap.Error(err))
-		return response.FailWithMessage400("接收文件失败", c)
+		return response.FailWithMessage400("接收文件失败", 3, err, c)
 	}
 	var file2 modelApp.FileUploadAndDownload
 	file2, err = fileUploadService.UploadFile(header, noSave) // 文件上传后拿到文件路径
 	if err != nil {
 		global.LOG.Error("上传更新失败!", zap.Error(err))
-		return response.FailWithMessage400("上传更新失败", c)
+		return response.FailWithMessage400("上传更新失败", 3, err, c)
 	}
 	return response.OkWithDetailed(responseUploadFile.ResponseUploadFile{File: file2}, "上传成功", c)
 }

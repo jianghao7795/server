@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	"server/model/system"
@@ -13,7 +12,6 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type SystemGithubApi struct{}
@@ -34,8 +32,7 @@ func (g *SystemGithubApi) GetGithubList(c fiber.Ctx) error {
 	var searchInfo request.PageInfo
 	_ = c.Bind().Query(&searchInfo)
 	if list, err := githubService.GetGithubList(searchInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -59,8 +56,7 @@ func (g *SystemGithubApi) GetGithubList(c fiber.Ctx) error {
 func (g *SystemGithubApi) CreateGithub(c fiber.Ctx) error {
 	isCheck := utils.NetWorkStatus("https://api.github.com")
 	if !isCheck {
-		global.LOG.Error("网络错误：networking not work")
-		return response.FailWithMessage("网络错误： networking not work", c)
+		return response.FailWithMessage("网络错误： networking not work", 3, nil, c)
 	}
 	data := make([]system.SysGithub, 1)
 
@@ -71,8 +67,7 @@ func (g *SystemGithubApi) CreateGithub(c fiber.Ctx) error {
 		_ = resp.Body.Close()
 	}()
 	if err != nil {
-		global.LOG.Error("请求Commit错误", zap.Error(err))
-		return response.FailWithMessage("请求Commit错误", c)
+		return response.FailWithMessage("请求Commit错误", 3, err, c)
 	}
 	body, _ := io.ReadAll(resp.Body)
 	// respData := new([]GithubCommit)
@@ -87,8 +82,7 @@ func (g *SystemGithubApi) CreateGithub(c fiber.Ctx) error {
 		data = append(data, temp)
 	}
 	if total, err := githubService.CreateGithub(&data); err != nil {
-		global.LOG.Error("创建commit有错误!", zap.Error(err))
-		return response.FailWithMessage("创建commit有错误!", c)
+		return response.FailWithMessage("创建commit有错误!", 3, err, c)
 	} else {
 		return response.OkWithData(map[string]int{"total": total}, c)
 	}

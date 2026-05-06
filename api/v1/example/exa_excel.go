@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // /excel/importExcel 接口，与upload接口作用类似，只是把文件存到resource/excel目录下，用于导入Excel时存放Excel文件(ExcelImport.xlsx)
@@ -40,27 +39,25 @@ func (e *ExcelApi) ExportExcel(c fiber.Ctx) (err error) {
 		InfoList: nil,
 	}
 	if err := c.Bind().Body(&excelInfo); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	// log.Println("excelInfo: ", excelInfo.InfoList)
 
 	if excelInfo.FileName == "" {
-		return response.FailWithMessage("请传参数filename", c)
+		return response.FailWithMessage("请传参数filename", 3, nil, c)
 	}
 	if strings.Contains(excelInfo.FileName, "..") {
-		return response.FailWithMessage("包含非法字符", c)
+		return response.FailWithMessage("包含非法字符", 3, nil, c)
 	}
 	// err := excelService.GetMenuData(&excelInfo.InfoList)
 	// if err != nil {
 	// 	global.LOG.Error("获取失败!", zap.Error(err))
-	// 	return response.FailWithMessage("获取失败", c)
+	// 	return response.FailWithMessage("获取失败", 3, err, c)
 	// }
 	filePath := global.CONFIG.Excel.Dir + excelInfo.FileName
 	err = excelService.ParseInfoList2Excel(excelInfo.InfoList, filePath)
 	if err != nil {
-		global.LOG.Error("转换Excel失败!", zap.Error(err))
-		return response.FailWithMessage("转换Excel失败", c)
+		return response.FailWithMessage("转换Excel失败", 3, err, c)
 	}
 	c.Set("success", "true")
 	return c.SendFile(filePath)
@@ -82,8 +79,7 @@ func (e *ExcelApi) ExportExcel(c fiber.Ctx) (err error) {
 func (e *ExcelApi) ImportExcel(c fiber.Ctx) error {
 	file, err := c.FormFile("file")
 	if err != nil {
-		global.LOG.Error("接收文件失败!", zap.Error(err))
-		return response.FailWithMessage("接收文件失败", c)
+		return response.FailWithMessage("接收文件失败", 3, err, c)
 	}
 	filepath_time := time.Now().Format("2006/01/02")
 	filenameMd5 := utils.MD5V([]byte(file.Filename)) + "_" + time.Now().Format("20060102150405") + "." + strings.Split(file.Filename, ".")[len(strings.Split(file.Filename, "."))-1]
@@ -98,16 +94,13 @@ func (e *ExcelApi) ImportExcel(c fiber.Ctx) error {
 	}
 	err = excelService.ImportExcel(&importExcel)
 	if err != nil {
-		global.LOG.Error("导入失败!", zap.Error(err))
-		return response.FailWithMessage("导入失败", c)
+		return response.FailWithMessage("导入失败", 3, err, c)
 	}
 	mkdirErr := os.MkdirAll(global.CONFIG.Excel.Dir+filepath_time, os.ModePerm)
 	if mkdirErr != nil {
-		global.LOG.Error("创建目录失败：", zap.Any("err", mkdirErr.Error()))
 	}
 	err = c.SaveFile(file, global.CONFIG.Excel.Dir+filepath_time+"/"+filenameMd5)
 	if err != nil {
-		global.LOG.Error("保存文件失败：", zap.Any("err", err.Error()))
 	}
 	return response.OkWithMessage("导入成功", c)
 }
@@ -124,8 +117,7 @@ func (e *ExcelApi) ImportExcel(c fiber.Ctx) error {
 func (e *ExcelApi) LoadExcel(c fiber.Ctx) error {
 	menus, err := excelService.ParseExcel2InfoList()
 	if err != nil {
-		global.LOG.Error("加载数据失败!", zap.Error(err))
-		return response.FailWithMessage("加载数据失败", c)
+		return response.FailWithMessage("加载数据失败", 3, err, c)
 	}
 	return response.OkWithDetailed(response.PageResult{
 		List:     menus,
@@ -152,12 +144,10 @@ func (e *ExcelApi) DownloadTemplate(c fiber.Ctx) error {
 
 	fi, err := os.Stat(filePath)
 	if err != nil {
-		global.LOG.Error("文件不存在!", zap.Error(err))
-		return response.FailWithMessage("文件不存在", c)
+		return response.FailWithMessage("文件不存在", 3, err, c)
 	}
 	if fi.IsDir() {
-		global.LOG.Error("不支持下载文件夹!", zap.Error(err))
-		return response.FailWithMessage("不支持下载文件夹", c)
+		return response.FailWithMessage("不支持下载文件夹", 3, nil, c)
 	}
 	c.Set("success", "true") // 增加返回头 信息
 	return c.Download(filePath)
@@ -168,8 +158,7 @@ func (e *ExcelApi) GetFileList(c fiber.Ctx) error {
 	_ = c.Bind().Query(&pageInfo)
 	list, total, err := excelService.GetFileList(&pageInfo)
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -183,8 +172,7 @@ func (e *ExcelApi) GetFileList(c fiber.Ctx) error {
 func (e *ExcelApi) DeleteFile(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if err := excelService.DeleteFile(int64(id)); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}

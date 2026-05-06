@@ -1,7 +1,6 @@
 package system
 
 import (
-	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	"server/model/system"
@@ -10,7 +9,6 @@ import (
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type AuthorityApi struct{}
@@ -31,22 +29,18 @@ type AuthorityApi struct{}
 func (a *AuthorityApi) CreateAuthority(c fiber.Ctx) error {
 	var authority system.SysAuthority
 	if err := c.Bind().Body(&authority); err != nil {
-		global.LOG.Error("获取更新数据失败", zap.Error(err))
-		return response.FailWithMessage("获取更新数据失败", c)
+		return response.FailWithMessage("获取更新数据失败", 3, err, c)
 	}
 	if err := utils.Verify(authority, utils.AuthorityVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if authBack, err := authorityService.CreateAuthority(authority); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithMessage("创建失败"+err.Error(), c)
+		return response.FailWithMessage("创建失败"+err.Error(), 3, err, c)
 	} else {
 		if err := menuService.AddMenuAuthority(systemReq.DefaultMenu(), authority.AuthorityId); err != nil {
-			global.LOG.Warn("菜单授权失败", zap.Any("err: ", err))
 		}
 
 		if err := casbinService.UpdateCasbin(authority.AuthorityId, systemReq.DefaultCasbin()); err != nil {
-			global.LOG.Warn("Casbin 接口授权失败", zap.Any("err: ", err))
 		}
 		return response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, "创建成功", c)
 	}
@@ -69,18 +63,16 @@ func (a *AuthorityApi) CopyAuthority(c fiber.Ctx) error {
 	var copyInfo systemRes.SysAuthorityCopyResponse
 	err := c.Bind().Body(&copyInfo)
 	if err != nil {
-		global.LOG.Error("获取数据错误", zap.Error(err))
-		return response.FailWithMessage("获取数据错误", c)
+		return response.FailWithMessage("获取数据错误", 3, err, c)
 	}
 	if err := utils.Verify(copyInfo, utils.OldAuthorityVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := utils.Verify(copyInfo.Authority, utils.AuthorityVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if authBack, err := authorityService.CopyAuthority(copyInfo); err != nil {
-		global.LOG.Error("拷贝失败!", zap.Error(err))
-		return response.FailWithMessage("拷贝失败"+err.Error(), c)
+		return response.FailWithMessage("拷贝失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, "拷贝成功", c)
 	}
@@ -103,11 +95,10 @@ func (a *AuthorityApi) DeleteAuthority(c fiber.Ctx) error {
 	var authority system.SysAuthority
 	_ = c.Bind().Query(&authority)
 	if err := utils.Verify(authority, utils.AuthorityIdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := authorityService.DeleteAuthority(&authority); err != nil { // 删除角色之前需要判断是否有用户正在使用此角色
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败"+err.Error(), c)
+		return response.FailWithMessage("删除失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -127,16 +118,14 @@ func (a *AuthorityApi) DeleteAuthority(c fiber.Ctx) error {
 func (a *AuthorityApi) UpdateAuthority(c fiber.Ctx) error {
 	var auth system.SysAuthority
 	if err := c.Bind().Body(&auth); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 
 	if err := utils.Verify(auth, utils.AuthorityVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if authority, err := authorityService.UpdateAuthority(auth); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败"+err.Error(), c)
+		return response.FailWithMessage("更新失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authority}, "更新成功", c)
 	}
@@ -163,11 +152,10 @@ func (a *AuthorityApi) GetAuthorityList(c fiber.Ctx) error {
 		pageInfo.PageSize = 10
 	}
 	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if list, total, err := authorityService.GetAuthorityInfoList(pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败"+err.Error(), c)
+		return response.FailWithMessage("获取失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -192,16 +180,13 @@ func (a *AuthorityApi) GetAuthorityList(c fiber.Ctx) error {
 func (a *AuthorityApi) SetDataAuthority(c fiber.Ctx) error {
 	var auth system.SysAuthority
 	if err := c.Bind().Body(&auth); err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err := utils.Verify(auth, utils.AuthorityIdVerify); err != nil {
-		global.LOG.Error("验证角色权限错误", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := authorityService.SetDataAuthority(&auth); err != nil {
-		global.LOG.Error("设置失败!", zap.Error(err))
-		return response.FailWithMessage("设置失败"+err.Error(), c)
+		return response.FailWithMessage("设置失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("设置成功", c)
 	}

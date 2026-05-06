@@ -1,11 +1,9 @@
 package frontend
 
 import (
-	global "server/model"
 	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // GetImages 获取图片列表
@@ -21,8 +19,7 @@ import (
 func (u *User) GetImages(c fiber.Ctx) error {
 	imageList, err := imagesServiceApp.GetImagesList()
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(imageList, "获取成功", c)
 	}

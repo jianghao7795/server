@@ -1,12 +1,10 @@
 package mobile
 
 import (
-	global "server/model"
 	"server/model/common/response"
 	"server/model/mobile"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type RegisterMobile struct{}
@@ -27,11 +25,10 @@ func (*RegisterMobile) Register(c fiber.Ctx) (err error) {
 	var data mobile.Register
 	err = c.Bind().Body(&data)
 	if err != nil {
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err = registerService.Register(data); err != nil {
-		global.LOG.Error("注册失败!", zap.Error(err))
-		return response.FailWithMessage400("注册失败，请重试", c)
+		return response.FailWithMessage400("注册失败，请重试", 3, err, c)
 	} else {
 		return response.OkWithDetailed("", "注册成功", c)
 	}

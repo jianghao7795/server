@@ -3,14 +3,12 @@ package app
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/app"
 	appReq "server/model/app/request"
 	"server/model/common/request"
 	"server/model/common/response"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // CreateTag 创建标签
@@ -30,12 +28,10 @@ func (TagApi *TagApi) CreateTag(c fiber.Ctx) error {
 	var appTab app.Tag
 	err := c.Bind().Body(&appTab)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err := appTabService.CreateTag(&appTab); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithMessage("创建失败", c)
+		return response.FailWithMessage("创建失败", 3, err, c)
 	} else {
 		return response.OkWithId("创建成功", appTab.ID, c)
 	}
@@ -57,11 +53,10 @@ func (TagApi *TagApi) CreateTag(c fiber.Ctx) error {
 func (TagApi *TagApi) DeleteTag(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return response.FailWithDetailed(fiber.Map{"msg": "获取id参数失败"}, "参数错误", c)
+		return response.FailWithDetailed(fiber.Map{"msg": "获取id参数失败"}, "参数错误", 3, err, c)
 	}
 	if err := appTabService.DeleteTag(uint(id)); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -84,8 +79,7 @@ func (TagApi *TagApi) DeleteTagByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	_ = c.Bind().Body(&IDS)
 	if err := appTabService.DeleteTagByIds(IDS); err != nil {
-		global.LOG.Error("批量删除失败!", zap.Error(err))
-		return response.FailWithMessage("批量删除失败", c)
+		return response.FailWithMessage("批量删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("批量删除成功", c)
 	}
@@ -108,12 +102,10 @@ func (TagApi *TagApi) UpdateTag(c fiber.Ctx) error {
 	var appTab app.Tag
 	err := c.Bind().Body(&appTab)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err = appTabService.UpdateTag(&appTab); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败", c)
+		return response.FailWithMessage("更新失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -134,8 +126,7 @@ func (TagApi *TagApi) UpdateTag(c fiber.Ctx) error {
 func (TagApi *TagApi) FindTag(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if tag, err := appTabService.GetTag(uint(id)); err != nil {
-		global.LOG.Error("查询失败!", zap.Error(err))
-		return response.FailWithMessage("查询失败", c)
+		return response.FailWithMessage("查询失败", 3, err, c)
 	} else {
 		return response.OkWithData(tag, c)
 	}
@@ -157,8 +148,7 @@ func (TagApi *TagApi) GetTagList(c fiber.Ctx) error {
 	var pageInfo appReq.TagSearch
 	_ = c.Bind().Query(&pageInfo)
 	if list, total, err := appTabService.GetTagInfoList(&pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,

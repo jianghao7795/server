@@ -3,14 +3,12 @@ package system
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	"server/model/system"
 	systemReq "server/model/system/request"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type OperationRecordApi struct{}
@@ -30,8 +28,7 @@ func (s *OperationRecordApi) CreateSysOperationRecord(c fiber.Ctx) error {
 	var sysOperationRecord system.SysOperationRecord
 	_ = c.Bind().Body(&sysOperationRecord)
 	if err := operationRecordService.CreateSysOperationRecord(&sysOperationRecord); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithMessage("创建失败", c)
+		return response.FailWithMessage("创建失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("创建成功", c)
 	}
@@ -51,8 +48,7 @@ func (s *OperationRecordApi) CreateSysOperationRecord(c fiber.Ctx) error {
 func (s *OperationRecordApi) DeleteSysOperationRecord(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if err := operationRecordService.DeleteSysOperationRecord(uint(id)); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -73,8 +69,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	_ = c.Bind().Body(&IDS)
 	if err := operationRecordService.DeleteSysOperationRecordByIds(IDS); err != nil {
-		global.LOG.Error("批量删除失败!", zap.Error(err))
-		return response.FailWithMessage("批量删除失败", c)
+		return response.FailWithMessage("批量删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("批量删除成功", c)
 	}
@@ -94,8 +89,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c fiber.Ctx) error {
 func (s *OperationRecordApi) FindSysOperationRecord(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if respSysOperationRecord, err := operationRecordService.GetSysOperationRecord(uint(id)); err != nil {
-		global.LOG.Error("查询失败!", zap.Error(err))
-		return response.FailWithMessage("查询失败", c)
+		return response.FailWithMessage("查询失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(respSysOperationRecord, "查询成功", c)
 	}
@@ -117,8 +111,7 @@ func (s *OperationRecordApi) GetSysOperationRecordList(c fiber.Ctx) error {
 	_ = c.Bind().Query(&pageInfo)
 	if pageInfo.TypePort == system.Backend {
 		if list, total, err := operationRecordService.GetSysOperationRecordInfoList(&pageInfo); err != nil {
-			global.LOG.Error("获取失败!", zap.Error(err))
-			return response.FailWithMessage("获取失败", c)
+			return response.FailWithMessage("获取失败", 3, err, c)
 		} else {
 			return response.OkWithDetailed(response.PageResult{
 				List:     list,
@@ -129,8 +122,7 @@ func (s *OperationRecordApi) GetSysOperationRecordList(c fiber.Ctx) error {
 		}
 	} else {
 		if list, total, err := operationRecordService.GetSysOperationRecordInfoFrontendList(pageInfo); err != nil {
-			global.LOG.Error("获取失败!", zap.Error(err))
-			return response.FailWithMessage("获取失败", c)
+			return response.FailWithMessage("获取失败", 3, err, c)
 		} else {
 			return response.OkWithDetailed(response.PageResult{
 				List:     list,

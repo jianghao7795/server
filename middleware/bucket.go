@@ -49,7 +49,7 @@ func LimitHandler(c fiber.Ctx) error {
 		lastToken: time.Now(),
 	}
 	if !tb.Allow() {
-		return response.FailWithDetailed(fiber.Map{"msg": "服务器需要休息一下，请等几分钟"}, "加载中", c)
+		return response.FailWithDetailed(fiber.Map{"msg": "服务器需要休息一下，请等几分钟"}, "加载中", 3, nil, c)
 	}
 	return c.Next()
 }

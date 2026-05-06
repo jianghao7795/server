@@ -3,7 +3,6 @@ package example
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/common/response"
 	"server/model/example"
 	"server/model/example/request"
@@ -11,7 +10,6 @@ import (
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 // CreateExaCustomer 创建客户
@@ -30,26 +28,22 @@ import (
 func (e *CustomerApi) CreateExaCustomer(c fiber.Ctx) error {
 	var customer example.ExaCustomer
 	if err := c.Bind().Body(&customer); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 
 	if err := utils.Verify(customer, utils.CustomerVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	var err error
 	if customer.SysUserID, err = utils.GetUserID(c); err != nil {
-		global.LOG.Warn("用户查询错误", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	customer.SysUserAuthorityID, err = utils.GetUserAuthorityId(c)
 	if err != nil {
-		global.LOG.Warn("获取用户权限失败", zap.Error(err))
-		return response.FailWithMessage("新增用户失败"+err.Error(), c)
+		return response.FailWithMessage("新增用户失败"+err.Error(), 3, err, c)
 	}
 	if err := customerService.CreateExaCustomer(&customer); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithMessage("创建失败", c)
+		return response.FailWithMessage("创建失败", 3, err, c)
 	} else {
 		return response.OkWithId("创建成功", customer.ID, c)
 	}
@@ -71,14 +65,13 @@ func (e *CustomerApi) CreateExaCustomer(c fiber.Ctx) error {
 func (e *CustomerApi) DeleteExaCustomer(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return response.FailWithMessage("请传id参数", c)
+		return response.FailWithMessage("请传id参数", 3, err, c)
 	}
 	if id == 0 {
-		return response.FailWithMessage("id传递错误", c)
+		return response.FailWithMessage("id传递错误", 3, nil, c)
 	}
 	if err := customerService.DeleteExaCustomer(uint(id)); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -101,25 +94,23 @@ func (e *CustomerApi) DeleteExaCustomer(c fiber.Ctx) error {
 func (e *CustomerApi) UpdateExaCustomer(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if id == 0 {
-		return response.FailWithMessage("id不存在", c)
+		return response.FailWithMessage("id不存在", 3, nil, c)
 	}
 	var customer example.ExaCustomer
 	if err := c.Bind().Body(&customer); err != nil {
-		global.LOG.Error("获取数据失败", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if customer.ID != uint(id) {
-		return response.FailWithMessage("数据不一致（id）", c)
+		return response.FailWithMessage("数据不一致（id）", 3, nil, c)
 	}
 	if err := utils.Verify(customer, utils.IdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := utils.Verify(customer, utils.CustomerVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := customerService.UpdateExaCustomer(&customer); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -137,17 +128,15 @@ func (e *CustomerApi) UpdateExaCustomer(c fiber.Ctx) error {
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /customer/customer/:id [get]
 func (e *CustomerApi) GetExaCustomer(c fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if id == 0 {
-		return response.FailWithMessage("id不存在", c)
+		return response.FailWithMessage("id不存在", 3, err, c)
 	}
 	data, err := customerService.GetExaCustomer(uint(id))
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
-	} else {
-		return response.OkWithDetailed(exampleRes.ExaCustomerResponse{Customer: data}, "获取成功", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	}
+	return response.OkWithDetailed(exampleRes.ExaCustomerResponse{Customer: data}, "获取成功", c)
 }
 
 // @Tags ExaCustomer
@@ -165,17 +154,15 @@ func (e *CustomerApi) GetExaCustomerList(c fiber.Ctx) error {
 	var pageInfo request.SearchCustomerParams
 	_ = c.Bind().Query(&pageInfo)
 	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	authorityId, err := utils.GetUserAuthorityId(c)
 	if err != nil {
-		global.LOG.Error("获取用户权限Id失败", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	customerList, total, err := customerService.GetCustomerInfoList(authorityId, &pageInfo)
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败"+err.Error(), c)
+		return response.FailWithMessage("获取失败"+err.Error(), 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     customerList,

@@ -41,7 +41,7 @@ func DefaultCheckOrMark(key string, expire int, limit int) (err error) {
 		return err
 	}
 	if err = SetLimitWithTime(key, limit, time.Duration(expire)*time.Second); err != nil {
-		global.LOG.Error("limit", zap.Error(err))
+		global.LOG.Error("limit error", zap.Error(err))
 	}
 	return err
 }

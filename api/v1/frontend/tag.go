@@ -3,13 +3,11 @@ package frontend
 import (
 	"strconv"
 
-	global "server/model"
 	appReq "server/model/app/request"
 	"server/model/common/response"
 	modelFrontend "server/model/frontend"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type TagApi struct{}
@@ -30,8 +28,7 @@ func (appTabApi *TagApi) GetTagList(c fiber.Ctx) error {
 	var pageInfo appReq.TagSearch
 	_ = c.Bind().Query(&pageInfo)
 	if list, err := tagServiceApp.GetTagList(c); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List: list,
@@ -53,13 +50,12 @@ func (appTabApi *TagApi) GetTagList(c fiber.Ctx) error {
 func (appTabApi *TagApi) GetTag(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return response.FailWithMessage("获取Ids失败", c)
+		return response.FailWithMessage("获取Ids失败", 3, err, c)
 	}
 	var tagArticles modelFrontend.Tag
 	tagArticles, err = tagServiceApp.GetTagArticle(id, c)
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithData(fiber.Map{"tag": tagArticles}, c)
 	}

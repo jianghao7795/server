@@ -1,14 +1,12 @@
 package system
 
 import (
-	global "server/model"
 	"server/model/common/response"
 	"server/model/system"
 	systemRes "server/model/system/response"
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type SystemApi struct{}
@@ -24,8 +22,7 @@ type SystemApi struct{}
 // @Router /system/getSystemConfig [get]
 func (s *SystemApi) GetSystemConfig(c fiber.Ctx) error {
 	if config, err := systemConfigService.GetSystemConfig(); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(systemRes.SysConfigResponse{Config: config}, "获取成功", c)
 	}
@@ -44,12 +41,10 @@ func (s *SystemApi) GetSystemConfig(c fiber.Ctx) error {
 func (s *SystemApi) SetSystemConfig(c fiber.Ctx) error {
 	var sys system.System
 	if err := c.Bind().Body(&sys); err != nil {
-		global.LOG.Error("获取配置数据失败", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := systemConfigService.SetSystemConfig(sys); err != nil {
-		global.LOG.Error("设置失败!", zap.Error(err))
-		return response.FailWithMessage("设置失败", c)
+		return response.FailWithMessage("设置失败", 3, err, c)
 	} else {
 		return response.OkWithData("设置成功", c)
 	}
@@ -67,8 +62,7 @@ func (s *SystemApi) SetSystemConfig(c fiber.Ctx) error {
 func (s *SystemApi) ReloadSystem(c fiber.Ctx) error {
 	err := utils.Reload()
 	if err != nil {
-		global.LOG.Error("重启系统失败!", zap.Error(err))
-		return response.FailWithMessage("重启系统失败", c)
+		return response.FailWithMessage("重启系统失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("重启系统成功", c)
 	}
@@ -85,8 +79,7 @@ func (s *SystemApi) ReloadSystem(c fiber.Ctx) error {
 // @Router /system/getServerInfo [post]
 func (s *SystemApi) GetServerInfo(c fiber.Ctx) error {
 	if server, err := systemConfigService.GetServerInfo(); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(server, "获取成功", c)
 	}

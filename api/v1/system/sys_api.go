@@ -3,7 +3,6 @@ package system
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	"server/model/system"
@@ -11,7 +10,6 @@ import (
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type SystemApiApi struct{}
@@ -31,15 +29,13 @@ func (s *SystemApiApi) CreateApi(c fiber.Ctx) (err error) {
 	var api system.SysApi
 	err = c.Bind().Body(&api)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err = utils.Verify(api, utils.ApiVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err = apiService.CreateApi(&api); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithDetailed(map[string]string{"msg": err.Error()}, "创建失败", c)
+		return response.FailWithDetailed(map[string]string{"msg": err.Error()}, "创建失败", 3, err, c)
 	} else {
 		return response.OkWithId("创建成功", api.ID, c)
 	}
@@ -61,11 +57,10 @@ func (s *SystemApiApi) DeleteApi(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	api.ID = uint(id)
 	if err := utils.Verify(api.MODEL, utils.IdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := apiService.DeleteApi(api); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -87,8 +82,7 @@ func (s *SystemApiApi) GetApiList(c fiber.Ctx) error {
 	_ = c.Bind().Query(&pageInfo)
 	// log.Println("pageInfo: ", pageInfo.ApiGroup)
 	if list, total, err := apiService.GetAPIInfoList(&pageInfo); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -115,12 +109,11 @@ func (s *SystemApiApi) GetApiById(c fiber.Ctx) error {
 	var idInfo request.GetById
 	idInfo.ID, _ = strconv.Atoi(c.Params("id"))
 	if err := utils.Verify(idInfo, utils.IdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	api, err := apiService.GetApiById(idInfo.ID)
 	if err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithData(api, c)
 	}
@@ -141,15 +134,13 @@ func (s *SystemApiApi) UpdateApi(c fiber.Ctx) error {
 	var api system.SysApi
 	err := c.Bind().Body(&api)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err := utils.Verify(api, utils.ApiVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := apiService.UpdateApi(&api); err != nil {
-		global.LOG.Error("修改失败!", zap.Error(err))
-		return response.FailWithMessage("修改失败", c)
+		return response.FailWithMessage("修改失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("修改成功", c)
 	}
@@ -167,8 +158,7 @@ func (s *SystemApiApi) UpdateApi(c fiber.Ctx) error {
 // @Router /api/getAllApis [get]
 func (s *SystemApiApi) GetAllApis(c fiber.Ctx) error {
 	if apis, err := apiService.GetAllApis(); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(apis, "获取成功", c)
 	}
@@ -189,8 +179,7 @@ func (s *SystemApiApi) DeleteApisByIds(c fiber.Ctx) error {
 	var ids request.IdsReq
 	_ = c.Bind().Query(&ids)
 	if err := apiService.DeleteApisByIds(ids); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}

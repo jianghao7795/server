@@ -9,8 +9,8 @@ import (
 
 	"github.com/casbin/casbin/v3"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
-	_ "gorm.io/driver/mysql"
 	"go.uber.org/zap"
+	_ "gorm.io/driver/mysql"
 )
 
 //

@@ -10,7 +10,6 @@ import (
 
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type DBApi struct{}
@@ -27,17 +26,14 @@ type DBApi struct{}
 // @Router /init/initdb [post]
 func (i *DBApi) InitDB(c fiber.Ctx) error {
 	if global.DB != nil {
-		global.LOG.Error("已存在数据库配置!")
-		return response.FailWithMessage("已存在数据库配置", c)
+		return response.FailWithMessage("已存在数据库配置", 3, nil, c)
 	}
 	var dbInfo request.InitDB
 	if err := c.Bind().Query(&dbInfo); err != nil {
-		global.LOG.Error("参数校验不通过!", zap.Error(err))
-		return response.FailWithMessage("参数校验不通过", c)
+		return response.FailWithMessage("参数校验不通过", 3, err, c)
 	}
 	if err := initDBService.InitDB(dbInfo); err != nil {
-		global.LOG.Error("自动创建数据库失败!", zap.Error(err))
-		return response.FailWithMessage("自动创建数据库失败，请查看后台日志，检查后在进行初始化", c)
+		return response.FailWithMessage("自动创建数据库失败，请查看后台日志，检查后在进行初始化", 3, err, c)
 	}
 	return response.OkWithData("自动创建数据库成功", c)
 }
@@ -62,15 +58,13 @@ func (i *DBApi) CheckDB(c fiber.Ctx) error {
 		needInit = false
 	}
 	if i.hasTable() {
-		global.LOG.Info("数据库初始化成功")
 		message = "数据库初始化成功"
 		return response.OkWithDetailed(needInit, message, c)
 	} else {
 		message = "数据库初始化失败：请查看后台日志"
 		needInit = true
 	}
-	global.LOG.Error(message)
-	return response.FailWithDetailed400(needInit, message, c)
+	return response.FailWithDetailed400(needInit, message, 3, nil, c)
 }
 
 // hasTable检查数据库中是否存在表

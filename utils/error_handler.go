@@ -24,25 +24,22 @@ func (eh *ErrorHandler) HandleAPIError(c fiber.Ctx, operation string, err error)
 	// Return standardized error response
 	return response.FailWithDetailed(map[string]string{
 		"error": err.Error(),
-	}, fmt.Sprintf("%s失败", operation), c)
+	}, fmt.Sprintf("%s失败", operation), 3, err, c)
 }
 
 // HandleValidationError handles parameter validation errors
 func (eh *ErrorHandler) HandleValidationError(c fiber.Ctx, field string, err error) error {
-	model.LOG.Error(fmt.Sprintf("Validation failed for field %s", field), zap.Error(err))
-	return response.FailWithMessage(fmt.Sprintf("参数验证失败: %s", err.Error()), c)
+	return response.FailWithMessage(fmt.Sprintf("参数验证失败: %s", err.Error()), 3, err, c)
 }
 
 // HandleDatabaseError handles database operation errors
 func (eh *ErrorHandler) HandleDatabaseError(c fiber.Ctx, operation string, err error) error {
-	model.LOG.Error(fmt.Sprintf("Database %s failed", operation), zap.Error(err))
-	return response.FailWithMessage(fmt.Sprintf("数据库操作失败: %s", operation), c)
+	return response.FailWithMessage(fmt.Sprintf("数据库操作失败: %s", operation), 3, err, c)
 }
 
 // HandleNotFoundError handles resource not found errors
 func (eh *ErrorHandler) HandleNotFoundError(c fiber.Ctx, resource string) error {
-	model.LOG.Warn(fmt.Sprintf("%s not found", resource))
-	return response.FailWithMessage(fmt.Sprintf("%s不存在", resource), c)
+	return response.FailWithMessage(fmt.Sprintf("%s不存在", resource), 3, nil, c)
 }
 
 // Global error handler instance

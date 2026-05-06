@@ -3,13 +3,11 @@ package system
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/common/response"
 	"server/model/system/request"
 	modelSystemResponse "server/model/system/response"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type AuthorityBtnApi struct{}
@@ -32,8 +30,7 @@ func (a *AuthorityBtnApi) GetAuthorityBtn(c fiber.Ctx) error {
 	var err error
 	res, err = authorityBtnService.GetAuthorityBtn(req)
 	if err != nil {
-		global.LOG.Error("查询失败!", zap.Error(err))
-		return response.FailWithMessage("查询失败", c)
+		return response.FailWithMessage("查询失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(res, "查询成功", c)
 	}
@@ -54,8 +51,7 @@ func (a *AuthorityBtnApi) SetAuthorityBtn(c fiber.Ctx) error {
 	var req request.SysAuthorityBtnReq
 	_ = c.Bind().Body(&req)
 	if err := authorityBtnService.SetAuthorityBtn(req); err != nil {
-		global.LOG.Error("分配失败!", zap.Error(err))
-		return response.FailWithMessage("分配失败", c)
+		return response.FailWithMessage("分配失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("分配成功", c)
 	}
@@ -74,8 +70,7 @@ func (a *AuthorityBtnApi) SetAuthorityBtn(c fiber.Ctx) error {
 func (a *AuthorityBtnApi) CanRemoveAuthorityBtn(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if err := authorityBtnService.CanRemoveAuthorityBtn(id); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}

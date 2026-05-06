@@ -3,7 +3,6 @@ package system
 import (
 	"strconv"
 
-	global "server/model"
 	"server/model/common/request"
 	"server/model/common/response"
 	"server/model/system"
@@ -12,7 +11,6 @@ import (
 	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type AuthorityMenuApi struct{}
@@ -31,12 +29,10 @@ type AuthorityMenuApi struct{}
 func (a *AuthorityMenuApi) GetMenu(c fiber.Ctx) error {
 	authorityId, err := utils.GetUserAuthorityId(c)
 	if err != nil {
-		global.LOG.Error("获取权限id失败", zap.Error(err))
-		return response.FailWithMessage("获取权限id", c)
+		return response.FailWithMessage("获取权限id", 3, err, c)
 	}
 	if menus, err := menuService.GetMenuTree(authorityId); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		if menus == nil {
 			menus = []system.SysMenu{}
@@ -58,8 +54,7 @@ func (a *AuthorityMenuApi) GetMenu(c fiber.Ctx) error {
 // @Router /menu/getBaseMenuTree [get]
 func (a *AuthorityMenuApi) GetBaseMenuTree(c fiber.Ctx) error {
 	if menus, err := menuService.GetBaseMenuTree(); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(menus, "获取成功", c)
 	}
@@ -82,11 +77,10 @@ func (a *AuthorityMenuApi) AddMenuAuthority(c fiber.Ctx) error {
 	var authorityMenu systemReq.AddMenuAuthorityInfo
 	_ = c.Bind().Body(&authorityMenu)
 	if err := utils.Verify(authorityMenu, utils.AuthorityIdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := menuService.AddMenuAuthority(authorityMenu.Menus, authorityMenu.AuthorityId); err != nil {
-		global.LOG.Error("添加失败!", zap.Error(err))
-		return response.FailWithMessage("添加失败", c)
+		return response.FailWithMessage("添加失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("添加成功", c)
 	}
@@ -109,11 +103,10 @@ func (a *AuthorityMenuApi) GetMenuAuthority(c fiber.Ctx) error {
 	var param request.GetAuthorityId
 	_ = c.Bind().Query(&param)
 	if err := utils.Verify(param, utils.AuthorityIdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if menus, err := menuService.GetMenuAuthority(&param); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithDetailed(systemRes.SysMenusResponse{Menus: menus}, "获取失败", c)
+		return response.FailWithDetailed(systemRes.SysMenusResponse{Menus: menus}, "获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(menus, "获取成功", c)
 	}
@@ -134,15 +127,14 @@ func (a *AuthorityMenuApi) AddBaseMenu(c fiber.Ctx) error {
 	var menu system.SysBaseMenu
 	_ = c.Bind().Body(&menu)
 	if err := utils.Verify(menu, utils.MenuVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := utils.Verify(menu.Meta, utils.MenuMetaVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := menuService.AddBaseMenu(menu); err != nil {
-		global.LOG.Error("添加失败!", zap.Error(err))
 
-		return response.FailWithMessage("添加失败", c)
+		return response.FailWithMessage("添加失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("添加成功", c)
 	}
@@ -163,11 +155,10 @@ func (a *AuthorityMenuApi) DeleteBaseMenu(c fiber.Ctx) error {
 	var menu request.GetById
 	menu.ID, _ = strconv.Atoi(c.Params("id"))
 	if err := utils.Verify(menu, utils.IdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := baseMenuService.DeleteBaseMenu(menu.ID); err != nil {
-		global.LOG.Error("删除失败!", zap.Error(err))
-		return response.FailWithMessage("删除失败", c)
+		return response.FailWithMessage("删除失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("删除成功", c)
 	}
@@ -188,14 +179,13 @@ func (a *AuthorityMenuApi) UpdateBaseMenu(c fiber.Ctx) error {
 	var menu system.SysBaseMenu
 	_ = c.Bind().Body(&menu)
 	if err := utils.Verify(menu, utils.MenuVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := utils.Verify(menu.Meta, utils.MenuMetaVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if err := baseMenuService.UpdateBaseMenu(menu); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败", c)
+		return response.FailWithMessage("更新失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -216,11 +206,10 @@ func (a *AuthorityMenuApi) GetBaseMenuById(c fiber.Ctx) error {
 	var idInfo request.GetById
 	idInfo.ID, _ = strconv.Atoi(c.Params("id"))
 	if err := utils.Verify(idInfo, utils.IdVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if menu, err := baseMenuService.GetBaseMenuById(idInfo.ID); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(menu, "获取成功", c)
 	}
@@ -242,11 +231,10 @@ func (a *AuthorityMenuApi) GetMenuList(c fiber.Ctx) error {
 	var pageInfo request.PageInfo
 	_ = c.Bind().Query(&pageInfo)
 	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
-		return response.FailWithMessage(err.Error(), c)
+		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
 	if menuList, total, err := menuService.GetInfoList(); err != nil {
-		global.LOG.Error("获取失败!", zap.Error(err))
-		return response.FailWithMessage("获取失败", c)
+		return response.FailWithMessage("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(response.PageResult{
 			List:     menuList,

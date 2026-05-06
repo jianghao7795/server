@@ -1,13 +1,11 @@
 package system
 
 import (
-	global "server/model"
 	"server/model/common/response"
 	"server/model/system"
 	"strings"
 
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 )
 
 type JwtApi struct{}
@@ -26,12 +24,11 @@ func (j *JwtApi) JsonInBlacklist(c fiber.Ctx) error {
 	tokenString := c.Get("Authorization")
 	token := strings.Replace(tokenString, "Bearer ", "", 1)
 	if token == "" {
-		return response.FailWithMessage401("token 失效， 请重新登录", c)
+		return response.FailWithMessage401("token 失效， 请重新登录", 3, nil, c)
 	}
 	jwt := system.JwtBlacklist{Jwt: token}
 	if err := jwtService.JsonInBlacklist(jwt); err != nil {
-		global.LOG.Error("jwt作废失败!", zap.Error(err))
-		return response.FailWithMessage("jwt作废失败", c)
+		return response.FailWithMessage("jwt作废失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("jwt作废成功", c)
 	}

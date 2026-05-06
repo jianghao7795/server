@@ -37,9 +37,7 @@ var (
 func Done(c fiber.Ctx, logString []byte) {
 	if c.Response().StatusCode() >= fiber.StatusBadRequest {
 		if c.Response().StatusCode() == 404 {
-			LOG.Info(string(logString))
 		} else {
-			LOG.Warn(string(logString))
 		}
 	}
 }

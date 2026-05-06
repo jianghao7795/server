@@ -7,10 +7,7 @@ import (
 	"server/model/app"
 	"server/model/common/response"
 
-	global "server/model"
-
 	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -31,12 +28,10 @@ func (a *BaseMessageApi) CreateBaseMessage(c fiber.Ctx) error {
 	var baseMessage app.BaseMessage
 	err := c.Bind().Body(&baseMessage)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err := baseMessageService.CreateBaseMessage(&baseMessage); err != nil {
-		global.LOG.Error("创建失败!", zap.Error(err))
-		return response.FailWithMessage("创建失败", c)
+		return response.FailWithMessage("创建失败", 3, err, c)
 	} else {
 		return response.OkWithId("创建成功", baseMessage.ID, c)
 	}
@@ -60,17 +55,14 @@ func (a *BaseMessageApi) UpdateBaseMessage(c fiber.Ctx) error {
 	var baseMessage app.BaseMessage
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	err = c.Bind().Body(&baseMessage)
 	if err != nil {
-		global.LOG.Error("获取数据失败!", zap.Error(err))
-		return response.FailWithMessage("获取数据失败", c)
+		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 	if err = baseMessageService.UpdateBaseMessage(id, &baseMessage); err != nil {
-		global.LOG.Error("更新失败!", zap.Error(err))
-		return response.FailWithMessage("更新失败", c)
+		return response.FailWithMessage("更新失败", 3, err, c)
 	} else {
 		return response.OkWithMessage("更新成功", c)
 	}
@@ -93,18 +85,15 @@ func (a *BaseMessageApi) UpdateBaseMessage(c fiber.Ctx) error {
 func (a *BaseMessageApi) FindBaseMessage(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		global.LOG.Error("获取id失败!", zap.Error(err))
-		return response.FailWithMessage("获取id失败", c)
+		return response.FailWithMessage("获取id失败", 3, err, c)
 	}
 	if responseBaseMessage, err := baseMessageService.FindBaseMessage(uint(id)); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			// respBaseMessage := baseMessageNotFound{message: "not found"}
 			str := "base message not found"
-			global.LOG.Error("查询失败!", zap.Error(errors.New(str)))
 			return response.OkWithData(str, c)
 		} else {
-			global.LOG.Error("查询失败!", zap.Error(err))
-			return response.FailWithMessage("查询失败", c)
+			return response.FailWithMessage("查询失败", 3, err, c)
 		}
 	} else {
 		return response.OkWithDetailed(responseBaseMessage, "查询成功", c)
