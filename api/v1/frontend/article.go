@@ -104,7 +104,7 @@ func (s *ArticleApi) GetArticleDetail(c fiber.Ctx) error {
 // @Router /getSearchArticle/{name}/{value} [get]
 func (s *ArticleApi) GetSearchArticle(c fiber.Ctx) error {
 	var searchValue request.ArticleSearch
-	err := c.Bind().Query(&searchValue)
+	err := c.Bind().URI(&searchValue)
 	if err != nil {
 		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "获取数据失败", 3, err, c)
 	}
