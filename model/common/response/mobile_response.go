@@ -17,6 +17,6 @@ const (
 
 // 返回401 错误信息 data 和 string message信息返回
 func FailWithDetailed401(data any, message string, err error, c fiber.Ctx) error {
-	logMethod(message, err, 3, zap.Any("data", data), zap.Int("code", ERROR401))
+	logMethodMessage(message, err, 3, zap.Any("data", data), zap.Int("code", ERROR401))
 	return Result(ERROR401, data, message, c)
 }

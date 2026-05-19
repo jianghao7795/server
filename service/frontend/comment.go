@@ -15,6 +15,9 @@ func (commentService *Comment) GetCommentByArticleId(articleId int) (list []fron
 	if len(commentList) > 0 {
 		for comment := range commentList {
 			err = commentService.findChildrenComment(&commentList[comment])
+			if err != nil {
+				break
+			}
 		}
 	}
 

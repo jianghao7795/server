@@ -12,6 +12,9 @@ var casbinService = new(service.CasbinService)
 
 // 拦截器
 func CasbinHandler(c fiber.Ctx) error {
+	if isPublicPath(c.Path()) {
+		return c.Next()
+	}
 	waitUse, err := utils.GetClaims(c)
 	if err != nil {
 		return response.FailWithMessage401("token 错误", 3, err, c)

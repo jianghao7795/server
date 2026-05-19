@@ -39,7 +39,7 @@ func getJWTMiddleware() fiber.Handler {
 		jwtMiddleware = jwtware.New(jwtware.Config{
 			// 跳过静态文件路径，避免 401
 			Next: func(c fiber.Ctx) bool {
-				return strings.Contains(c.Path(), "uploads/excel/") || strings.Contains(c.Path(), "uploads/file/")
+				return isPublicPath(c.Path())
 			},
 			SigningKey: jwtware.SigningKey{
 				JWTAlg: jwtware.RS256,

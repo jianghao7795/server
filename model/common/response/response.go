@@ -34,19 +34,19 @@ func Result(code int, data any, msg string, c fiber.Ctx) error {
 
 // 成功返回
 func Ok(c fiber.Ctx) error {
-	logMethod("操作成功", nil, 2)
+	logMethodMessage("操作成功", nil, 2)
 	return Result(SUCCESS, map[string]any{}, "操作成功", c)
 }
 
 // 成功返回 并带string信息返回
 func OkWithMessage(message string, c fiber.Ctx) error {
-	logMethod("操作成功", nil, 2)
+	logMethodMessage("操作成功", nil, 2)
 	return Result(SUCCESS, map[string]any{}, message, c)
 }
 
 // 成功返回 并带id信息返回
 func OkWithId(message string, id uint, c fiber.Ctx) error {
-	logMethod("操作成功", nil, 2)
+	logMethodMessage("操作成功", nil, 2)
 	return Result(SUCCESS, map[string]uint{
 		"id": id,
 	}, message, c)
@@ -54,17 +54,17 @@ func OkWithId(message string, id uint, c fiber.Ctx) error {
 
 // 成功返回 并带data信息返回
 func OkWithData(data any, c fiber.Ctx) error {
-	logMethod("操作成功", nil, 2)
+	logMethodMessage("操作成功", nil, 2)
 	return Result(SUCCESS, data, "操作成功", c)
 }
 
 // 成功返回 并带data 和 string message信息返回
 func OkWithDetailed(data any, message string, c fiber.Ctx) error {
-	logMethod("操作成功", nil, 2)
+	logMethodMessage("操作成功", nil, 2)
 	return Result(SUCCESS, data, message, c)
 }
 
-func logMethod(msg string, err error, status int, fields ...zap.Field) { // status 1.warn 2.info 3.error，4.debug， 5.fatal
+func logMethodMessage(msg string, err error, status int, fields ...zap.Field) { // status 1.warn 2.info 3.error，4.debug， 5.fatal
 	fs := fields
 	var logMethod func(string, ...zap.Field)
 	switch status {
@@ -92,45 +92,47 @@ func logMethod(msg string, err error, status int, fields ...zap.Field) { // stat
 
 // 失败返回
 func Fail(status int, err error, c fiber.Ctx) error {
-	logMethod("操作失败", err, status)
+	logMethodMessage("操作失败", err, status)
 	return Result(ERROR, map[string]any{}, "操作失败", c)
 }
 
 func FailWithMessage(message string, status int, err error, c fiber.Ctx) error {
-	logMethod(message, err, status)
-	return Result(ERROR, map[string]any{}, message, c)
+	logMethodMessage(message, err, status, zap.Error(err))
+	return Result(ERROR, map[string]any{
+		"msg": err.Error(),
+	}, message, c)
 }
 
 func FailWithDetailed(data any, message string, status int, err error, c fiber.Ctx) error {
-	logMethod(message, err, status, zap.Any("data", data))
+	logMethodMessage(message, err, status, zap.Any("data", data))
 	return Result(ERROR, data, message, c)
 }
 
 // 返回400 错误信息 带上data信息
 func FailWithDetailed400(data any, message string, status int, err error, c fiber.Ctx) error {
-	logMethod(message, err, status, zap.Any("data", data))
+	logMethodMessage(message, err, status, zap.Any("data", data))
 	return Result(ERROR, data, message, c)
 }
 
 // 返回400 错误信息 带上message信息
 func FailWithMessage400(message string, status int, err error, c fiber.Ctx) error {
-	logMethod(message, err, status)
+	logMethodMessage(message, err, status)
 	return Result(ERROR, map[string]any{}, message, c)
 }
 
 func FailWithMessage404(message string, status int, err error, c fiber.Ctx) error {
-	logMethod(message, err, status, zap.Int("code", ERRORNotFound))
+	logMethodMessage(message, err, status, zap.Int("code", ERRORNotFound))
 	return Result(ERRORNotFound, map[string]any{}, message, c)
 }
 
 // 返回401 错误信息 带上message信息
 func FailWithMessage401(message string, status int, err error, c fiber.Ctx) error {
-	logMethod(message, err, status, zap.Int("code", ERRORUnauthorized))
+	logMethodMessage(message, err, status, zap.Int("code", ERRORUnauthorized))
 	return Result(ERRORUnauthorized, map[string]any{}, message, c)
 }
 
 // 返回403 错误信息 带上message信息
 func FailWithMessage403(message string, status int, err error, c fiber.Ctx) error {
-	logMethod(message, err, status, zap.Int("code", ERROR403))
+	logMethodMessage(message, err, status, zap.Int("code", ERROR403))
 	return Result(ERROR403, map[string]any{}, message, c)
 }

@@ -1,7 +1,9 @@
 package frontend
 
 import (
-	"encoding/json"
+	"bytes"
+	"encoding/binary"
+	"encoding/gob"
 	"errors"
 	"net/url"
 	global "server/model"
@@ -22,9 +24,39 @@ import (
 
 type Article struct{}
 
+func encodeArticleListCache(list []frontend.Article) ([]byte, error) {
+	var buf bytes.Buffer
+	if err := gob.NewEncoder(&buf).Encode(&list); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+func decodeArticleListCache(data []byte) ([]frontend.Article, error) {
+	var list []frontend.Article
+	if err := gob.NewDecoder(bytes.NewReader(data)).Decode(&list); err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func encodeTotalCache(total int64) []byte {
+	b := make([]byte, 8)
+	binary.BigEndian.PutUint64(b, uint64(total))
+	return b
+}
+
+func decodeTotalCache(b []byte) int64 {
+	if len(b) < 8 {
+		return 0
+	}
+	return int64(binary.BigEndian.Uint64(b))
+}
+
 func (s *Article) GetArticleList(info *frontendReq.ArticleSearch, c fiber.Ctx) (list []frontend.Article, total int64, err error) {
 	cacheTime := global.CONFIG.Cache.Time
-	var articleStr string
+	var articleBlob []byte
+	pageKey := "article-list-" + strconv.Itoa(info.Page)
 	db := global.DB.Model(&frontend.Article{})
 	err = db.Count(&total).Error
 	if err != nil {
@@ -32,11 +64,11 @@ func (s *Article) GetArticleList(info *frontendReq.ArticleSearch, c fiber.Ctx) (
 	}
 	switch info.IsImportant {
 	case 1:
-		articleStr, err = global.REDIS.Get(c.Context(), "article-list-home").Result()
+		articleBlob, err = global.REDIS.Get(c.Context(), "article-list-home").Bytes()
 	case 2:
-		articleStr, err = global.REDIS.Get(c.Context(), "article-list"+strconv.Itoa(info.Page)).Result()
+		articleBlob, err = global.REDIS.Get(c.Context(), pageKey).Bytes()
 	default:
-		articleStr, err = global.REDIS.Get(c.Context(), "article-list"+strconv.Itoa(info.Page)).Result()
+		articleBlob, err = global.REDIS.Get(c.Context(), pageKey).Bytes()
 	}
 
 	if errors.Is(err, redis.Nil) {
@@ -54,36 +86,41 @@ func (s *Article) GetArticleList(info *frontendReq.ArticleSearch, c fiber.Ctx) (
 			return list, 0, err
 		}
 
-		strList, _ := json.Marshal(list)
-		totalStr, _ := json.Marshal(total)
+		listBytes, encErr := encodeArticleListCache(list)
+		if encErr != nil {
+			return list, 0, encErr
+		}
+		totalBytes := encodeTotalCache(total)
 
 		if info.IsImportant != 0 {
-			// articleStr, err = global.REDIS.Get(c, "article-list-home").Result()
-			err = global.REDIS.Set(c.Context(), "article-list-home", strList, time.Duration(cacheTime)*time.Second).Err()
+			err = global.REDIS.Set(c.Context(), "article-list-home", listBytes, time.Duration(cacheTime)*time.Second).Err()
 			if err != nil {
 				return list, 0, errors.New("redis 存储失败")
 			}
 		} else {
-			err = global.REDIS.Set(c.Context(), "article-list-total", totalStr, time.Duration(cacheTime)*time.Second).Err()
+			err = global.REDIS.Set(c.Context(), "article-list-total", totalBytes, time.Duration(cacheTime)*time.Second).Err()
 			if err != nil {
 				return list, 0, errors.New("redis 存储失败")
 			}
-			err = global.REDIS.Set(c.Context(), "article-list-"+strconv.Itoa(info.Page), strList, time.Duration(cacheTime)*time.Second).Err()
+			err = global.REDIS.Set(c.Context(), pageKey, listBytes, time.Duration(cacheTime)*time.Second).Err()
 			if err != nil {
 				return list, 0, errors.New("redis 存储失败")
 			}
-		}
-
-		if err != nil {
-			return list, 0, errors.New("redis 存储失败")
 		}
 	} else if err != nil {
 		return list, 0, err
-	} else {
-		if articleStr != "" {
-			err = json.Unmarshal([]byte(articleStr), &list)
+	} else if len(articleBlob) > 0 {
+		list, err = decodeArticleListCache(articleBlob)
+		if err != nil {
 			return list, 0, err
 		}
+		if info.IsImportant == 0 {
+			totalBlob, terr := global.REDIS.Get(c.Context(), "article-list-total").Bytes()
+			if terr == nil && len(totalBlob) >= 8 {
+				total = decodeTotalCache(totalBlob)
+			}
+		}
+		return list, total, nil
 	}
 
 	return list, total, err

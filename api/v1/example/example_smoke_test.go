@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAPIHandlerStructsConstructible(t *testing.T) {
+func TestExampleAPIHandlerStructsConstructible(t *testing.T) {
 	cases := []struct {
 		name string
 		ptr  any
@@ -20,4 +20,10 @@ func TestAPIHandlerStructsConstructible(t *testing.T) {
 			assert.NotNil(t, tc.ptr)
 		})
 	}
+}
+
+func TestExampleServiceVars(t *testing.T) {
+	assert.NotNil(t, excelService)
+	assert.NotNil(t, customerService)
+	assert.NotNil(t, fileUploadAndDownloadService)
 }
