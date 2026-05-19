@@ -3,7 +3,6 @@ package frontend
 import global "server/model"
 
 // Comment 结构体
-// 如果含有time.Time 请自行import time包
 type Comment struct {
 	global.MODEL
 	ArticleId int       `query:"article_id" json:"article_id" form:"article_id" gorm:"column:article_id;comment:文章id;size:10;"`
@@ -15,6 +14,7 @@ type Comment struct {
 	ToUserId  int       `query:"to_user_id" json:"to_user_id" form:"to_user_id" gorm:"column:to_user_id;comment:回复评论的用户id;"`
 	ToUser    User      `query:"to_user" json:"to_user" form:"to_user" gorm:"foreignKey:ToUserId"`
 	Children  []Comment `json:"children" form:"children" gorm:"foreignKey:ParentId;"`
+	Praises   []Praise  `json:"praises" gorm:"foreignKey:CommentId"`
 }
 
 // TableName Comment 表名

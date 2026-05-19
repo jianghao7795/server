@@ -535,6 +535,9 @@ CREATE TABLE `praise` (
   `comment_id` bigint NOT NULL,
   `user_id` bigint NOT NULL,
   `id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) DEFAULT NULL,
+  `updated_at` datetime(3) DEFAULT NULL,
+  `deleted_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_praise` (`comment_id`,`user_id`),
   KEY `FK_praise_comment` (`comment_id`),
@@ -548,7 +551,7 @@ CREATE TABLE `praise` (
 
 LOCK TABLES `praise` WRITE;
 /*!40000 ALTER TABLE `praise` DISABLE KEYS */;
-INSERT INTO `praise` VALUES (1,1,1),(1,3,2),(2,1,3),(2,3,4),(6,1,5),(6,3,6),(7,1,7),(7,3,8),(10,1,9),(10,3,10),(11,1,11),(11,3,12);
+INSERT INTO `praise` (`comment_id`, `user_id`, `id`) VALUES(1,1,1),(1,3,2),(2,1,3),(2,3,4),(6,1,5),(6,3,6),(7,1,7),(7,3,8),(10,1,9),(10,3,10),(11,1,11),(11,3,12);
 /*!40000 ALTER TABLE `praise` ENABLE KEYS */;
 UNLOCK TABLES;
 

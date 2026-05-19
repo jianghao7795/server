@@ -7,33 +7,31 @@ import (
 	commentReq "server/model/app/request"
 	"server/model/common/request"
 	"strings"
+
+	"gorm.io/gorm"
 )
 
 type CommentService struct{}
 
 // CreateComment 创建Comment记录
-// Author wuhao
 func (commentService *CommentService) CreateComment(comment *app.Comment) (err error) {
 	err = global.DB.Create(comment).Error
 	return err
 }
 
 // DeleteComment 删除Comment记录
-// Author wuhao
 func (commentService *CommentService) DeleteComment(id uint) (err error) {
 	err = global.DB.Delete(&app.Comment{}, id).Error
 	return err
 }
 
 // DeleteCommentByIds 批量删除Comment记录
-// Author wuhao
 func (commentService *CommentService) DeleteCommentByIds(ids request.IdsReq) (err error) {
 	err = global.DB.Delete(&[]app.Comment{}, "id in ?", ids.Ids).Error
 	return err
 }
 
 // UpdateComment 更新Comment记录
-// Author wuhao
 func (commentService *CommentService) UpdateComment(comment *app.Comment) (err error) {
 	var commentReplica app.Comment
 	db := global.DB.Where("id = ?", comment.ID).First(&commentReplica)
@@ -53,9 +51,8 @@ func (commentService *CommentService) UpdateComment(comment *app.Comment) (err e
 }
 
 // GetComment 根据id获取Comment记录
-// Author wuhao
 func (commentService *CommentService) GetComment(id int) (comment app.Comment, err error) {
-	err = global.DB.Preload("Article").Where("id = ?", id).First(&comment).Error
+	err = global.DB.Preload("Article").Preload("Praises").Where("id = ?", id).First(&comment).Error
 	return
 }
 
@@ -64,16 +61,15 @@ func (commentService *CommentService) GetCommentList(postId uint, page, pageSize
 	var comments []app.Comment
 	var total int64
 
-	// 计算总数
 	if err := global.DB.Model(&app.Comment{}).Where("post_id = ?", postId).Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	// 分页查询
 	offset := (page - 1) * pageSize
 	err := global.DB.Where("post_id = ?", postId).
 		Preload("User").
 		Preload("ToUser").
+		Preload("Praises").
 		Order("created_at DESC").
 		Limit(pageSize).
 		Offset(offset).
@@ -83,21 +79,17 @@ func (commentService *CommentService) GetCommentList(postId uint, page, pageSize
 }
 
 // GetCommentInfoList 分页获取Comment记录
-// Author wuhao
 func (commentService *CommentService) GetCommentInfoList(info *commentReq.CommentSearch) (list []app.Comment, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	// 创建db
-	db := global.DB.Model(&app.Comment{}).Preload("Article").Preload("User").Preload("ToUser").Preload("Praise")
+	db := global.DB.Model(&app.Comment{}).Preload("Article").Preload("User").Preload("ToUser").Preload("Praises")
 	if info.ArticleId != 0 {
 		db = db.Where("article_id = ?", info.ArticleId)
 	}
 	if info.Content != "" {
 		db = db.Where("content like ?", strings.Join([]string{"%", info.Content, "%"}, ""))
-		// db = db.Where("MATCH(content) AGAINST('+" + info.Content + "')")
 	}
 	var comments []app.Comment
-	// 如果有条件搜索 下方会自动创建搜索语句
 	err = db.Count(&total).Error
 	if err != nil {
 		return
@@ -106,8 +98,7 @@ func (commentService *CommentService) GetCommentInfoList(info *commentReq.Commen
 	return comments, total, err
 }
 
-// GetCommentTreeList 分页获取Treelist
-
+// GetCommentTreeList 分页获取TreeList
 func (commentService *CommentService) GetCommentTreeList(info *commentReq.CommentSearch) (list []app.Comment, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -124,9 +115,7 @@ func (commentService *CommentService) GetCommentTreeList(info *commentReq.Commen
 	}
 
 	var commentList []app.Comment
-
-	err = db.Limit(limit).Offset(offset).Where("parent_id = ?", 0).Preload("Article").Preload("User").Order("id desc").Find(&commentList).Error
-	// err = db.Limit(limit).Offset(offset).Where("parent_id = ?", 0).Find(&commentList).Error
+	err = db.Limit(limit).Offset(offset).Where("parent_id = ?", 0).Preload("Article").Preload("User").Preload("Praises").Order("id desc").Find(&commentList).Error
 	if len(commentList) > 0 {
 		for comment := range commentList {
 			err = commentService.findChildrenComment(&commentList[comment])
@@ -136,35 +125,87 @@ func (commentService *CommentService) GetCommentTreeList(info *commentReq.Commen
 }
 
 func (commentService *CommentService) findChildrenComment(comment *app.Comment) (err error) {
-	err = global.DB.Where("parent_id = ?", comment.ID).Preload("User").Preload("ToUser").Order("user_id desc").Find(&comment.Children).Error
-	return err
-}
-
-// LikeIt 点赞一条记录
-func (*CommentService) PutLikeItOrDislike(info *app.Praise) (err error) {
-	db := global.DB.Model(&app.Praise{})
-
-	if info.ID == 0 {
-		var praise app.Praise
-		err = db.Raw("Select id, comment_id, user_id, created_at, updated_at from praise where user_id = ? and comment_id = ? limit 1", info.UserId, info.CommentId).Scan(&praise).Error
-		if err != nil {
+	err = global.DB.Where("parent_id = ?", comment.ID).Preload("User").Preload("ToUser").Preload("Praises").Order("id asc").Find(&comment.Children).Error
+	for i := range comment.Children {
+		if err = commentService.findChildrenComment(&comment.Children[i]); err != nil {
 			return err
 		}
-		if praise.ID == 0 {
-			err = db.Create(info).Error
-		} else {
-			info.ID = praise.ID
-			info.CreatedAt = praise.CreatedAt
-			info.UpdatedAt = praise.UpdatedAt
-			err = db.Exec("UPDATE `praise` SET `deleted_at`=NULL,`comment_id`=?,`user_id`=? where id = ? ORDER BY `praise`.`id` LIMIT 1", info.CommentId, info.UserId, info.ID).Error
+	}
+	return nil
+}
 
+// PutLikeItOrDislike 评论点赞/取消点赞
+func (*CommentService) PutLikeItOrDislike(info *app.Praise) (err error) {
+	if info.ID == 0 {
+		// 查找已有记录（包括软删除的）
+		var existing app.Praise
+		err = global.DB.Unscoped().Where("user_id = ? AND comment_id = ?", info.UserId, info.CommentId).First(&existing).Error
+
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				// 首次点赞 → 新建
+				return global.DB.Create(info).Error
+			}
+			return err
 		}
-	} else {
-		err = db.Where("id = ?", info.ID).Delete(info).Error
+
+		// 找到已有记录
+		info.ID = existing.ID
+		if existing.DeletedAt.Valid {
+			// 曾经取消过点赞 → 恢复
+			return global.DB.Unscoped().Model(&existing).Update("deleted_at", nil).Error
+		}
+		// 已点赞 → 返回已有记录
+		info.CreatedAt = existing.CreatedAt
+		info.UpdatedAt = existing.UpdatedAt
+		return nil
 	}
 
-	// if err != nil {
-	// 	return err
-	// }
-	return err
+	// 取消点赞
+	return global.DB.Where("id = ?", info.ID).Delete(&app.Praise{}).Error
+}
+
+// LikeComment 点赞评论
+func (*CommentService) LikeComment(commentId uint, userId int64) (*app.Praise, error) {
+	var existing app.Praise
+	err := global.DB.Unscoped().Where("user_id = ? AND comment_id = ?", userId, commentId).First(&existing).Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		praise := &app.Praise{CommentId: int64(commentId), UserId: userId}
+		return praise, global.DB.Create(praise).Error
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	if existing.DeletedAt.Valid {
+		global.DB.Unscoped().Model(&existing).Update("deleted_at", nil)
+		existing.DeletedAt = gorm.DeletedAt{}
+	}
+	return &existing, nil
+}
+
+// UnlikeComment 取消点赞评论
+func (*CommentService) UnlikeComment(commentId uint, userId int64) error {
+	result := global.DB.Where("user_id = ? AND comment_id = ?", userId, commentId).Delete(&app.Praise{})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("未找到点赞记录")
+	}
+	return nil
+}
+
+// CheckCommentLiked 检查用户是否已点赞
+func (*CommentService) CheckCommentLiked(commentId uint, userId int64) (bool, *app.Praise, error) {
+	var praise app.Praise
+	err := global.DB.Where("user_id = ? AND comment_id = ?", userId, commentId).First(&praise).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil, nil
+	}
+	if err != nil {
+		return false, nil, err
+	}
+	return true, &praise, nil
 }

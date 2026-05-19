@@ -7,6 +7,7 @@ import (
 	commentReq "server/model/app/request"
 	"server/model/common/request"
 	"server/model/common/response"
+	"server/utils"
 
 	"github.com/gofiber/fiber/v3"
 )
@@ -206,18 +207,7 @@ func (*CommentApi) GetCommentTreeList(c fiber.Ctx) error {
 	}
 }
 
-// PutLikeItOrDislike 点赞
-// @Tags Comment
-// @Summary 点赞
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body app.Praise true "点赞"
-// @Success 200 {object} response.Response{msg=string} "点赞成功"
-// @Failure 400 {object} response.Response{msg=string} "参数错误"
-// @Failure 401 {object} response.Response{msg=string} "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /comment/pariseComment [put]
+// PutLikeItOrDislike 点赞/取消点赞
 func (*CommentApi) PutLikeItOrDislike(c fiber.Ctx) error {
 	var likeIt app.Praise
 	err := c.Bind().Body(&likeIt)
@@ -225,9 +215,72 @@ func (*CommentApi) PutLikeItOrDislike(c fiber.Ctx) error {
 		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
 
+	// 从 JWT 获取用户 ID，防止伪造
+	if claims, err := utils.GetClaims(c); err == nil {
+		likeIt.UserId = int64(claims.BaseClaims.ID)
+	}
+
 	if err := commentService.PutLikeItOrDislike(&likeIt); err != nil {
 		return response.FailWithDetailed(err.Error(), "点赞失败", 3, err, c)
-	} else {
-		return response.OkWithDetailed(likeIt, "点赞成功", c)
 	}
+	return response.OkWithDetailed(likeIt, "点赞成功", c)
+}
+
+// LikeComment 点赞评论
+// @Router /comment/:id/like [post]
+func (*CommentApi) LikeComment(c fiber.Ctx) error {
+	commentId, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return response.FailWithMessage("获取评论ID失败", 3, err, c)
+	}
+
+	claims, err := utils.GetClaims(c)
+	if err != nil {
+		return response.FailWithMessage401("请先登录", 3, err, c)
+	}
+
+	praise, err := commentService.LikeComment(uint(commentId), int64(claims.BaseClaims.ID))
+	if err != nil {
+		return response.FailWithDetailed(err.Error(), "点赞失败", 3, err, c)
+	}
+	return response.OkWithDetailed(praise, "点赞成功", c)
+}
+
+// UnlikeComment 取消点赞评论
+// @Router /comment/:id/like [delete]
+func (*CommentApi) UnlikeComment(c fiber.Ctx) error {
+	commentId, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return response.FailWithMessage("获取评论ID失败", 3, err, c)
+	}
+
+	claims, err := utils.GetClaims(c)
+	if err != nil {
+		return response.FailWithMessage401("请先登录", 3, err, c)
+	}
+
+	if err := commentService.UnlikeComment(uint(commentId), int64(claims.BaseClaims.ID)); err != nil {
+		return response.FailWithDetailed(err.Error(), "取消点赞失败", 3, err, c)
+	}
+	return response.OkWithMessage("取消点赞成功", c)
+}
+
+// CheckCommentLiked 检查用户是否已点赞
+// @Router /comment/:id/like [get]
+func (*CommentApi) CheckCommentLiked(c fiber.Ctx) error {
+	commentId, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return response.FailWithMessage("获取评论ID失败", 3, err, c)
+	}
+
+	claims, err := utils.GetClaims(c)
+	if err != nil {
+		return response.FailWithMessage401("请先登录", 3, err, c)
+	}
+
+	liked, praise, err := commentService.CheckCommentLiked(uint(commentId), int64(claims.BaseClaims.ID))
+	if err != nil {
+		return response.FailWithDetailed(err.Error(), "查询点赞状态失败", 3, err, c)
+	}
+	return response.OkWithDetailed(fiber.Map{"liked": liked, "praise": praise}, "查询成功", c)
 }

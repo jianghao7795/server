@@ -23,6 +23,8 @@ COPY --from=builder /app/conf/ ./conf/
 COPY --from=builder /app/config.yaml ./conf/config.yaml
 COPY --from=builder /app/rbac_model.conf .
 COPY --from=builder /app/docs/ ./docs/
+COPY --from=builder /app/public/ ./public/
+COPY --from=builder /app/logs/ ./logs/
 
 EXPOSE 3100
 CMD ["/app/fiber"]

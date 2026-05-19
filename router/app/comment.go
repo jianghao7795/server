@@ -19,7 +19,11 @@ func (s *CommentRouter) InitCommentRouter(Router fiber.Router) {
 	commentRouter.Delete("DeleteComment/:id", middleware.OperationRecord, commentApi.DeleteComment)       // 删除Comment
 	commentRouter.Delete("DeleteCommentByIds", middleware.OperationRecord, commentApi.DeleteCommentByIds) // 批量删除Comment
 	commentRouter.Put("updateComment/:id", middleware.OperationRecord, commentApi.UpdateComment)          // 更新Comment
-	commentRouter.Put("pariseComment", middleware.OperationRecord, commentApi.PutLikeItOrDislike)         //点赞
+	commentRouter.Put("pariseComment", middleware.OperationRecord, commentApi.PutLikeItOrDislike) //点赞（旧接口）
+
+	commentRouter.Post(":id/like", commentApi.LikeComment)              // 点赞评论
+	commentRouter.Delete(":id/like", commentApi.UnlikeComment)          // 取消点赞评论
+	commentRouter.Get(":id/like", commentApi.CheckCommentLiked)         // 检查点赞状态
 
 	commentRouter.Get("getComment/:id", commentApi.FindComment)            // 根据ID获取Comment
 	commentRouter.Get("getCommentList", commentApi.GetCommentList)         // 获取Comment列表

@@ -13,7 +13,6 @@ import (
 )
 
 // Comment 结构体
-// 如果含有time.Time 请自行import time包
 type Comment struct {
 	global.MODEL
 	PostId    uint           `json:"post_id" form:"post_id" gorm:"column:post_id;comment:帖子ID;not null;index"`
@@ -27,6 +26,7 @@ type Comment struct {
 	ToUser    system.SysUser `json:"to_user" form:"to_user" gorm:"foreignKey:ToUserId"`
 	ArticleId uint           `json:"article_id" form:"article_id" query:"article_id" gorm:"column:article_id;comment:文章ID;not null;index"`
 	Article   Article        `json:"article" gorm:"foreignKey:ArticleId"`
+	Praises   []Praise       `json:"praises" gorm:"foreignKey:CommentId"`
 }
 
 // TableName Comment 表名
