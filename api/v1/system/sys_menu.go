@@ -150,7 +150,7 @@ func (a *AuthorityMenuApi) AddBaseMenu(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /menu/deleteBaseMenu [post]
+// @Router /menu/deleteBaseMenu/{id} [delete]
 func (a *AuthorityMenuApi) DeleteBaseMenu(c fiber.Ctx) error {
 	var menu request.GetById
 	menu.ID, _ = strconv.Atoi(c.Params("id"))
@@ -201,7 +201,7 @@ func (a *AuthorityMenuApi) UpdateBaseMenu(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /menu/getBaseMenuById/:id [get]
+// @Router /menu/getBaseMenuById/{id} [get]
 func (a *AuthorityMenuApi) GetBaseMenuById(c fiber.Ctx) error {
 	var idInfo request.GetById
 	idInfo.ID, _ = strconv.Atoi(c.Params("id"))
@@ -226,7 +226,7 @@ func (a *AuthorityMenuApi) GetBaseMenuById(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /menu/getMenuList [post]
+// @Router /menu/getMenuList [get]
 func (a *AuthorityMenuApi) GetMenuList(c fiber.Ctx) error {
 	var pageInfo request.PageInfo
 	_ = c.Bind().Query(&pageInfo)

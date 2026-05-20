@@ -121,7 +121,7 @@ func (userApi *UserApi) UpdateMobileUser(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /mobileUser/findMobileUser/:id [get]
+// @Router /mobileUser/findMobileUser/{id} [get]
 func (userApi *UserApi) FindMobileUser(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {

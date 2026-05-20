@@ -1,10 +1,3 @@
-/*
- * @Author: jianghao
- * @Date: 2022-09-05 09:10:12
- * @LastEditors: jianghao
- * @LastEditTime: 2022-10-27 14:12:30
- */
-// 自动生成模板Comment
 package app
 
 import (
@@ -12,7 +5,6 @@ import (
 	"server/model/system"
 )
 
-// Comment 结构体
 type Comment struct {
 	global.MODEL
 	PostId    uint           `json:"post_id" form:"post_id" gorm:"column:post_id;comment:帖子ID;not null;index"`
@@ -26,10 +18,9 @@ type Comment struct {
 	ToUser    system.SysUser `json:"to_user" form:"to_user" gorm:"foreignKey:ToUserId"`
 	ArticleId uint           `json:"article_id" form:"article_id" query:"article_id" gorm:"column:article_id;comment:文章ID;not null;index"`
 	Article   Article        `json:"article" gorm:"foreignKey:ArticleId"`
-	Praises   []Praise       `json:"praises" gorm:"foreignKey:CommentId"`
+	Praises   []global.Praise `json:"praises" gorm:"foreignKey:CommentId"`
 }
 
-// TableName Comment 表名
 func (Comment) TableName() string {
 	return "comments"
 }

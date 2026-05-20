@@ -50,7 +50,7 @@ func (a *BaseMessageApi) CreateBaseMessage(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /base_message/updateBaseMessage/{id} [put]
+// @Router /base_message/updateBaseMessage [put]
 func (a *BaseMessageApi) UpdateBaseMessage(c fiber.Ctx) error {
 	var baseMessage app.BaseMessage
 	id, err := strconv.Atoi(c.Params("id"))

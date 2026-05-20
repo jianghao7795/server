@@ -14,5 +14,6 @@ func (t *TaskRouter) InitTaskRouter(Router fiber.Router) {
 	var taskApi = new(v1.TaskNameApi)
 	{
 		taskRouterWithoutRecord.Get("start", middleware.OperationRecord, taskApi.StartTasking) // 开启任务
+		taskRouterWithoutRecord.Get("stop", middleware.OperationRecord, taskApi.StopTasking)  // 停止任务
 	}
 }

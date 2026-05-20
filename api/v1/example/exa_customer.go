@@ -126,7 +126,7 @@ func (e *CustomerApi) UpdateExaCustomer(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /customer/customer/:id [get]
+// @Router /customer/customer/{id} [get]
 func (e *CustomerApi) GetExaCustomer(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if id == 0 {

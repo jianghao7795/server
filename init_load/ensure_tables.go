@@ -3,6 +3,7 @@ package init_load
 import (
 	"context"
 
+	global "server/model"
 	"server/model/app"
 	"server/model/example"
 	sysModel "server/model/system"
@@ -104,7 +105,7 @@ func (e *ensureTables) TableCreated(ctx context.Context) bool {
 		app.BaseMessage{},
 		app.Comment{},
 		app.Ip{},
-		app.Praise{},
+		global.Praise{},
 		app.User{},
 	}
 	yes := true

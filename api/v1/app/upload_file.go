@@ -28,7 +28,7 @@ import (
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /base_message/upload [post]
+// @Router /base_message/upload_file [post]
 func (u *FileUploadAndDownloadApi) UploadFile(c fiber.Ctx) error {
 	// var file app.FileUploadAndDownload
 	noSave := c.Query("noSave", "0")

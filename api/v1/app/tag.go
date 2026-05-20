@@ -122,7 +122,7 @@ func (TagApi *TagApi) UpdateTag(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /tag/:id [get]
+// @Router /tag/findTag/{id} [get]
 func (TagApi *TagApi) FindTag(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if tag, err := appTabService.GetTag(uint(id)); err != nil {

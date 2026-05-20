@@ -203,7 +203,7 @@ func (*ArticleApi) GetArticleList(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response "服务器错误"
-// @Router /article/putArticleByIds [put]
+// @Router /article/PutArticleByIds [put]
 func (*ArticleApi) PutArticleByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	if err := c.Bind().Body(&IDS); err != nil {

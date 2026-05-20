@@ -51,7 +51,7 @@ func (s *SystemApiApi) CreateApi(c fiber.Ctx) (err error) {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /api/delete/{id} [delete]
+// @Router /api/DeleteApi/{id} [delete]
 func (s *SystemApiApi) DeleteApi(c fiber.Ctx) error {
 	var api system.SysApi
 	id, _ := strconv.Atoi(c.Params("id"))
@@ -104,7 +104,7 @@ func (s *SystemApiApi) GetApiList(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /api/getApiById [post]
+// @Router /api/getApiById/{id} [get]
 func (s *SystemApiApi) GetApiById(c fiber.Ctx) error {
 	var idInfo request.GetById
 	idInfo.ID, _ = strconv.Atoi(c.Params("id"))
@@ -129,7 +129,7 @@ func (s *SystemApiApi) GetApiById(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /api/updateApi [put]
+// @Router /api/updateApi/{id} [put]
 func (s *SystemApiApi) UpdateApi(c fiber.Ctx) error {
 	var api system.SysApi
 	err := c.Bind().Body(&api)

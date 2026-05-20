@@ -15,8 +15,8 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/createApi": {
-            "post": {
+        "/api/DeleteApi/{id}": {
+            "delete": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -31,21 +31,20 @@ const docTemplate = `{
                 "tags": [
                     "SysApi"
                 ],
-                "summary": "创建基础api",
+                "summary": "删除api",
                 "parameters": [
                     {
-                        "description": "api路径, api中文描述, api组, 方法",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/server_model_system.SysApi"
-                        }
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "创建基础api",
+                        "description": "删除api",
                         "schema": {
                             "allOf": [
                                 {
@@ -119,8 +118,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/delete/{id}": {
-            "delete": {
+        "/api/createApi": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -135,20 +134,21 @@ const docTemplate = `{
                 "tags": [
                     "SysApi"
                 ],
-                "summary": "删除api",
+                "summary": "创建基础api",
                 "parameters": [
                     {
-                        "minimum": 1,
-                        "type": "integer",
-                        "description": "ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
+                        "description": "api路径, api中文描述, api组, 方法",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server_model_system.SysApi"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "删除api",
+                        "description": "创建基础api",
                         "schema": {
                             "allOf": [
                                 {
@@ -425,8 +425,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/getApiById": {
-            "post": {
+        "/api/getApiById/{id}": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -636,7 +636,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/updateApi": {
+        "/api/updateApi/{id}": {
             "put": {
                 "security": [
                     {
@@ -1044,6 +1044,75 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/article/PutArticleByIds": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "批量更新文章的显示状态",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "批量更新文章",
+                "parameters": [
+                    {
+                        "description": "文章ID列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "批量更新成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -1558,75 +1627,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/article/putArticleByIds": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "批量更新文章的显示状态",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Article"
-                ],
-                "summary": "批量更新文章",
-                "parameters": [
-                    {
-                        "description": "文章ID列表",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_request.IdsReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "批量更新成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/article/updateArticle/{id}": {
             "put": {
                 "security": [
@@ -1952,7 +1952,7 @@ const docTemplate = `{
             }
         },
         "/authority/getAuthorityList": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -4415,7 +4415,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/base_message/updateBaseMessage/{id}": {
+        "/base_message/updateBaseMessage": {
             "put": {
                 "security": [
                     {
@@ -4504,7 +4504,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/base_message/upload": {
+        "/base_message/upload_file": {
             "post": {
                 "security": [
                     {
@@ -4806,7 +4806,6 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "创建新的评论",
                 "consumes": [
                     "application/json"
                 ],
@@ -4830,37 +4829,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "创建评论成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
+                        "description": "创建成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -4887,7 +4856,6 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "根据评论ID删除指定评论",
                 "consumes": [
                     "application/json"
                 ],
@@ -4900,7 +4868,6 @@ const docTemplate = `{
                 "summary": "删除评论",
                 "parameters": [
                     {
-                        "minimum": 1,
                         "type": "integer",
                         "description": "评论ID",
                         "name": "id",
@@ -4910,37 +4877,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "删除评论成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
+                        "description": "删除成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -4967,7 +4904,6 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "根据ID列表批量删除评论",
                 "consumes": [
                     "application/json"
                 ],
@@ -4980,7 +4916,7 @@ const docTemplate = `{
                 "summary": "批量删除评论",
                 "parameters": [
                     {
-                        "description": "评论ID列表",
+                        "description": "ID列表",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -4991,37 +4927,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "批量删除评论成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
+                        "description": "批量删除成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -5041,7 +4947,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comment/getComment/:id": {
+        "/comment/getComment/{id}": {
             "get": {
                 "security": [
                     {
@@ -5060,8 +4966,8 @@ const docTemplate = `{
                 "summary": "用id查询Comment",
                 "parameters": [
                     {
-                        "type": "number",
-                        "description": "用id查询Comment",
+                        "type": "integer",
+                        "description": "评论ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -5070,60 +4976,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "查询成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
                         "schema": {
                             "allOf": [
                                 {
@@ -5212,90 +5064,6 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "code": {
-                                            "type": "number"
-                                        },
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/server_model_common_response.PageResult"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "list": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/server_model_app.Comment"
-                                                            }
-                                                        },
-                                                        "page": {
-                                                            "type": "number"
-                                                        },
-                                                        "pageSize": {
-                                                            "type": "number"
-                                                        },
-                                                        "total": {
-                                                            "type": "number"
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
                                         "msg": {
                                             "type": "string"
                                         }
@@ -5376,36 +5144,6 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "code": {
-                                            "type": "number"
-                                        },
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/server_model_common_response.PageResult"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "list": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/server_model_app.Comment"
-                                                            }
-                                                        },
-                                                        "page": {
-                                                            "type": "number"
-                                                        },
-                                                        "pageSize": {
-                                                            "type": "number"
-                                                        },
-                                                        "total": {
-                                                            "type": "number"
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        },
                                         "msg": {
                                             "type": "string"
                                         }
@@ -5413,45 +5151,48 @@ const docTemplate = `{
                                 }
                             ]
                         }
+                    }
+                }
+            }
+        },
+        "/comment/updateComment/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "更新评论",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "评论ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     },
-                    "400": {
-                        "description": "参数错误",
+                    {
+                        "description": "评论信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/server_model_app.Comment"
                         }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -5471,15 +5212,12 @@ const docTemplate = `{
                 }
             }
         },
-        "/comment/pariseComment": {
-            "put": {
+        "/comment/{id}/like": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
-                ],
-                "consumes": [
-                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -5487,16 +5225,57 @@ const docTemplate = `{
                 "tags": [
                     "Comment"
                 ],
-                "summary": "点赞",
+                "summary": "检查用户是否已点赞",
                 "parameters": [
                     {
-                        "description": "点赞",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
+                        "type": "integer",
+                        "description": "评论ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询成功",
                         "schema": {
-                            "$ref": "#/definitions/server_model_app.Praise"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "点赞评论",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "评论ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -5517,74 +5296,14 @@ const docTemplate = `{
                                 }
                             ]
                         }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
                     }
                 }
-            }
-        },
-        "/comment/updateComment/{id}": {
-            "put": {
+            },
+            "delete": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
-                ],
-                "description": "根据评论ID更新评论信息",
-                "consumes": [
-                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -5592,59 +5311,19 @@ const docTemplate = `{
                 "tags": [
                     "Comment"
                 ],
-                "summary": "更新评论",
+                "summary": "取消点赞评论",
                 "parameters": [
                     {
-                        "minimum": 1,
                         "type": "integer",
                         "description": "评论ID",
                         "name": "id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "评论信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/server_model_app.Comment"
-                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "更新评论成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
+                        "description": "取消点赞成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -5745,7 +5424,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/customer/customer/:id": {
+        "/customer/customer/{id}": {
             "get": {
                 "security": [
                     {
@@ -5848,9 +5527,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/customer/customer/{id}": {
+            },
             "put": {
                 "security": [
                     {
@@ -7480,6 +7157,87 @@ const docTemplate = `{
                 }
             }
         },
+        "/frontend-user/createUser": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "创建新的应用用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "创建用户",
+                "parameters": [
+                    {
+                        "description": "用户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server_model_app.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建用户成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/frontend-user/deleteUser/{id}": {
             "delete": {
                 "security": [
@@ -7560,9 +7318,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/frontend/comment": {
-            "post": {
-                "description": "为指定文章创建新评论",
+        "/frontend-user/deleteUserByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "根据ID列表批量删除用户",
                 "consumes": [
                     "application/json"
                 ],
@@ -7570,23 +7333,23 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Frontend Comment"
+                    "User"
                 ],
-                "summary": "创建评论",
+                "summary": "批量删除用户",
                 "parameters": [
                     {
-                        "description": "评论信息",
+                        "description": "用户ID列表",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/server_model_frontend.Comment"
+                            "$ref": "#/definitions/server_model_common_request.IdsReq"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "评论成功",
+                        "description": "批量删除用户成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -7607,6 +7370,137 @@ const docTemplate = `{
                         "description": "参数错误",
                         "schema": {
                             "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/frontend-user/findUser/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "用id查询User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "content",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "headImg",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "header",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "introduction",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "password",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -7648,22 +7542,477 @@ const docTemplate = `{
                 }
             }
         },
-        "/frontend/comment/{articleId}": {
+        "/frontend-user/getUserList": {
             "get": {
-                "description": "根据文章ID获取相关评论列表",
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "分页获取User列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "content",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "headImg",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "header",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "introduction",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "是否为截图 1, 或 2",
+                        "name": "is_cropper",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "password",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "proportion",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/server_model_common_response.PageResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "$ref": "#/definitions/server_model_app.User"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/frontend-user/updateUser/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "根据用户ID更新用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "更新用户",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "用户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server_model_app.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新用户成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/frontend/comment/{id}/like": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Frontend Comment"
                 ],
-                "summary": "获取文章评论",
+                "summary": "检查用户是否已点赞",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "评论ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Frontend Comment"
+                ],
+                "summary": "点赞评论",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "评论ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "点赞成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Frontend Comment"
+                ],
+                "summary": "取消点赞评论",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "评论ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "取消点赞成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/frontend/createdComment": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Frontend Comment"
+                ],
+                "summary": "创建评论",
+                "parameters": [
+                    {
+                        "description": "评论信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server_model_frontend.Comment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "评论成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/frontend/getArticle/{id}": {
+            "get": {
+                "description": "根据文章ID获取文章详细信息",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Frontend Article"
+                ],
+                "summary": "获取文章详情",
                 "parameters": [
                     {
                         "minimum": 1,
                         "type": "integer",
                         "description": "文章ID",
-                        "name": "articleId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -7711,6 +8060,12 @@ const docTemplate = `{
                             ]
                         }
                     },
+                    "404": {
+                        "description": "文章不存在",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
@@ -7727,6 +8082,175 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/frontend/getArticleComment/{articleId}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Frontend Comment"
+                ],
+                "summary": "获取文章评论",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "文章ID",
+                        "name": "articleId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/frontend/getArticleList": {
+            "get": {
+                "description": "分页获取前台文章列表，支持搜索和筛选",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Frontend Article"
+                ],
+                "summary": "分页获取文章列表",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 1,
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 10,
+                        "description": "每页数量",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "文章标题搜索",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "文章状态",
+                        "name": "state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "是否首页显示",
+                        "name": "is_important",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "integer"
+                                        },
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/server_model_common_response.PageResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/server_model_frontend.Article"
+                                                            }
+                                                        },
+                                                        "page": {
+                                                            "type": "integer"
+                                                        },
+                                                        "pageSize": {
+                                                            "type": "integer"
+                                                        },
+                                                        "total": {
+                                                            "type": "integer"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
                         }
                     }
                 }
@@ -7806,7 +8330,107 @@ const docTemplate = `{
                 }
             }
         },
-        "/frontend/getTag/{id}": {
+        "/frontend/getSearchArticle/{name}/{value}": {
+            "get": {
+                "description": "根据标签或文章名称搜索相关内容",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Frontend Article"
+                ],
+                "summary": "搜索文章",
+                "parameters": [
+                    {
+                        "enum": [
+                            "tags",
+                            "articles"
+                        ],
+                        "type": "string",
+                        "description": "搜索类型",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "搜索值",
+                        "name": "value",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "排序方式",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "搜索成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/frontend/getTagArticleList/{id}": {
             "get": {
                 "description": "根据标签ID获取标签及其关联的文章",
                 "produces": [
@@ -8071,325 +8695,6 @@ const docTemplate = `{
                         "description": "登录失败",
                         "schema": {
                             "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/getArticle/{id}": {
-            "get": {
-                "description": "根据文章ID获取文章详细信息",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Frontend Article"
-                ],
-                "summary": "获取文章详情",
-                "parameters": [
-                    {
-                        "minimum": 1,
-                        "type": "integer",
-                        "description": "文章ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "获取成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "404": {
-                        "description": "文章不存在",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/getArticleList": {
-            "get": {
-                "description": "分页获取前台文章列表，支持搜索和筛选",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Frontend Article"
-                ],
-                "summary": "分页获取文章列表",
-                "parameters": [
-                    {
-                        "minimum": 1,
-                        "type": "integer",
-                        "default": 1,
-                        "description": "页码",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "maximum": 100,
-                        "minimum": 1,
-                        "type": "integer",
-                        "default": 10,
-                        "description": "每页数量",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "文章标题搜索",
-                        "name": "title",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "文章状态",
-                        "name": "state",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "是否首页显示",
-                        "name": "is_important",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "获取成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "code": {
-                                            "type": "integer"
-                                        },
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/server_model_common_response.PageResult"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "list": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/server_model_frontend.Article"
-                                                            }
-                                                        },
-                                                        "page": {
-                                                            "type": "integer"
-                                                        },
-                                                        "pageSize": {
-                                                            "type": "integer"
-                                                        },
-                                                        "total": {
-                                                            "type": "integer"
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/getSearchArticle/{name}/{value}": {
-            "get": {
-                "description": "根据标签或文章名称搜索相关内容",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Frontend Article"
-                ],
-                "summary": "搜索文章",
-                "parameters": [
-                    {
-                        "enum": [
-                            "tags",
-                            "articles"
-                        ],
-                        "type": "string",
-                        "description": "搜索类型",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "搜索值",
-                        "name": "value",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "排序方式",
-                        "name": "sort",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "搜索成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     },
                     "500": {
@@ -9590,8 +9895,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/menu/deleteBaseMenu": {
-            "post": {
+        "/menu/deleteBaseMenu/{id}": {
+            "delete": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -9694,7 +9999,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/menu/getBaseMenuById/:id": {
+        "/menu/getBaseMenuById/{id}": {
             "get": {
                 "security": [
                     {
@@ -10057,7 +10362,7 @@ const docTemplate = `{
             }
         },
         "/menu/getMenuList": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -10976,7 +11281,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/mobileUser/findMobileUser/:id": {
+        "/mobileUser/findMobileUser/{id}": {
             "get": {
                 "security": [
                     {
@@ -11494,7 +11799,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysDictionary/deleteSysDictionary/:id": {
+        "/sysDictionary/deleteSysDictionary/{id}": {
             "delete": {
                 "security": [
                     {
@@ -11932,7 +12237,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysDictionary/updateSysDictionary/:id": {
+        "/sysDictionary/updateSysDictionary/{id}": {
             "put": {
                 "security": [
                     {
@@ -12140,7 +12445,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysDictionaryDetail/deleteSysDictionaryDetail/:id": {
+        "/sysDictionaryDetail/deleteSysDictionaryDetail/{id}": {
             "delete": {
                 "security": [
                     {
@@ -12244,7 +12549,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysDictionaryDetail/findSysDictionaryDetail/:id": {
+        "/sysDictionaryDetail/findSysDictionaryDetail/{id}": {
             "get": {
                 "security": [
                     {
@@ -13006,7 +13311,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysOperationRecord/findSysOperationRecord/:id": {
+        "/sysOperationRecord/findSysOperationRecord/{id}": {
             "get": {
                 "security": [
                     {
@@ -13839,117 +14144,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/tag/:id": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tag"
-                ],
-                "summary": "用id查询Tag",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":app.Tag,\"msg\":\"查询成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/tag/createTag": {
             "post": {
                 "security": [
@@ -14169,6 +14363,117 @@ const docTemplate = `{
                         "description": "未授权",
                         "schema": {
                             "$ref": "#/definitions/server_model_common_response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/tag/findTag/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "用id查询Tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":app.Tag,\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -14583,110 +14888,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/SetSelfInfo": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysUser"
-                ],
-                "summary": "设置用户信息",
-                "parameters": [
-                    {
-                        "description": "ID, 用户名, 昵称, 头像链接",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/server_model_system.SysUser"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "设置用户信息",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/user/admin_register": {
             "post": {
                 "produces": [
@@ -14884,87 +15085,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/createUser": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "创建新的应用用户",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "创建用户",
-                "parameters": [
-                    {
-                        "description": "用户信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/server_model_app.User"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "创建用户成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/user/deleteUser/{id}": {
             "delete": {
                 "security": [
@@ -15028,230 +15148,6 @@ const docTemplate = `{
                         "description": "不能删除自己",
                         "schema": {
                             "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/user/deleteUserByIds": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "根据ID列表批量删除用户",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "批量删除用户",
-                "parameters": [
-                    {
-                        "description": "用户ID列表",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_request.IdsReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "批量删除用户成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/user/findUser/:id": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "用id查询User",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "name": "content",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "headImg",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "header",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "introduction",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "password",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "查询成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     },
                     "500": {
@@ -15697,6 +15593,110 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/setSelfInfo": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "设置用户信息",
+                "parameters": [
+                    {
+                        "description": "ID, 用户名, 昵称, 头像链接",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server_model_system.SysUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置用户信息",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "未授权",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/server_model_common_response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/setUserAuthorities": {
             "post": {
                 "security": [
@@ -15891,95 +15891,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "设置用户信息成功",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "未授权",
-                        "schema": {
-                            "$ref": "#/definitions/server_model_common_response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器错误",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/server_model_common_response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/user/updateUser/{id}": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "根据用户ID更新用户信息",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "更新用户",
-                "parameters": [
-                    {
-                        "minimum": 1,
-                        "type": "integer",
-                        "description": "用户ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "用户信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/server_model_app.User"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "更新用户成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -16868,6 +16779,29 @@ const docTemplate = `{
             "type": "object",
             "additionalProperties": {}
         },
+        "server_model.Praise": {
+            "type": "object",
+            "properties": {
+                "comment_id": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "server_model_app.Article": {
             "type": "object",
             "properties": {
@@ -16980,6 +16914,12 @@ const docTemplate = `{
         "server_model_app.Comment": {
             "type": "object",
             "properties": {
+                "article": {
+                    "$ref": "#/definitions/server_model_app.Article"
+                },
+                "article_id": {
+                    "type": "integer"
+                },
                 "children": {
                     "type": "array",
                     "items": {
@@ -17005,6 +16945,12 @@ const docTemplate = `{
                 },
                 "post_id": {
                     "type": "integer"
+                },
+                "praises": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/server_model.Praise"
+                    }
                 },
                 "to_user": {
                     "$ref": "#/definitions/server_model_system.SysUser"
@@ -17147,29 +17093,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/server_model_system.SysUser"
                         }
                     ]
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "server_model_app.Praise": {
-            "type": "object",
-            "properties": {
-                "comment_id": {
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
                 },
                 "user_id": {
                     "type": "integer"
@@ -17566,6 +17489,12 @@ const docTemplate = `{
                 },
                 "parent_id": {
                     "type": "integer"
+                },
+                "praises": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/server_model.Praise"
+                    }
                 },
                 "to_user": {
                     "$ref": "#/definitions/server_model_frontend.User"

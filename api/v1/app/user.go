@@ -23,7 +23,7 @@ import (
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /user/createUser [post]
+// @Router /frontend-user/createUser [post]
 func (userApi *UserApi) CreateUser(c fiber.Ctx) error {
 	var user app.User
 	err := c.Bind().Body(&user)
@@ -74,7 +74,7 @@ func (userApi *UserApi) DeleteUser(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /user/deleteUserByIds [delete]
+// @Router /frontend-user/deleteUserByIds [delete]
 func (userApi *UserApi) DeleteUserByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
 	err := c.Bind().Body(&IDS)
@@ -101,7 +101,7 @@ func (userApi *UserApi) DeleteUserByIds(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /user/updateUser/{id} [put]
+// @Router /frontend-user/updateUser/{id} [put]
 func (userApi *UserApi) UpdateUser(c fiber.Ctx) error {
 	var user app.User
 	id, err := strconv.Atoi(c.Params("id"))
@@ -136,7 +136,7 @@ func (userApi *UserApi) UpdateUser(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /user/findUser/:id [get]
+// @Router /frontend-user/findUser/{id} [get]
 func (userApi *UserApi) FindUser(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -160,7 +160,7 @@ func (userApi *UserApi) FindUser(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /user/getUserList [get]
+// @Router /frontend-user/getUserList [get]
 func (userApi *UserApi) GetUserList(c fiber.Ctx) error {
 	var pageInfo appReq.UserSearch
 	_ = c.Bind().Query(&pageInfo)

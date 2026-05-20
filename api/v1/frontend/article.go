@@ -28,7 +28,7 @@ type ArticleApi struct{}
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 500 {object} response.Response "服务器错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
-// @Router /getArticleList [get]
+// @Router /frontend/getArticleList [get]
 func (s *ArticleApi) GetArticleList(c fiber.Ctx) error {
 	var pageInfo request.ArticleSearch
 	err := c.Bind().Query(&pageInfo)
@@ -70,7 +70,7 @@ func (s *ArticleApi) GetArticleList(c fiber.Ctx) error {
 // @Failure 404 {object} response.Response "文章不存在"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /getArticle/{id} [get]
+// @Router /frontend/getArticle/{id} [get]
 func (s *ArticleApi) GetArticleDetail(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -101,7 +101,7 @@ func (s *ArticleApi) GetArticleDetail(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /getSearchArticle/{name}/{value} [get]
+// @Router /frontend/getSearchArticle/{name}/{value} [get]
 func (s *ArticleApi) GetSearchArticle(c fiber.Ctx) error {
 	var searchValue request.ArticleSearch
 	err := c.Bind().URI(&searchValue)

@@ -44,7 +44,7 @@ func (s *DictionaryDetailApi) CreateSysDictionaryDetail(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /sysDictionaryDetail/deleteSysDictionaryDetail/:id [delete]
+// @Router /sysDictionaryDetail/deleteSysDictionaryDetail/{id} [delete]
 func (s *DictionaryDetailApi) DeleteSysDictionaryDetail(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if err := dictionaryDetailService.DeleteSysDictionaryDetail(uint(id)); err != nil {
@@ -85,7 +85,7 @@ func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /sysDictionaryDetail/findSysDictionaryDetail/:id [get]
+// @Router /sysDictionaryDetail/findSysDictionaryDetail/{id} [get]
 func (s *DictionaryDetailApi) FindSysDictionaryDetail(c fiber.Ctx) error {
 	var detail system.SysDictionaryDetail
 	id, _ := strconv.Atoi(c.Params("id"))

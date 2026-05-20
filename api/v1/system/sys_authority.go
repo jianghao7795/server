@@ -141,7 +141,7 @@ func (a *AuthorityApi) UpdateAuthority(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /authority/getAuthorityList [post]
+// @Router /authority/getAuthorityList [get]
 func (a *AuthorityApi) GetAuthorityList(c fiber.Ctx) error {
 	var pageInfo request.PageInfo
 	_ = c.Bind().Query(&pageInfo)

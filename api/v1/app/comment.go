@@ -3,6 +3,8 @@ package app
 import (
 	"strconv"
 
+	appService "server/service/app"
+
 	"server/model/app"
 	commentReq "server/model/app/request"
 	"server/model/common/request"
@@ -12,18 +14,16 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
+var praiseService = appService.PraiseServer
+
 // CreateComment 创建评论
 // @Tags Comment
 // @Summary 创建评论
-// @Description 创建新的评论
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
 // @Param data body app.Comment true "评论信息"
-// @Success 200 {object} response.Response{msg=string} "创建评论成功"
-// @Failure 400 {object} response.Response "参数错误"
-// @Failure 401 {object} response.Response "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
+// @Success 200 {object} response.Response{msg=string} "创建成功"
 // @Router /comment/createComment [post]
 func (commentApi *CommentApi) CreateComment(c fiber.Ctx) error {
 	var commentData app.Comment
@@ -33,23 +33,18 @@ func (commentApi *CommentApi) CreateComment(c fiber.Ctx) error {
 	}
 	if err := commentService.CreateComment(&commentData); err != nil {
 		return response.FailWithMessage("创建失败"+err.Error(), 3, err, c)
-	} else {
-		return response.OkWithMessage("创建成功", c)
 	}
+	return response.OkWithMessage("创建成功", c)
 }
 
 // DeleteComment 删除评论
 // @Tags Comment
 // @Summary 删除评论
-// @Description 根据评论ID删除指定评论
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param id path integer true "评论ID" minimum(1)
-// @Success 200 {object} response.Response{msg=string} "删除评论成功"
-// @Failure 400 {object} response.Response "参数错误"
-// @Failure 401 {object} response.Response "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
+// @Param id path integer true "评论ID"
+// @Success 200 {object} response.Response{msg=string} "删除成功"
 // @Router /comment/deleteComment/{id} [delete]
 func (commentApi *CommentApi) DeleteComment(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
@@ -58,23 +53,18 @@ func (commentApi *CommentApi) DeleteComment(c fiber.Ctx) error {
 	}
 	if err := commentService.DeleteComment(uint(id)); err != nil {
 		return response.FailWithDetailed(err.Error(), "删除失败", 3, err, c)
-	} else {
-		return response.OkWithMessage("删除成功", c)
 	}
+	return response.OkWithMessage("删除成功", c)
 }
 
 // DeleteCommentByIds 批量删除评论
 // @Tags Comment
 // @Summary 批量删除评论
-// @Description 根据ID列表批量删除评论
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body request.IdsReq true "评论ID列表"
-// @Success 200 {object} response.Response{msg=string} "批量删除评论成功"
-// @Failure 400 {object} response.Response "参数错误"
-// @Failure 401 {object} response.Response "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
+// @Param data body request.IdsReq true "ID列表"
+// @Success 200 {object} response.Response{msg=string} "批量删除成功"
 // @Router /comment/deleteCommentByIds [delete]
 func (commentApi *CommentApi) DeleteCommentByIds(c fiber.Ctx) error {
 	var IDS request.IdsReq
@@ -84,24 +74,19 @@ func (commentApi *CommentApi) DeleteCommentByIds(c fiber.Ctx) error {
 	}
 	if err := commentService.DeleteCommentByIds(IDS); err != nil {
 		return response.FailWithMessage("批量删除失败", 3, err, c)
-	} else {
-		return response.OkWithMessage("批量删除成功", c)
 	}
+	return response.OkWithMessage("批量删除成功", c)
 }
 
 // UpdateComment 更新评论
 // @Tags Comment
 // @Summary 更新评论
-// @Description 根据评论ID更新评论信息
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param id path integer true "评论ID" minimum(1)
+// @Param id path integer true "评论ID"
 // @Param data body app.Comment true "评论信息"
-// @Success 200 {object} response.Response{msg=string} "更新评论成功"
-// @Failure 400 {object} response.Response "参数错误"
-// @Failure 401 {object} response.Response "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /comment/updateComment/{id} [put]
 func (commentApi *CommentApi) UpdateComment(c fiber.Ctx) error {
 	var comment2 app.Comment
@@ -116,23 +101,19 @@ func (commentApi *CommentApi) UpdateComment(c fiber.Ctx) error {
 	}
 	if err = commentService.UpdateComment(&comment2); err != nil {
 		return response.FailWithMessage("更新失败"+err.Error(), 3, err, c)
-	} else {
-		return response.OkWithMessage("更新成功", c)
 	}
+	return response.OkWithMessage("更新成功", c)
 }
 
 // FindComment 用id查询Comment
 // @Tags Comment
 // @Summary 用id查询Comment
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
-// @Param id path number true "用id查询Comment"
+// @Param id path integer true "评论ID"
 // @Success 200 {object} response.Response{msg=string} "查询成功"
-// @Failure 400 {object} response.Response{msg=string} "参数错误"
-// @Failure 401 {object} response.Response{msg=string} "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /comment/getComment/:id [get]
+// @Router /comment/getComment/{id} [get]
 func (commentApi *CommentApi) FindComment(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -149,13 +130,10 @@ func (commentApi *CommentApi) FindComment(c fiber.Ctx) error {
 // @Tags Comment
 // @Summary 分页获取Comment列表
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
-// @Param data query commentReq.CommentSearch true "分页获取Comment列表"
-// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]app.Comment,total=number,page=number,pageSize=number},code=number} "获取成功"
-// @Failure 400 {object} response.Response{msg=string} "参数错误"
-// @Failure 401 {object} response.Response{msg=string} "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
+// @Param data query commentReq.CommentSearch true "搜索条件"
+// @Success 200 {object} response.Response{msg=string} "获取成功"
 // @Router /comment/getCommentList [get]
 func (commentApi *CommentApi) GetCommentList(c fiber.Ctx) error {
 	var pageInfo commentReq.CommentSearch
@@ -179,17 +157,14 @@ func (commentApi *CommentApi) GetCommentList(c fiber.Ctx) error {
 	}
 }
 
-// GetCommentList 树状获取Comment列表
+// GetCommentTreeList 树状获取Comment列表
 // @Tags Comment
 // @Summary 树状获取Comment列表
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
-// @Param data query commentReq.CommentSearch true "分页获取Comment列表"
-// @Success 200 {object} response.Response{msg=string,data=response.PageResult{list=[]app.Comment,total=number,page=number,pageSize=number},code=number} "获取成功"
-// @Failure 400 {object} response.Response{msg=string} "参数错误"
-// @Failure 401 {object} response.Response{msg=string} "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
+// @Param data query commentReq.CommentSearch true "搜索条件"
+// @Success 200 {object} response.Response{msg=string} "获取成功"
 // @Router /comment/getCommentTreeList [get]
 func (*CommentApi) GetCommentTreeList(c fiber.Ctx) error {
 	var pageInfo commentReq.CommentSearch
@@ -207,27 +182,14 @@ func (*CommentApi) GetCommentTreeList(c fiber.Ctx) error {
 	}
 }
 
-// PutLikeItOrDislike 点赞/取消点赞
-func (*CommentApi) PutLikeItOrDislike(c fiber.Ctx) error {
-	var likeIt app.Praise
-	err := c.Bind().Body(&likeIt)
-	if err != nil {
-		return response.FailWithMessage("获取数据失败", 3, err, c)
-	}
-
-	// 从 JWT 获取用户 ID，防止伪造
-	if claims, err := utils.GetClaims(c); err == nil {
-		likeIt.UserId = int64(claims.BaseClaims.ID)
-	}
-
-	if err := commentService.PutLikeItOrDislike(&likeIt); err != nil {
-		return response.FailWithDetailed(err.Error(), "点赞失败", 3, err, c)
-	}
-	return response.OkWithDetailed(likeIt, "点赞成功", c)
-}
-
 // LikeComment 点赞评论
-// @Router /comment/:id/like [post]
+// @Tags Comment
+// @Summary 点赞评论
+// @Security ApiKeyAuth
+// @Produce application/json
+// @Param id path integer true "评论ID"
+// @Success 200 {object} response.Response{msg=string} "点赞成功"
+// @Router /comment/{id}/like [post]
 func (*CommentApi) LikeComment(c fiber.Ctx) error {
 	commentId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -239,7 +201,7 @@ func (*CommentApi) LikeComment(c fiber.Ctx) error {
 		return response.FailWithMessage401("请先登录", 3, err, c)
 	}
 
-	praise, err := commentService.LikeComment(uint(commentId), int64(claims.BaseClaims.ID))
+	praise, err := praiseService.LikeComment(uint(commentId), claims.BaseClaims.ID)
 	if err != nil {
 		return response.FailWithDetailed(err.Error(), "点赞失败", 3, err, c)
 	}
@@ -247,7 +209,13 @@ func (*CommentApi) LikeComment(c fiber.Ctx) error {
 }
 
 // UnlikeComment 取消点赞评论
-// @Router /comment/:id/like [delete]
+// @Tags Comment
+// @Summary 取消点赞评论
+// @Security ApiKeyAuth
+// @Produce application/json
+// @Param id path integer true "评论ID"
+// @Success 200 {object} response.Response{msg=string} "取消点赞成功"
+// @Router /comment/{id}/like [delete]
 func (*CommentApi) UnlikeComment(c fiber.Ctx) error {
 	commentId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -259,14 +227,20 @@ func (*CommentApi) UnlikeComment(c fiber.Ctx) error {
 		return response.FailWithMessage401("请先登录", 3, err, c)
 	}
 
-	if err := commentService.UnlikeComment(uint(commentId), int64(claims.BaseClaims.ID)); err != nil {
+	if err := praiseService.UnlikeComment(uint(commentId), claims.BaseClaims.ID); err != nil {
 		return response.FailWithDetailed(err.Error(), "取消点赞失败", 3, err, c)
 	}
 	return response.OkWithMessage("取消点赞成功", c)
 }
 
 // CheckCommentLiked 检查用户是否已点赞
-// @Router /comment/:id/like [get]
+// @Tags Comment
+// @Summary 检查用户是否已点赞
+// @Security ApiKeyAuth
+// @Produce application/json
+// @Param id path integer true "评论ID"
+// @Success 200 {object} response.Response{msg=string} "查询成功"
+// @Router /comment/{id}/like [get]
 func (*CommentApi) CheckCommentLiked(c fiber.Ctx) error {
 	commentId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -278,7 +252,7 @@ func (*CommentApi) CheckCommentLiked(c fiber.Ctx) error {
 		return response.FailWithMessage401("请先登录", 3, err, c)
 	}
 
-	liked, praise, err := commentService.CheckCommentLiked(uint(commentId), int64(claims.BaseClaims.ID))
+	liked, praise, err := praiseService.CheckCommentLiked(uint(commentId), claims.BaseClaims.ID)
 	if err != nil {
 		return response.FailWithDetailed(err.Error(), "查询点赞状态失败", 3, err, c)
 	}

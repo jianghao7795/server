@@ -3,6 +3,8 @@ package frontend
 import (
 	"strconv"
 
+	appService "server/service/app"
+
 	"server/model/common/response"
 	"server/model/frontend"
 	"server/utils"
@@ -10,19 +12,17 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
+var praiseService = appService.PraiseServer
+
 type CommentApi struct{}
 
 // GetCommentByArticleId 获取文章评论
 // @Tags Frontend Comment
 // @Summary 获取文章评论
-// @Description 根据文章ID获取相关评论列表
 // @Produce application/json
-// @Param articleId path integer true "文章ID" minimum(1)
+// @Param articleId path integer true "文章ID"
 // @Success 200 {object} response.Response{msg=string} "获取成功"
-// @Failure 400 {object} response.Response "参数错误"
-// @Failure 401 {object} response.Response{msg=string} "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /frontend/comment/{articleId} [get]
+// @Router /frontend/getArticleComment/{articleId} [get]
 func (s *CommentApi) GetCommentByArticleId(c fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("articleId"))
 	if err != nil {
@@ -38,20 +38,24 @@ func (s *CommentApi) GetCommentByArticleId(c fiber.Ctx) error {
 // CreatedComment 创建评论
 // @Tags Frontend Comment
 // @Summary 创建评论
-// @Description 为指定文章创建新评论
 // @Accept application/json
 // @Produce application/json
 // @Param data body frontend.Comment true "评论信息"
 // @Success 200 {object} response.Response{msg=string} "评论成功"
-// @Failure 400 {object} response.Response "参数错误"
-// @Failure 401 {object} response.Response{msg=string} "未授权"
-// @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /frontend/comment [post]
+// @Router /frontend/createdComment [post]
 func (s *CommentApi) CreatedComment(c fiber.Ctx) error {
 	var comment frontend.Comment
 	if err := c.Bind().Body(&comment); err != nil {
 		return response.FailWithMessage(err.Error(), 3, err, c)
 	}
+
+	// 从 JWT 获取用户 ID，防止伪造
+	if claims, err := utils.GetClaims(c); err == nil {
+		comment.UserId = int(claims.BaseClaims.ID)
+	} else {
+		return response.FailWithMessage401("请先登录", 3, err, c)
+	}
+
 	if err := commentServiceApp.CreatedComment(&comment); err != nil {
 		return response.FailWithDetailed(fiber.Map{"msg": err.Error()}, "评论失败", 3, err, c)
 	}
@@ -59,6 +63,13 @@ func (s *CommentApi) CreatedComment(c fiber.Ctx) error {
 }
 
 // LikeComment 点赞评论
+// @Tags Frontend Comment
+// @Summary 点赞评论
+// @Security ApiKeyAuth
+// @Produce application/json
+// @Param id path integer true "评论ID"
+// @Success 200 {object} response.Response{msg=string} "点赞成功"
+// @Router /frontend/comment/{id}/like [post]
 func (s *CommentApi) LikeComment(c fiber.Ctx) error {
 	commentId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -70,7 +81,7 @@ func (s *CommentApi) LikeComment(c fiber.Ctx) error {
 		return response.FailWithMessage401("请先登录", 3, err, c)
 	}
 
-	praise, err := commentServiceApp.LikeComment(uint(commentId), int64(claims.BaseClaims.ID))
+	praise, err := praiseService.LikeComment(uint(commentId), claims.BaseClaims.ID)
 	if err != nil {
 		return response.FailWithDetailed(err.Error(), "点赞失败", 3, err, c)
 	}
@@ -78,6 +89,13 @@ func (s *CommentApi) LikeComment(c fiber.Ctx) error {
 }
 
 // UnlikeComment 取消点赞评论
+// @Tags Frontend Comment
+// @Summary 取消点赞评论
+// @Security ApiKeyAuth
+// @Produce application/json
+// @Param id path integer true "评论ID"
+// @Success 200 {object} response.Response{msg=string} "取消点赞成功"
+// @Router /frontend/comment/{id}/like [delete]
 func (s *CommentApi) UnlikeComment(c fiber.Ctx) error {
 	commentId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -89,13 +107,20 @@ func (s *CommentApi) UnlikeComment(c fiber.Ctx) error {
 		return response.FailWithMessage401("请先登录", 3, err, c)
 	}
 
-	if err := commentServiceApp.UnlikeComment(uint(commentId), int64(claims.BaseClaims.ID)); err != nil {
+	if err := praiseService.UnlikeComment(uint(commentId), claims.BaseClaims.ID); err != nil {
 		return response.FailWithDetailed(err.Error(), "取消点赞失败", 3, err, c)
 	}
 	return response.OkWithMessage("取消点赞成功", c)
 }
 
 // CheckCommentLiked 检查用户是否已点赞
+// @Tags Frontend Comment
+// @Summary 检查用户是否已点赞
+// @Security ApiKeyAuth
+// @Produce application/json
+// @Param id path integer true "评论ID"
+// @Success 200 {object} response.Response{msg=string} "查询成功"
+// @Router /frontend/comment/{id}/like [get]
 func (s *CommentApi) CheckCommentLiked(c fiber.Ctx) error {
 	commentId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -107,7 +132,7 @@ func (s *CommentApi) CheckCommentLiked(c fiber.Ctx) error {
 		return response.FailWithMessage401("请先登录", 3, err, c)
 	}
 
-	liked, praise, err := commentServiceApp.CheckCommentLiked(uint(commentId), int64(claims.BaseClaims.ID))
+	liked, praise, err := praiseService.CheckCommentLiked(uint(commentId), claims.BaseClaims.ID)
 	if err != nil {
 		return response.FailWithDetailed(err.Error(), "查询点赞状态失败", 3, err, c)
 	}

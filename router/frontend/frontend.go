@@ -26,7 +26,7 @@ func (s *FrontendRouter) InitFrontendRouter(Router fiber.Router) {
 	frontendCommentApi := new(v1.CommentApi)
 	{
 		frontend.Get("getArticleComment/:articleId", frontendCommentApi.GetCommentByArticleId)
-		frontend.Post("createdComment", middleware.OperationRecord, frontendCommentApi.CreatedComment)
+		frontend.Post("createdComment", middleware.JWTAuth, middleware.OperationRecord, frontendCommentApi.CreatedComment)
 		frontend.Post("comment/:id/like", middleware.JWTAuth, frontendCommentApi.LikeComment)
 		frontend.Delete("comment/:id/like", middleware.JWTAuth, frontendCommentApi.UnlikeComment)
 		frontend.Get("comment/:id/like", middleware.JWTAuth, frontendCommentApi.CheckCommentLiked)

@@ -354,7 +354,7 @@ func (b *BaseApi) SetUserInfo(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /user/SetSelfInfo [put]
+// @Router /user/setSelfInfo [put]
 func (b *BaseApi) SetSelfInfo(c fiber.Ctx) error {
 	var user systemReq.ChangeUserInfo
 	_ = c.Bind().Body(&user)

@@ -85,7 +85,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c fiber.Ctx) error {
 // @Failure 400 {object} response.Response{msg=string} "参数错误"
 // @Failure 401 {object} response.Response{msg=string} "未授权"
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
-// @Router /sysOperationRecord/findSysOperationRecord/:id [get]
+// @Router /sysOperationRecord/findSysOperationRecord/{id} [get]
 func (s *OperationRecordApi) FindSysOperationRecord(c fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 	if respSysOperationRecord, err := operationRecordService.GetSysOperationRecord(uint(id)); err != nil {

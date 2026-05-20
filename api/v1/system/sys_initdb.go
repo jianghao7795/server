@@ -97,7 +97,7 @@ func (initDB *DBApi) hasTable() bool {
 		app.BaseMessage{},
 		app.Comment{},
 		app.Ip{},
-		app.Praise{},
+		global.Praise{},
 		app.User{},
 	}
 	yes := true
