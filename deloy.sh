@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|grep -v 172.\*.\*.\*|awk '{print $2}'|tr -d "addr:"`
-ip=$(ifconfig -a | grep inet | grep -v 127.0.0.1 | grep -v inet6 | grep -v '172\.' | awk '{print $2}' | tr -d "addr:" | head -n 1)
+ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|grep -v 172.\*.\*.\*|awk '{print $2}'|tr -d "addr:"`
+# ip=$(ifconfig -a | grep inet | grep -v 127.0.0.1 | grep -v inet6 | grep -v '172\.' | awk '{print $2}' | tr -d "addr:" | head -n 1)
 # sed -i -e "s/127.0.0.1/${ip}/g" config.yaml
 echo $ip
+# ip=127.0.0.1
 
 cp conf/config.yaml config.yaml
 sed -i -e "s/127.0.0.1/$ip/g" config.yaml
@@ -13,4 +14,3 @@ docker rmi fiber
 
 docker build --progress=plain -t fiber .
 docker run --name fiber -d -v ./uploads:/app/uploads -p 3100:3100 fiber
-rm -rf config.yaml

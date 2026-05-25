@@ -1,4 +1,4 @@
-FROM golang:1.26-alpine AS builder
+FROM docker.io/library/golang:1.26-alpine AS builder
 
 LABEL org.opencontainers.image.authors="jianghao"
 
@@ -25,6 +25,8 @@ COPY --from=builder /app/rbac_model.conf .
 COPY --from=builder /app/docs/ ./docs/
 COPY --from=builder /app/public/ ./public/
 COPY --from=builder /app/logs/ ./logs/
+
+RUN ls -lh
 
 EXPOSE 3100
 CMD ["/app/fiber"]
