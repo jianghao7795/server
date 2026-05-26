@@ -37,7 +37,7 @@ func (vm *ValidationMiddleware) ValidateQuery(c fiber.Ctx, queryName string) (st
 
 // ValidateID validates and converts ID parameter to uint
 func (vm *ValidationMiddleware) ValidateID(c fiber.Ctx) (uint, error) {
-	id := fiber.Params[int](c, "id", 0)
+	id := fiber.Params(c, "id", 0)
 	if id <= 0 {
 		return 0, utils.ErrorHandlerInstance.HandleValidationError(c, "id", fiber.NewError(400, "invalid ID"))
 	}
