@@ -15,7 +15,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -tags=jsoniter -trimpath -o fiber -ldflags
 RUN upx -6 fiber
 RUN ls -lh
 
-FROM docker.io/library/rockylinux:9-minimal AS runner
+FROM docker.io/library/alpine:latest AS runner
 WORKDIR /app
 
 COPY --from=builder /app/fiber .
