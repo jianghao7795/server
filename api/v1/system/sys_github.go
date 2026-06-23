@@ -63,12 +63,12 @@ func (g *SystemGithubApi) CreateGithub(c fiber.Ctx) error {
 	page := "1"
 	per_page := "5"
 	resp, err := http.Get("https://api.github.com/repos/JiangHaoCode/server-web/commits?page=" + page + "&per_page=" + per_page)
-	defer func() {
-		_ = resp.Body.Close()
-	}()
 	if err != nil {
 		return response.FailWithMessage("请求Commit错误", 3, err, c)
 	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 	body, _ := io.ReadAll(resp.Body)
 	// respData := new([]GithubCommit)
 	var respData []system.GithubCommit

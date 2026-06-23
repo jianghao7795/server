@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
@@ -10,96 +9,65 @@ import (
 	"syscall"
 	"time"
 
-	"server/init_load"
 	global "server/model"
-	"server/router"
 	"server/service/system"
 
 	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
 )
 
-func initConfig() {
-	var err error
-	global.VIPER, err = viperInit() // 初始化Viper 配置
+func RunServer() {
+	routerApp, cleanup, err := InitializeApp()
 	if err != nil {
-		// global.LOG.Error("配置错误：", zap.Error(err))
-		log.Println("配置错误： ", err.Error())
-		os.Exit(1)
+		log.Fatalf("initialize Fiber app failed: %v", err)
 	}
-	global.LOG, err = zapInit() // 初始化zap日志库
-	if err != nil {
-		log.Println("日志初始化错误： ", err.Error())
-		// 日志初始化错误 退出程序
-		os.Exit(1)
-	}
-	// global.Logger = InitLogger()   // 初始化 log 让log标准输出
-	zap.ReplaceGlobals(global.LOG) // 配置部署到全局
+	defer cleanup()
+	defer closeDatabase()
 
-	db, err := init_load.Gorm() // gorm连接数据库
-	if err == nil {
-		global.DB = db
-	} else {
-		os.Exit(1)
-	}
-	init_load.Timer() // 定时 执行任务
-	// err = utilsInit.TransInit("zh")
-	// if err != nil {
-	// 	global.LOG.Error("翻译错误：" + err.Error())
-	// }
-
-	if global.CONFIG.System.UseMultipoint || global.CONFIG.System.UseRedis {
-		err = init_load.Redis()
-		if err != nil {
-			os.Exit(1)
-		}
-	}
-
-}
-
-func runServerElectron(app *fiber.App) {
-	// 使用全局路由实例（向后兼容）
-	appRouter := router.AppRouterInstance
-	systemRouter := router.SystemRouterInstance
-	exampleRouter := router.ExampleRouterInstance
-	frontendRouter := router.FrontendRouterInstance
-	mobileRouter := router.MobileRouterInstance
-	routerApp := init_load.Routers(app, appRouter, systemRouter, exampleRouter, frontendRouter, mobileRouter)
-	router := routerApp
-	address := fmt.Sprintf(":%d", global.CONFIG.System.Addr)
-	log.Println(`Welcome to Fiber API`)
-	err := router.Listen(address)
-	if err != nil {
-		os.Exit(1)
-	}
+	app := routerApp.App
+	zap.ReplaceGlobals(global.LOG)
 
 	if global.DB != nil {
-		system.LoadAll() // 加载所有的 拉黑的jwt数据 避免盗用jwt
-		// initialize.RegisterTables(global.DB) // 初始化表
-		// 程序结束前关闭数据库链接
-		db, _ := global.DB.DB()
-		defer func(db *sql.DB) {
-			err := db.Close()
-			if err != nil {
-			}
-		}(db)
+		system.LoadAll()
 	}
-}
 
-func RunServer() {
-	initConfig()
-	app := fiber.New(global.RunCONFIG.FiberConfig)
-	go runServerElectron(app)
+	go listen(app)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	timeout := 5 * time.Second
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if err := app.ShutdownWithContext(ctx); err != nil {
+		global.LOG.Error("shutdown Fiber app failed", zap.Error(err))
 		os.Exit(1)
+	}
+}
+
+func listen(app *fiber.App) {
+	address := fmt.Sprintf(":%d", global.CONFIG.System.Addr)
+	log.Println("Welcome to Fiber API")
+
+	if err := app.Listen(address); err != nil {
+		global.LOG.Error("listen Fiber app failed", zap.Error(err))
+		os.Exit(1)
+	}
+}
+
+func closeDatabase() {
+	if global.DB == nil {
+		return
+	}
+
+	db, err := global.DB.DB()
+	if err != nil {
+		global.LOG.Error("get database handle failed", zap.Error(err))
+		return
+	}
+
+	if err := db.Close(); err != nil {
+		global.LOG.Error("close database failed", zap.Error(err))
 	}
 }
