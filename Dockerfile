@@ -24,9 +24,10 @@ COPY --from=builder /app/config.yaml ./conf/config.yaml
 COPY --from=builder /app/rbac_model.conf .
 COPY --from=builder /app/docs/ ./docs/
 COPY --from=builder /app/public/ ./public/
-COPY --from=builder /app/logs/ ./logs/
+# COPY --from=builder /app/logs/ ./logs/
 
 RUN ls -lh
+# RUN mkdir logs
 
 EXPOSE 3100
 CMD ["/app/fiber"]
