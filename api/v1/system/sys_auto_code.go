@@ -2,7 +2,6 @@ package system
 
 import (
 	"errors"
-	"fmt"
 	"net/url"
 	"os"
 	"server/model/common/response"
@@ -18,6 +17,11 @@ import (
 )
 
 type AutoCodeApi struct{}
+
+const (
+	autoCodeArchiveName = "server-fiber.zip"
+	autoCodeArchivePath = "./" + autoCodeArchiveName
+)
 
 // PreviewTemp
 // @Tags AutoCode
@@ -82,14 +86,16 @@ func (autoApi *AutoCodeApi) CreateTemp(c fiber.Ctx) error {
 		} else {
 			c.Locals("success", "false")
 			c.Locals("msg", url.QueryEscape(err.Error()))
-			_ = os.Remove("./ginvueadmin.zip")
+			_ = os.Remove(autoCodeArchivePath)
 		}
 	} else {
-		c.Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) // fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
-		c.Set("Content-Type", "application/json")
+		c.Set("Content-Type", "application/zip")
 		c.Locals("success", "true")
-		c.Download("./ginvueadmin.zip")
-		_ = os.Remove("./ginvueadmin.zip")
+		if err := c.Download(autoCodeArchivePath, autoCodeArchiveName); err != nil {
+			return err
+		}
+		_ = os.Remove(autoCodeArchivePath)
+		return nil
 	}
 	return response.OkWithMessage("文件生成成功", c)
 }

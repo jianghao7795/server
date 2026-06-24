@@ -1,20 +1,8 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"log"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
-
 	"server/core"
-	_ "server/docs" // 引入生成的文档
-	global "server/model"
-
-	"github.com/gofiber/fiber/v3"
-	"go.uber.org/zap"
+	_ "server/docs"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -22,54 +10,5 @@ import (
 //go:generate go mod tidy
 //go:generate go mod download
 func main() {
-	// 使用 Wire 初始化应用
-	routerApp, cleanup, err := core.InitializeApp()
-	if err != nil {
-		log.Fatalf("初始化应用失败: %v", err)
-	}
-	defer cleanup()
-
-	app := routerApp.App
-
-	// 设置全局日志
-	zap.ReplaceGlobals(global.LOG)
-
-	// 启动服务器
-	go runServer(app)
-
-	// 等待中断信号
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-
-	// 优雅关闭
-	timeout := 5 * time.Second
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	if err := app.ShutdownWithContext(ctx); err != nil {
-		os.Exit(1)
-	}
-}
-
-func runServer(app *fiber.App) {
-	address := fmt.Sprintf(":%d", global.CONFIG.System.Addr)
-	log.Println(`Welcome to Fiber API`)
-
-	// if global.DB != nil {
-	// 	system.LoadAll() // 加载所有的 拉黑的jwt数据 避免盗用jwt
-	// 	// 程序结束前关闭数据库链接
-	// 	db, _ := global.DB.DB()
-	// 	defer func(db *sql.DB) {
-	// 		err := db.Close()
-	// 		if err != nil {
-	// 			global.LOG.Error("数据库关闭失败: " + err.Error())
-	// 		}
-	// 	}(db)
-	// }
-
-	err := app.Listen(address)
-	if err != nil {
-		os.Exit(1)
-	}
+	core.RunServer()
 }

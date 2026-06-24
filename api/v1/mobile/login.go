@@ -1,8 +1,6 @@
 package mobile
 
 import (
-	"strconv"
-
 	"server/model/common/response"
 	"server/model/mobile"
 	"server/model/mobile/request"
@@ -12,6 +10,19 @@ import (
 )
 
 type LoginApi struct{}
+
+func mobileUserID(c fiber.Ctx) (uint, bool) {
+	switch userID := c.Locals("user_id").(type) {
+	case uint:
+		return userID, userID != 0
+	case uint64:
+		return uint(userID), userID != 0
+	case int:
+		return uint(userID), userID > 0
+	default:
+		return 0, false
+	}
+}
 
 // Login 移动端用户登录
 // @Tags Mobile Login
@@ -54,12 +65,11 @@ func (*LoginApi) Login(c fiber.Ctx) error {
 // @Failure 500 {object} response.Response{msg=string} "服务器错误"
 // @Router /mobile/getUserInfo [get]
 func (*LoginApi) GetUserInfo(c fiber.Ctx) error {
-	authorization := c.Get("user_id", "")
-	if authorization == "" {
+	userID, ok := mobileUserID(c)
+	if !ok {
 		return response.FailWithMessage400("获取失败", 3, nil, c)
 	}
-	authorityId, _ := strconv.Atoi(authorization)
-	if user, err := loginService.GetUserInfo(uint(authorityId)); err != nil {
+	if user, err := loginService.GetUserInfo(userID); err != nil {
 		return response.FailWithMessage400("获取失败", 3, err, c)
 	} else {
 		return response.OkWithDetailed(user, "获取成功", c)
@@ -85,15 +95,12 @@ func (*LoginApi) UpdateMobileUser(c fiber.Ctx) error {
 	if err := c.Bind().Body(&data); err != nil {
 		return response.FailWithMessage("获取数据失败", 3, err, c)
 	}
-	authorization := c.Get("user_id", "") // user_id 在请求头信息中
+	userID, ok := mobileUserID(c)
 
-	if authorization == "" {
+	if !ok {
 		return response.FailWithDetailed400(fiber.Map{"id": 0}, "更新失败", 3, nil, c)
 	} else {
-		authId, _ := strconv.Atoi(authorization)
-		if authId == 0 {
-		}
-		if err := loginService.UpdateUser(&data, uint(authId)); err != nil {
+		if err := loginService.UpdateUser(&data, userID); err != nil {
 			return response.FailWithMessage("更新用户失败", 3, err, c)
 		} else {
 			return response.OkWithDetailed(data, "更新成功", c)

@@ -28,6 +28,7 @@ import (
 
 const (
 	autoPath           = "autocode_template/"
+	autoCodeArchive    = "./server-fiber.zip"
 	basePath           = "resource/template"
 	packageService     = "service/%s/enter.go"
 	packageServiceName = "service"
@@ -294,7 +295,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		_ = ImportReference(gormPath, imporStr, "", "", "")
 
 	} else { // 打包
-		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
+		if err = utils.ZipFiles(autoCodeArchive, fileList, ".", "."); err != nil {
 			return err
 		}
 	}
